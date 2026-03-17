@@ -26,12 +26,14 @@ exports.handleLogin = async (req, res) => {
 exports.handleSignup = async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
+    const fullname = req.body.fullname;
+    const phone = req.body.phone;
     const email = req.body.email;
     const gender = req.body.gender;
     const bio = req.body.bio;
 
     try {
-        const newUser = new User({username, password, email, gender, bio});
+        const newUser = new User({username, password, fullname, phone, email, gender, bio});
         await newUser.save();
         res.redirect("/login");
     } catch (error) {
