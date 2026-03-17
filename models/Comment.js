@@ -3,14 +3,17 @@ const mongoose = require("mongoose");
 const commentSchema = new mongoose.Schema({
     text: {
         type: String,
+        required: true,
         trim: true,
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     },
     listing: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Listing"
+        ref: "Listing",
+        required: true
     }
 });
