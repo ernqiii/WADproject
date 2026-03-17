@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+</head>
+<body>
+
+<h1>Edit Profile</h1>
+
+<p>
+    <a href="/">Back to Home</a> |
+    <a href="/wishlist">Go to Wishlist</a> |
+    <a href="/listings">Go to Listings</a> |
+    <a href="/profile">Back to Profile</a>
+</p>
+
+<hr>
+
+<% if (errorMessage) { %>
+    <p style="color:red;"><strong><%= errorMessage %></strong></p>
+<% } %>
+
+<form method="POST" action="/profile/edit" enctype="multipart/form-data">
+
+    <div>
+        <label>Full Name:</label><br>
+        <input type="text" name="fullName" value="<%= user.fullName %>" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Email:</label><br>
+        <input type="email" name="email" value="<%= user.email %>" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Phone:</label><br>
+        <input type="text" name="phone" value="<%= user.phone %>" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Bio:</label><br>
+        <textarea name="bio" rows="5" cols="40"><%= user.bio %></textarea>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Upload Profile Picture:</label><br>
+        <input type="file" name="profilePicture" accept="image/*">
+    </div>
+
+    <br>
+
+    <button type="submit">Save Changes</button>
+
+</form>
+
+</body>
+</html>

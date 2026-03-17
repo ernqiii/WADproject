@@ -1,0 +1,17 @@
+{
+  "name": "wadproject",
+  "version": "1.0.0",
+  "description": "Apartment rental project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node data/seed.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "mongoose": "^8.18.0",
+    "multer": "^2.1.1"
+  }
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>User Profile Page</h1>
+
+    <p>
+        <a href="/">Back to Home</a> |
+        <a href="/wishlist">Go to Wishlist</a> |
+        <a href="/listings">Go to Listings</a> |
+        <a href="/profile/edit">Edit My Profile</a>
+    </p>
+
+    <hr>
+
+    <h2>My Details</h2>
+
+    <% if (profileImage) { %>
+        <p>
+            <img src="<%= profileImage %>" alt="Profile Picture" width="150" height="150">
+        </p>
+    <% } else { %>
+        <p>No profile picture uploaded.</p>
+    <% } %>
+
+    <p><strong>Username:</strong> <%= user.username %></p>
+    <p><strong>Full Name:</strong> <%= user.fullName %></p>
+    <p><strong>Email:</strong> <%= user.email %></p>
+    <p><strong>Phone:</strong> <%= user.phone %></p>
+    <p><strong>Bio:</strong> <%= user.bio %></p>
+
+    <hr>
+
+    <h2>My Recent Apartment Listings</h2>
+
+    <% if (listings.length === 0) { %>
+        <p>No listings found.</p>
+    <% } else { %>
+        <% listings.forEach(function(listing) { %>
+            <div>
+                <h3><%= listing.title %></h3>
+                <p><strong>Location:</strong> <%= listing.location %></p>
+                <p><strong>Rent:</strong> $<%= listing.rent %></p>
+                <p><strong>Description:</strong> <%= listing.description %></p>
+                <hr>
+            </div>
+        <% }) %>
+    <% } %>
+</body>
+</html>
