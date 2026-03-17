@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Explore Rooms</title>
+</head>
+<body>
+    <h1>Student Housing</h1>
+    <hr>
+
+    <h3>Filters</h3>
+    <label>Type:</label>
+    <select id="type">
+        <option value="">All</option>
+        <option value="room">Room</option>
+        <option value="roommate">Roommate</option>
+    </select>
+    
+    <label>Max Price:</label>
+    <input type="number" id="price">
+    
+    <button onclick="showListings()">Search</button>
+    
+    <hr>
+    <div id="listings"></div>
+
+    <script>
+        
+        // Mock data - replace with MongoDB later
+        // Change this later
+        const data = [
+            { id: 1, type: 'room', title: 'Room Near Campus', location: 'Downtown', price: 650, interested: 12, comments: 5 },
+            { id: 2, type: 'roommate', title: 'Need 2 Roommates', location: 'Westside', price: 550, interested: 8, comments: 3 },
+            { id: 3, type: 'room', title: 'Studio Available', location: 'City Center', price: 900, interested: 20, comments: 7 }
+        ];
+        // End of change this later to mongodb data
+
+        // Show listings when page loads
+        showListings();
+
+        // Display listings
+        function showListings() {
+            let typeFilter = document.getElementById('type').value;
+            let priceFilter = document.getElementById('price').value;
+            let container = document.getElementById('listings');
+            let html = '';
+
+            // Loop through each listing
+            for (let i = 0; i < data.length; i++) {
+                let listing = data[i];
+                
+                // Check filters
+                if (typeFilter && listing.type !== typeFilter) continue;
+                if (priceFilter && listing.price > priceFilter) continue;
+
+                // Build HTML for this listing
+                html += '<hr>';
+                html += '<h3>' + listing.title + '</h3>';
+                html += '<p>Type: ' + listing.type + '</p>';
+                html += '<p>Location: ' + listing.location + '</p>';
+                html += '<p>Price: $' + listing.price + '/month</p>';
+                html += '<p>';
+                html += '<button onclick="like(' + listing.id + ')">Like (' + listing.interested + ')</button> ';
+                html += '<button onclick="comment(' + listing.id + ')">Comments (' + listing.comments + ')</button>';
+                html += '</p>';
+            }
+
+            if (html === '') {
+                html = '<p>No listings found</p>';
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Like a listing
+        function like(id) {
+            alert('You liked listing ' + id);
+            // TODO: Send to MongoDB
+            // fetch('/api/listings/' + id + '/interest', {method: 'POST'})
+        }
+
+        // View comments
+        function comment(id) {
+            alert('Comments for listing ' + id);
+            // TODO: Show comments from MongoDB
+        }
+    </script>
+</body>
+</html>
