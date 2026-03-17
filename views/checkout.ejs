@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>checkout</title>
+    </head>
+    <body>
+        <h1>One step closer to your dream room</h1>
+        <table>
+           <% for(let j = 0; j < checkout_item.length; j++){%>
+                <% if( j === 0) {%>
+                    <tr>
+                    <td>
+                        <img src="<%= checkout_item[0]%>">
+                        
+                    </td>    
+                    </tr>
+                <% }else { %>
+                    <tr>
+                    <td>
+                        <%= checkout_item[j] %>
+                    </td>    
+                    </tr>
+                <% } %>
+            <% } %>
+    
+        </table>
+        <h3>if you are sure about your decision of renting out the above room</h3>
+        <h3>Contact the person</h3>
+        <button type="submit" name="checkout_item" value="<%= checkout_item %>">Check Out!</button> 
+    </body>
+</html>
