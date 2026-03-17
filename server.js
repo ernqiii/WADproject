@@ -4,6 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 
+const loginRoutes = require("./routes/login-routes");
 const profileRoutes = require("./routes/profileRoutes");
 
 const app = express();
@@ -25,6 +26,7 @@ async function startServer() {
             `);
         });
 
+        app.use("/", loginRoutes);
         app.use("/profile", profileRoutes);
 
         const PORT = process.env.PORT || 8000;
