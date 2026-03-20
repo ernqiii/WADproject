@@ -7,8 +7,8 @@ const upload = multer({
     storage: multer.memoryStorage()
 });
 
-router.get("/", profileController.getProfile);
-router.get("/edit", profileController.getEditProfile);
-router.post("/edit", upload.single("profilePicture"), profileController.postEditProfile);
+router.get("/", profileController.showProfile);
+router.get("/edit", profileController.showEditForm);
+router.post("/edit", upload.single("profilePicture"), profileController.submitEditProfile);
 
 module.exports = router;

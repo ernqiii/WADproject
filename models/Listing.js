@@ -1,30 +1,20 @@
 const mongoose = require("mongoose");
 
 const listingSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    location: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    rent: {
-        type: Number,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true,
-        trim: true
-    },
+    title: String,
+    location: String,
+    rent: Number,
+    description: String,
     landlord: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+        ref: "User"
     }
 });
 
-module.exports = mongoose.model("Listing", listingSchema);
+const Listing = mongoose.model("Listing", listingSchema);
+
+exports.findByLandlord = function(userId) {
+    return Listing.find({ landlord: userId });
+};
+
+exports.Listing = Listing;
