@@ -7,6 +7,7 @@ const path = require("path");
 const loginRoutes = require("./routes/login-routes");
 const profileRoutes = require("./routes/profileRoutes");
 const wishlistRoutes = require("./routes/wishlist-routes");
+const createListingRoutes = require("./routes/createListingRoute");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 app.use("/", loginRoutes);
 app.use("/profile", profileRoutes);
 app.use("/", wishlistRoutes);
+app.use('/listing', createListingRoutes);
 
 async function startServer() {
     try {

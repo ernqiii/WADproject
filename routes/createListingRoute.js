@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const listingController = require('../controllers/createListingController');
+const createListingController = require('../controllers/createListingController');
 
-router.get('/new', listingController.newListing);
-router.post('/', listingController.createListing);
+router.get('/new', createListingController.newListing);
+router.post('/', createListingController.createListing);
 
 module.exports = router;

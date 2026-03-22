@@ -12,4 +12,4 @@ const listingSchema = new mongoose.Schema({
   photos: [String],
 });
 
-module.exports = mongoose.model('Listing', listingSchema);
+module.exports = mongoose.model('Listing2', listingSchema);

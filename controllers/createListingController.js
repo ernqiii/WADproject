@@ -1,4 +1,4 @@
-const Listing = require('../models/createListing');
+const Listing2 = require('../models/createListing');
 const multer = require('multer');
 const path = require('path');
 
@@ -43,7 +43,7 @@ exports.createListing = (req, res) => {
     else if (!Array.isArray(amenities)) amenities = [amenities];
 
     try {
-      const listing = new Listing({
+      const listing2 = new Listing2({
         title: req.body.title,
         description: req.body.description,
         region: req.body.region,
@@ -55,7 +55,7 @@ exports.createListing = (req, res) => {
         photos: req.files.map(f => f.filename),
       });
 
-      await listing.save();
+      await listing2.save();
       //res.send('Listing Created Successfully!');
       res.redirect('/');
     } catch (e) {
