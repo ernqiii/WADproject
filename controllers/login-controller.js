@@ -1,4 +1,4 @@
-const User = require("../models/login-model");
+const User = require("../models/User.js");
 
 exports.displayLoginForm = (req, res) => {
   res.render("login-form");
