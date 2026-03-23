@@ -12,7 +12,7 @@ exports.handleLogin = async (req, res) => {
     const user = await User.findOne({username: username});
 
     if (user && password === user.password) {
-        req.session.userId = user._id; // session??
+        // req.session.userId = user._id; // session??
         res.redirect("/home");
     } else {
         res.send("Invalid credentials");
