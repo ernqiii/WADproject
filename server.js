@@ -4,28 +4,34 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 
+const loginRoutes = require("./routes/login-routes");
 const profileRoutes = require("./routes/profileRoutes");
+const wishlistRoutes = require("./routes/wishlist-routes");
+const createListingRoutes = require("./routes/createListingRoute");
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
+// Home route
+app.get("/", (req, res) => {
+    res.render("home");
+});
+
+// Routes
+app.use("/", loginRoutes);
+app.use("/profile", profileRoutes);
+app.use("/", wishlistRoutes);
+app.use('/listing', createListingRoutes);
 
 async function startServer() {
     try {
         await mongoose.connect(process.env.MONGO_URI);
         console.log("Connected to MongoDB Atlas");
-
-        app.get("/", (req, res) => {
-            res.send(`
-                <h1>Apartment Rental App</h1>
-                <p><a href="/profile">Go to User Profile</a></p>
-            `);
-        });
-
-        app.use("/profile", profileRoutes);
 
         const PORT = process.env.PORT || 8000;
         app.listen(PORT, () => {

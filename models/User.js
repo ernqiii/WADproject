@@ -20,6 +20,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    gender: {
+        type: String,
+        enum: ["Male", "Female", "Other"],
+        default: "Other"
+    },
     phone: {
         type: String,
         required: true,
@@ -40,4 +45,14 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+exports.findByUserId = function(userId) {
+    return User.findById(userId);
+};
+
+exports.editProfile = function(userId, updateData) {
+    return User.findByIdAndUpdate(userId, updateData);
+};
+
+exports.User = User;

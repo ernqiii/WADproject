@@ -3,13 +3,13 @@ const Listing = require("../models/Listing");
 
 const DEMO_USER_ID = "69b90b2e6099c414584b3344";
 
-exports.getProfile = async (req, res) => {
+exports.showProfile = async (req, res) => {
     try {
-        const user = await User.findById(DEMO_USER_ID);
-        const listings = await Listing.find({ landlord: DEMO_USER_ID });
+        const user = await User.findByUserId(DEMO_USER_ID);
+        const listings = await Listing.findByLandlord(DEMO_USER_ID);
 
         if (!user) {
-            return res.send("Demo user not found.");
+            return res.send("User not found.");
         }
 
         let profileImage = null;
@@ -19,9 +19,9 @@ exports.getProfile = async (req, res) => {
         }
 
         res.render("profile", {
-            user: user,
-            listings: listings,
-            profileImage: profileImage
+            user,
+            listings,
+            profileImage
         });
     } catch (error) {
         console.log(error);
@@ -29,16 +29,16 @@ exports.getProfile = async (req, res) => {
     }
 };
 
-exports.getEditProfile = async (req, res) => {
+exports.showEditForm = async (req, res) => {
     try {
-        const user = await User.findById(DEMO_USER_ID);
+        const user = await User.findByUserId(DEMO_USER_ID);
 
         if (!user) {
-            return res.send("Demo user not found.");
+            return res.send("User not found.");
         }
 
         res.render("editProfile", {
-            user: user,
+            user,
             errorMessage: ""
         });
     } catch (error) {
@@ -47,24 +47,25 @@ exports.getEditProfile = async (req, res) => {
     }
 };
 
-exports.postEditProfile = async (req, res) => {
+exports.submitEditProfile = async (req, res) => {
     try {
-        const { fullName, email, phone, bio } = req.body;
+        const { fullName, email, gender, phone, bio } = req.body;
 
-        if (!fullName || !email || !phone) {
-            const user = await User.findById(DEMO_USER_ID);
+        if (!fullName || !email || !gender || !phone) {
+            const user = await User.findByUserId(DEMO_USER_ID);
 
             return res.render("editProfile", {
-                user: user,
-                errorMessage: "Full name, email, and phone are required."
+                user,
+                errorMessage: "Full name, email, gender, and phone are required."
             });
         }
 
         const updateData = {
             fullName: fullName.trim(),
             email: email.trim(),
+            gender: gender.trim(),
             phone: phone.trim(),
-            bio: bio.trim()
+            bio: bio ? bio.trim() : ""
         };
 
         if (req.file) {
@@ -72,7 +73,7 @@ exports.postEditProfile = async (req, res) => {
             updateData.profilePictureType = req.file.mimetype;
         }
 
-        await User.findByIdAndUpdate(DEMO_USER_ID, updateData);
+        await User.editProfile(DEMO_USER_ID, updateData);
 
         res.redirect("/profile");
     } catch (error) {
