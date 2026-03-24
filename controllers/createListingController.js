@@ -1,4 +1,4 @@
-const Listing2 = require('../models/createListing');
+const Listing2 = require('../models/Listing');
 const multer = require('multer');
 const path = require('path');
 
