@@ -1,4 +1,4 @@
-const User = require("../models/User.js");
+const {User} = require("../models/User.js");
 
 exports.displayLoginForm = (req, res) => {
     let msg = "";
@@ -8,6 +8,7 @@ exports.displayLoginForm = (req, res) => {
 };
 
 exports.handleLogin = async (req, res) => {
+    let msg = "";
     const username = req.body.username;
     const password = req.body.password;
 
@@ -40,25 +41,25 @@ exports.handleSignup = async (req, res) => {
     if (username.length < 3) {
         msg = "Username must be at least 3 characters.";
 
-        return res.render("signup-form", {msg});
+        return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
     }
 
     if (password.length < 6) {
         msg = "Password must be at least 6 characters.";
 
-        return res.render("signup-form", {msg});
+        return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
     }
 
     if (!email.includes("@") || !email.includes(".") || email.includes(" ")) {
         msg = "Please enter a valid email address.";
 
-        return res.render("signup-form", {msg});
+        return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
     }
 
     if(phone.length !== 8 || isNaN(phone)) {
         msg = "Phone number must be exactly 8 digits";
 
-        return res.render("signup-form", {msg});
+        return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
     }
 
     try {
@@ -69,7 +70,7 @@ exports.handleSignup = async (req, res) => {
         if (error.code === 11000) {
             return res.send("Username already taken.");
         }
-        res.send("Signup failed: " + error.message);
+        res.send("Signup failed.");
     }
 };
 
