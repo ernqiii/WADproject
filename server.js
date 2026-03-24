@@ -20,7 +20,7 @@ app.set("views", path.join(__dirname, "views"));
 
 // Home route
 app.get("/", (req, res) => {
-    res.render("home");
+    res.redirect("/login-form");
 });
 
 // Routes
