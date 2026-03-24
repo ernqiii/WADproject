@@ -29,7 +29,7 @@ exports.handleLogin = async (req, res) => {
 };
 
 exports.handleSignup = async (req, res) => {
-    let msg = "";
+    let msg = [];
     const username = req.body.username;
     const password = req.body.password;
     const fullName = req.body.fullName;
@@ -39,26 +39,22 @@ exports.handleSignup = async (req, res) => {
     const bio = req.body.bio;
 
     if (username.length < 3) {
-        msg = "Username must be at least 3 characters.";
-
-        return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
+        msg.push("Username must be at least 3 characters.");
     }
 
-    if (password.length < 6) {
-        msg = "Password must be at least 6 characters.";
-
-        return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
+    if (password.length < 6) {  
+        msg.push("Password must be at least 6 characters.");
     }
 
     if (!email.includes("@") || !email.includes(".") || email.includes(" ")) {
-        msg = "Please enter a valid email address.";
-
-        return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
+        msg.push("Please enter a valid email address.");
     }
 
     if(phone.length !== 8 || isNaN(phone)) {
-        msg = "Phone number must be exactly 8 digits";
+        msg.push("Phone number must be exactly 8 digits");
+    }
 
+    if(msg) {
         return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
     }
 
