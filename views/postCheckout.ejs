@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Interest Submitted</title>
+</head>
+<body>
+
+<h1>Interest Submitted Successfully</h1>
+<hr>
+
+<p>Your interest for "<%= listing.title %>" has been submitted.</p>
+<p>The landlord will be able to view your request in the system.</p>
+
+<form action="/main" method="GET">
+  <button type="submit">Go to Explore Page</button>
+</form>
+
+<br>
+
+<form action="/wishlist" method="GET">
+  <button type="submit">Back to Wishlist</button>
+</form>
+
+</body>
+</html>
