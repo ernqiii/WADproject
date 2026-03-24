@@ -28,7 +28,7 @@ app.use("/", loginRoutes);
 app.use("/profile", profileRoutes);
 app.use("/", wishlistRoutes);
 app.use('/listing', createListingRoutes);
-app.use('/explore', exploreRoutes);
+app.use("/explore", exploreRoutes);
 
 async function startServer() {
     try {

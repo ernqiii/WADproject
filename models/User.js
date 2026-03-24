@@ -58,4 +58,10 @@ exports.editProfile = function(userId, updateData) {
     return User.findByIdAndUpdate(userId, updateData);
 };
 
+exports.searchByUsername = function(username) {
+    return User.find({
+        username: { $regex: username, $options: "i" }
+    });
+};
+
 exports.User = User;
