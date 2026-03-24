@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const Listing = require("../models/createListing");
+const Listing = require("../models/Listing");
 
 const DEMO_USER_ID = "69c145ad74f11baa30ed10c9";
 

@@ -1,5 +1,5 @@
 const wishlistModel = require("../models/wishlistModel");
-const listingModel = require("../models/createListing")
+const listingModel = require("../models/Listing")
 const interestFormModel =require("../models/interestFormModel");
 
 const addToWishlist = async (req, res) => {
