@@ -3,10 +3,10 @@ const express = require("express");
 const router = express.Router();
 const loginController = require("../controllers/login-controller");
 
-router.get("/login", loginController.displayLoginForm);
-router.post("/login", loginController.handleLogin);
+router.get("/login-form", loginController.displayLoginForm);
+router.post("/login-form", loginController.handleLogin);
 
-router.get("/signup", loginController.displaySignupForm);
-router.post("/signup", loginController.handleSignup);
+router.get("/signup-form", loginController.displaySignupForm);
+router.post("/signup-form", loginController.handleSignup);
 
 module.exports = router;
