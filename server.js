@@ -3,6 +3,7 @@ require("dotenv").config({ path: "./config.env" });
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+// const session = require("express-session");
 
 const loginRoutes = require("./routes/login-routes");
 const profileRoutes = require("./routes/profileRoutes");
