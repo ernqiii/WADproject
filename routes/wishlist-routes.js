@@ -3,6 +3,7 @@ const router = express.Router();
 const wishlistController = require("../controllers/wishlist-controllers");
 
 router.get("/wishlist", wishlistController.getWishlist);
+router.post("/wishlist/add", wishlistController.addToWishlist);
 
 router.post("/wishlist/update-ranking", wishlistController.updateRanking);
 router.post("/wishlist/delete", wishlistController.deleteWishlistItem);

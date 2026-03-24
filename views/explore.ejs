@@ -29,8 +29,8 @@
     <label>Type:</label>
     <select id="type">
         <option value="">All</option>
-        <option value="room">Room</option>
-        <option value="roommate">Roommate</option>
+        <option value="Shared Room">Shared Room</option>
+        <option value="Private Room">Private Room</option>
     </select>
     
     <label>Gender:</label>
@@ -38,7 +38,6 @@
         <option value="">All</option>
         <option value="Male">Male</option>
         <option value="Female">Female</option>
-        <option value="Any">Any</option>
     </select>
     
     <label>Max Price:</label>
@@ -57,21 +56,24 @@
         const data = [
             {
                 id: 1,
-                type: 'room',
+                type: 'Shared Room',
                 title: 'Cozy Room in Central District',
                 description: 'Looking for a comfortable room in the heart of the city. Close to MRT stations and amenities. Perfect for working professionals.',
                 location: 'Central',
                 specificLocation: 'City Hall',
-                gender: 'Any',
+                gender: 'Male',
                 price: 800,
                 amenities: ['WiFi', 'Air Conditioning', 'Near MRT', 'Furnished'],
                 interested: 12,
-                comments: 5,
+                comments: [
+                    { user: 'John', text: 'Is the room still available?' },
+                    { user: 'Sarah', text: 'How far is it from Raffles Place MRT?' }
+                ],
                 wishlist: 3
             },
             {
                 id: 2,
-                type: 'roommate',
+                type: 'Private Room',
                 title: 'Female Roommate Wanted - East Coast',
                 description: 'I have a spacious apartment near East Coast Park and looking for a friendly female roommate.',
                 location: 'East',
@@ -80,12 +82,15 @@
                 price: 950,
                 amenities: ['WiFi', 'Air Conditioning', 'Near Beach', 'Gym Access', 'Pool'],
                 interested: 8,
-                comments: 3,
+                comments: [
+                    { user: 'Emily', text: 'Love the location! Is parking available?' },
+                    { user: 'Rachel', text: 'What floor is the unit on?' }
+                ],
                 wishlist: 5
             },
             {
                 id: 3,
-                type: 'room',
+                type: 'Shared Room',
                 title: 'Affordable Room in North Region',
                 description: 'Budget-friendly option for students or young professionals. Quiet neighborhood, good transport links.',
                 location: 'North',
@@ -94,12 +99,15 @@
                 price: 600,
                 amenities: ['WiFi', 'Furnished', 'Near Bus Stop', 'Quiet Area'],
                 interested: 20,
-                comments: 7,
+                comments: [
+                    { user: 'Alex', text: 'Great price for the area!' },
+                    { user: 'Ben', text: 'Are utilities included?' }
+                ],
                 wishlist: 8
             },
             {
                 id: 4,
-                type: 'roommate',
+                type: 'Private Room',
                 title: 'Looking for Male Roommate - West Side',
                 description: 'Clean and tidy apartment in the west. I work from home so prefer someone who is respectful and organized.',
                 location: 'West',
@@ -108,54 +116,66 @@
                 price: 750,
                 amenities: ['WiFi', 'Air Conditioning', 'Near Shopping Mall', 'Parking'],
                 interested: 15,
-                comments: 4,
+                comments: [
+                    { user: 'Daniel', text: 'Is the dog friendly with strangers?' },
+                    { user: 'Marcus', text: 'How many people share the common area?' }
+                ],
                 wishlist: 6
             },
             {
                 id: 5,
-                type: 'room',
+                type: 'Shared Room',
                 title: 'Premium Studio Room - CBD',
                 description: 'Luxury studio apartment perfect for executives. Fully furnished with modern appliances, 24/7 security.',
                 location: 'Central',
                 specificLocation: 'Tanjong Pagar',
-                gender: 'Any',
+                gender: 'Female',
                 price: 1500,
                 amenities: ['WiFi', 'Air Conditioning', 'Gym', 'Pool', 'Security', 'Concierge'],
                 interested: 25,
-                comments: 10,
+                comments: [
+                    { user: 'Lisa', text: 'Stunning place! Can I schedule a viewing?' },
+                    { user: 'Karen', text: 'Is the gym open 24/7?' }
+                ],
                 wishlist: 12
             },
             {
                 id: 6,
-                type: 'roommate',
+                type: 'Private Room',
                 title: 'Roommate for Shared Condo - Northeast',
                 description: 'I am looking for a roommate to share a beautiful condo in the northeast. Great facilities including pool, gym.',
                 location: 'Northeast',
                 specificLocation: 'Sengkang',
-                gender: 'Any',
+                gender: 'Male',
                 price: 1100,
                 amenities: ['WiFi', 'Air Conditioning', 'Gym', 'Pool', 'BBQ Area'],
                 interested: 18,
-                comments: 6,
+                comments: [
+                    { user: 'James', text: 'How old is the condo?' },
+                    { user: 'Wei Ming', text: 'Is there a minimum stay period?' }
+                ],
                 wishlist: 9
             },
             {
                 id: 7,
-                type: 'room',
+                type: 'Shared Room',
                 title: 'Simple Room near University - North',
                 description: 'Perfect for students! Walking distance to university campus, libraries, and food courts. Utilities included.',
                 location: 'North',
                 specificLocation: 'Woodlands',
-                gender: 'Any',
+                gender: 'Female',
                 price: 550,
                 amenities: ['WiFi', 'Near University', 'Utilities Included', 'Study Desk'],
                 interested: 30,
-                comments: 12,
+                comments: [
+                    { user: 'Priya', text: 'Which university is it near?' },
+                    { user: 'Amy', text: 'Can I move in mid-semester?' }
+                ],
                 wishlist: 15
             },
             {
                 id: 8,
-                type: 'roommate',
+                type: 'Private Room',
                 title: 'Female Roommate - South Coast Living',
                 description: 'Beautiful seaside location with stunning views. Looking for a female roommate who enjoys outdoor activities.',
                 location: 'South',
@@ -164,35 +184,44 @@
                 price: 1050,
                 amenities: ['WiFi', 'Air Conditioning', 'Sea View', 'Near Beach', 'Balcony'],
                 interested: 22,
-                comments: 8,
+                comments: [
+                    { user: 'Natalie', text: 'The sea view sounds amazing!' },
+                    { user: 'Grace', text: 'Is the balcony shared or private?' }
+                ],
                 wishlist: 11
             },
             {
                 id: 9,
-                type: 'room',
+                type: 'Shared Room',
                 title: 'Master Bedroom with Ensuite - Northwest',
                 description: 'Spacious master bedroom with private bathroom. Modern HDB flat with all amenities nearby.',
                 location: 'Northwest',
                 specificLocation: 'Bukit Panjang',
-                gender: 'Any',
+                gender: 'Male',
                 price: 900,
                 amenities: ['WiFi', 'Air Conditioning', 'Ensuite Bathroom', 'Furnished', 'Near MRT'],
                 interested: 16,
-                comments: 5,
+                comments: [
+                    { user: 'Ryan', text: 'Is the ensuite bathroom recently renovated?' },
+                    { user: 'Kevin', text: 'How far is the nearest MRT?' }
+                ],
                 wishlist: 7
             },
             {
                 id: 10,
-                type: 'roommate',
+                type: 'Private Room',
                 title: 'Looking for Chill Roommate - Southeast',
                 description: 'Laid-back environment for working professionals. I travel frequently so you will have the place mostly to yourself.',
                 location: 'Southeast',
                 specificLocation: 'Tampines',
-                gender: 'Any',
+                gender: 'Female',
                 price: 850,
                 amenities: ['WiFi', 'Air Conditioning', 'Parking', 'Quiet Area', 'Near MRT'],
                 interested: 14,
-                comments: 4,
+                comments: [
+                    { user: 'Chloe', text: 'How often are you away?' },
+                    { user: 'Michelle', text: 'Is there a lease agreement?' }
+                ],
                 wishlist: 6
             }
         ];
@@ -238,7 +267,7 @@
                 // Build HTML for this listing
                 html += '<hr>';
                 html += '<h3>' + listing.title + '</h3>';
-                html += '<p><strong>Type:</strong> ' + (listing.type === 'room' ? 'Looking for Room' : 'Looking for Roommate') + '</p>';
+                html += '<p><strong>Type:</strong> ' + listing.type + '</p>';
                 html += '<p><strong>Region:</strong> ' + listing.location + '</p>';
                 if (listing.specificLocation) {
                     html += '<p><strong>Location:</strong> ' + listing.specificLocation + '</p>';
@@ -262,10 +291,18 @@
                 // Image placeholder (commented for future)
                 // html += '<!-- <img src="' + listing.image + '" alt="' + listing.title + '"> -->';
                 
+                // Display comments
+                if (listing.comments && listing.comments.length > 0) {
+                    html += '<p><strong>Comments (' + listing.comments.length + '):</strong></p>';
+                    for (let k = 0; k < listing.comments.length; k++) {
+                        html += '<p>&nbsp;&nbsp;<strong>' + listing.comments[k].user + ':</strong> ' + listing.comments[k].text + '</p>';
+                    }
+                }
+
                 // Action buttons
                 html += '<p>';
                 html += '<button onclick="like(' + listing.id + ')"> Like (' + listing.interested + ')</button> ';
-                html += '<button onclick="comment(' + listing.id + ')"> Comments (' + listing.comments + ')</button> ';
+                html += '<button onclick="toggleComments(' + listing.id + ')"> Comments (' + listing.comments.length + ')</button> ';
                 html += '<button onclick="wishlist(' + listing.id + ')"> Wishlist (' + listing.wishlist + ')</button>';
                 html += '</p>';
             }
@@ -296,18 +333,32 @@
             // fetch('/api/listings/' + id + '/like', {method: 'POST'})
         }
 
-        // View comments
-        function comment(id) {
-            alert('Comments for listing ' + id);
-            // TODO: Show comments from MongoDB
-            // fetch('/api/listings/' + id + '/comments')
+        // Toggle comments visibility
+        function toggleComments(id) {
+            let listing = data.find(l => l.id === id);
+            if (!listing || !listing.comments.length) return;
+            let msg = listing.comments.map(c => c.user + ': ' + c.text).join('\n');
+            alert(msg);
         }
 
         // Add to wishlist
         function wishlist(id) {
-            alert('Added listing ' + id + ' to wishlist');
-            // TODO: Send to MongoDB
-            // fetch('/api/listings/' + id + '/wishlist', {method: 'POST'})
+            fetch('/wishlist/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ listingId: id })
+            })
+            .then(res => {
+                if (res.redirected) {
+                    window.location.href = res.url;
+                } else {
+                    alert('Added to wishlist!');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Error adding to wishlist');
+            });
         }
     </script>
 </body>
