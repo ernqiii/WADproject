@@ -1,7 +1,9 @@
 const User = require("../models/User.js");
 
 exports.displayLoginForm = (req, res) => {
-  res.render("login-form");
+    let msg = "";
+
+    res.render("login-form", {msg});
 };
 
 exports.handleLogin = async (req, res) => {
@@ -12,10 +14,11 @@ exports.handleLogin = async (req, res) => {
     const user = await User.findOne({username: username});
 
     if (user && password === user.password) {
-        // req.session.userId = user._id; // session??
         res.redirect("/home");
     } else {
-        res.send("Invalid credentials");
+        msg = "Invalid credentials.";
+
+        res.render("login-form", {msg});
     }
   } catch (error) {
     console.error("Login error: ", error);
@@ -34,13 +37,13 @@ exports.handleSignup = async (req, res) => {
     const bio = req.body.bio;
 
     if (username.length < 3) {
-        msg = "Username must be at least 3 characters."
+        msg = "Username must be at least 3 characters.";
 
         return res.render("signup-form", {msg});
     }
 
     if (password.length < 6) {
-        msg = "Password must be at least 6 characters."
+        msg = "Password must be at least 6 characters.";
 
         return res.render("signup-form", {msg});
     }
@@ -53,6 +56,7 @@ exports.handleSignup = async (req, res) => {
 
     if(phone.length !== 8 || isNaN(phone)) {
         msg = "Phone number must be exactly 8 digits";
+
         return res.render("signup-form", {msg});
     }
 
