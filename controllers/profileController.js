@@ -1,12 +1,14 @@
 const User = require("../models/User");
 const Listing = require("../models/Listing");
 
-const DEMO_USER_ID = "69b90b2e6099c414584b3344";
+const DEMO_USER_ID = "69c145ad74f11baa30ed10c9";
 
 exports.showProfile = async (req, res) => {
     try {
-        const user = await User.findByUserId(DEMO_USER_ID);
-        const listings = await Listing.findByLandlord(DEMO_USER_ID);
+        const userId = req.params.userId || DEMO_USER_ID;
+
+        const user = await User.findByUserId(userId);
+        const listings = await Listing.findByLandlord(userId);
 
         if (!user) {
             return res.send("User not found.");
@@ -21,7 +23,10 @@ exports.showProfile = async (req, res) => {
         res.render("profile", {
             user,
             listings,
-            profileImage
+            profileImage,
+            errorMessage: "",
+            results: null,
+            searchTerm: ""
         });
     } catch (error) {
         console.log(error);
@@ -79,5 +84,41 @@ exports.submitEditProfile = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.send("Error updating profile.");
+    }
+};
+
+exports.searchUser = async (req, res) => {
+    try {
+        const searchTerm = req.body.username ? req.body.username.trim() : "";
+        const currentUser = await User.findByUserId(DEMO_USER_ID);
+        const listings = await Listing.findByLandlord(DEMO_USER_ID);
+
+        if (!currentUser) {
+            return res.send("User not found.");
+        }
+
+        let profileImage = null;
+
+        if (currentUser.profilePicture && currentUser.profilePictureType) {
+            profileImage = `data:${currentUser.profilePictureType};base64,${currentUser.profilePicture.toString("base64")}`;
+        }
+
+        let results = [];
+
+        if (searchTerm !== "") {
+            results = await User.searchByUsername(searchTerm);
+        }
+
+        res.render("profile", {
+            user: currentUser,
+            listings,
+            profileImage,
+            errorMessage: "",
+            results,
+            searchTerm
+        });
+    } catch (error) {
+        console.log(error);
+        res.send("Error searching users.");
     }
 };

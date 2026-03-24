@@ -235,14 +235,11 @@
                 // Display amenities
                 if (listing.amenities && listing.amenities.length > 0) {
                     html += '<p><strong>Amenities:</strong> ';
-                    for (let j = 0; j < Math.min(3, listing.amenities.length); j++) {
+                    for (let j = 0; j < listing.amenities.length; j++) {
                         html += listing.amenities[j];
-                        if (j < Math.min(3, listing.amenities.length) - 1) html += ', ';
+                        if (j != listing.amenities.length - 1)
+                            html += ', ';
                     }
-                    if (listing.amenities.length > 3) {
-                        html += ' +' + (listing.amenities.length - 3) + ' more';
-                    }
-                    html += '</p>';
                 }
                 
                 // Display description
