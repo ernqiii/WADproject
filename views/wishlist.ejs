@@ -28,23 +28,7 @@
             </td>
               
         </tr>
-          <tr>
-            <td>
-              <% if (item.listing.images && item.listing.images[0]) { %>
-                <img src="<%= listingItem.images[0] %>" alt="<%= listingItem.title %> image 1">
-              <% } %>
-            </td>
-            <td>
-              <% if (item.listing.images && item.listing.images[1]) { %>
-                <img src="<%= listingItem.images[1] %>" alt="<%= listingItem.title %> image 2">
-              <% } %>
-            </td>
-            <td>
-              <% if (item.listing.images && item.listing.images[2]) { %>
-                <img src="<%= listingItem.images[2] %>" alt="<%= listingItem.title %> image 3">
-              <% } %>
-            </td>
-          </tr>
+        
         <tr>
             <td >
                 <strong>
@@ -59,6 +43,7 @@
                 <%= listingItem.location %>
             </td>
         </tr>
+        
         <tr colspan="3">
             <td >
                 <%= listingItem.description %>
