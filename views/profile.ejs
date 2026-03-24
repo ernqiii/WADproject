@@ -2,49 +2,49 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>User Profile</title>
+    <title><%= user.username %>'s Profile</title>
 </head>
 <body>
 
-    <h1>User Profile</h1>
+    <h1><%= user.username %>'s Profile</h1>
 
     <p>
-        <a href="/">Back to Home</a> |
-        <a href="/wishlist">Go to Wishlist</a> |
-        <a href="/listings">Go to Listings</a>
-        <% if (String(user._id) === String(loggedInUserId)) { %>
-            | <a href="/profile/edit">Edit Profile</a>
-        <% } %>
+        <a href="/explore">Back to Explore</a> |
+        <a href="/wishlist">Wishlist</a> |
+        <a href="/listings">Listings</a>
     </p>
 
     <hr>
 
     <% if (String(user._id) === String(loggedInUserId)) { %>
-        <h2>Search Users by Username</h2>
+        <h2>Find Other Users</h2>
 
         <form method="POST" action="/profile/search">
-            <input type="text" name="username" placeholder="Enter username" value="<%= searchTerm %>">
+            <label>Search by username:</label>
+            <input type="text" name="username" value="<%= searchTerm %>" placeholder="Enter username">
             <button type="submit">Search</button>
         </form>
 
         <% if (results !== null) { %>
-            <hr>
+            <br>
             <h3>Search Results</h3>
 
             <% if (results.length === 0) { %>
                 <p>No users found.</p>
             <% } else { %>
                 <% results.forEach(function(foundUser) { %>
-                    <div>
-                        <p><strong>Username:</strong> <%= foundUser.username %></p>
-                        <p><strong>Full Name:</strong> <%= foundUser.fullName %></p>
-                        <p><strong>Email:</strong> <%= foundUser.email %></p>
-                        <p><a href="/profile/<%= foundUser._id %>">View Profile</a></p>
-                        <hr>
-                    </div>
+                    <p>
+                        <strong><%= foundUser.username %></strong><br>
+                        Full Name: <%= foundUser.fullName %><br>
+                        Email: <%= foundUser.email %><br>
+                        <a href="/profile/<%= foundUser._id %>">View Profile</a>
+                    </p>
+                    <hr>
                 <% }) %>
             <% } %>
         <% } %>
+
+        <hr>
     <% } %>
 
     <h2>Profile Information</h2>
@@ -64,73 +64,84 @@
     <p><strong>Phone:</strong> <%= user.phone %></p>
     <p><strong>Bio:</strong> <%= user.bio %></p>
 
+    <% if (String(user._id) === String(loggedInUserId)) { %>
+        <p>
+            <a href="/profile/edit">Edit Profile</a>
+        </p>
+    <% } %>
+
     <hr>
 
-    <h2>My Listings</h2>
+    <h2>Listings</h2>
 
     <% if (listings.length === 0) { %>
         <p>No listings posted yet.</p>
     <% } else { %>
         <% listings.forEach(function(listing) { %>
-            <div>
-                <h3><%= listing.title %></h3>
-                <p><strong>Location:</strong> <%= listing.location %></p>
-                <p><strong>Rent:</strong> $<%= listing.rent %></p>
-                <p><strong>Description:</strong> <%= listing.description %></p>
-                <p><a href="/listings/<%= listing._id %>">View Listing</a></p>
-                <hr>
-            </div>
+            <h3><%= listing.title %></h3>
+            <p><strong>Location:</strong> <%= listing.location %></p>
+            <p><strong>Price:</strong> $<%= listing.price %></p>
+            <p><strong>Description:</strong> <%= listing.description %></p>
+            <p><a href="/listings/<%= listing._id %>">View Listing</a></p>
+            <hr>
         <% }) %>
     <% } %>
 
-<hr>
-<h2>User Reviews</h2>
+    <!-- ⭐ Reviews -->
+    <h2>Reviews</h2>
 
-<p><strong>Average Rating:</strong> <%= avgRating ? avgRating.toFixed(1) : "0.0" %> / 5</p>
-<p><strong>Total Reviews:</strong> <%= totalReviews %></p>
+    <p><strong>Average Rating:</strong> <%= avgRating ? avgRating.toFixed(1) : "0.0" %> / 5</p>
+    <p><strong>Total Reviews:</strong> <%= totalReviews || 0 %></p>
 
-<% if (String(user._id) !== String(loggedInUserId)) { %>
-    <h3>Leave a Review</h3>
+    <!-- Leave Review -->
+    <% if (String(user._id) !== String(loggedInUserId)) { %>
+        <h3>Leave a Review</h3>
 
-    <form method="POST" action="/reviews/add">
-        <input type="hidden" name="reviewedUserId" value="<%= user._id %>">
+        <form method="POST" action="/reviews/add">
+            <input type="hidden" name="reviewedUserId" value="<%= user._id %>">
 
-        <label for="rating">Rating:</label>
-        <select name="rating" id="rating" required>
-            <option value="">Select rating</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-
-        <br><br>
-
-        <label for="comment">Comment:</label><br>
-        <textarea name="comment" id="comment" rows="4" cols="40"></textarea>
-
-        <br><br>
-
-        <button type="submit">Submit Review</button>
-    </form>
-<% } %>
-
-<hr>
-
-<% if (reviews.length === 0) { %>
-    <p>No reviews yet.</p>
-<% } else { %>
-    <% reviews.forEach(function(review) { %>
-        <div>
-            <p><strong>Reviewer:</strong>
-                <%= review.reviewerId ? review.reviewerId.username : "Unknown User" %>
+            <p>
+                Rating:
+                <select name="rating" required>
+                    <option value="">Select</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
             </p>
-            <p><strong>Rating:</strong> <%= review.rating %> / 5</p>
-            <p><strong>Comment:</strong> <%= review.comment %></p>
 
-            <% if (String(review.reviewerId._id) === String(loggedInUserId)) { %>
-                <p><a href="/reviews/edit?reviewId=<%= review._id %>">Edit Review</a></p>
+            <p>
+                Comment:<br>
+                <textarea name="comment" rows="4" cols="40"></textarea>
+            </p>
+
+            <button type="submit">Submit Review</button>
+        </form>
+
+        <hr>
+    <% } %>
+
+    <!-- Review List -->
+    <% if (reviews.length === 0) { %>
+        <p>No reviews yet.</p>
+    <% } else { %>
+        <% reviews.forEach(function(review) { %>
+            <p>
+                <strong>Reviewer:</strong>
+                <%= review.reviewerId ? review.reviewerId.username : "Unknown User" %><br>
+
+                <strong>Rating:</strong> <%= review.rating %> / 5<br>
+
+                <strong>Comment:</strong>
+                <%= review.comment && review.comment.trim() !== "" ? review.comment : "No comment provided." %>
+            </p>
+
+            <% if (review.reviewerId && String(review.reviewerId._id) === String(loggedInUserId)) { %>
+                <p>
+                    <a href="/reviews/edit?reviewId=<%= review._id %>">Edit Review</a>
+                </p>
 
                 <form method="POST" action="/reviews/delete">
                     <input type="hidden" name="reviewId" value="<%= review._id %>">
@@ -140,9 +151,8 @@
             <% } %>
 
             <hr>
-        </div>
-    <% }) %>
-<% } %>
+        <% }) %>
+    <% } %>
 
 </body>
 </html>
