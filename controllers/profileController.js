@@ -1,14 +1,15 @@
 const User = require("../models/User");
 const Listing = require("../models/Listing");
-
-const DEMO_USER_ID = "69c145ad74f11baa30ed10c9";
+const Review = require("../models/Review");
 
 exports.showProfile = async (req, res) => {
     try {
-        const userId = req.params.userId || DEMO_USER_ID;
+        const userId = req.params.userId || req.session.user.id;
 
         const user = await User.findByUserId(userId);
         const listings = await Listing.findByLandlord(userId);
+        const reviews = await Review.findReviewsByUserId(userId);
+        const ratingSummary = await Review.getAverageRating(userId);
 
         if (!user) {
             return res.send("User not found.");
@@ -24,19 +25,21 @@ exports.showProfile = async (req, res) => {
             user,
             listings,
             profileImage,
-            errorMessage: "",
             results: null,
-            searchTerm: ""
+            searchTerm: "",
+            loggedInUserId: req.session.user.id,
+            reviews,
+            avgRating: ratingSummary.avgRating,
+            totalReviews: ratingSummary.totalReviews
         });
     } catch (error) {
         console.log(error);
         res.send("Error loading profile page.");
     }
 };
-
 exports.showEditForm = async (req, res) => {
     try {
-        const user = await User.findByUserId(DEMO_USER_ID);
+        const user = await User.findByUserId(req.session.user.id);
 
         if (!user) {
             return res.send("User not found.");
@@ -57,7 +60,7 @@ exports.submitEditProfile = async (req, res) => {
         const { fullName, email, gender, phone, bio } = req.body;
 
         if (!fullName || !email || !gender || !phone) {
-            const user = await User.findByUserId(DEMO_USER_ID);
+            const user = await User.findByUserId(req.session.user.id);
 
             return res.render("editProfile", {
                 user,
@@ -78,7 +81,7 @@ exports.submitEditProfile = async (req, res) => {
             updateData.profilePictureType = req.file.mimetype;
         }
 
-        await User.editProfile(DEMO_USER_ID, updateData);
+        await User.editProfile(req.session.user.id, updateData);
 
         res.redirect("/profile");
     } catch (error) {
@@ -90,8 +93,10 @@ exports.submitEditProfile = async (req, res) => {
 exports.searchUser = async (req, res) => {
     try {
         const searchTerm = req.body.username ? req.body.username.trim() : "";
-        const currentUser = await User.findByUserId(DEMO_USER_ID);
-        const listings = await Listing.findByLandlord(DEMO_USER_ID);
+        const currentUser = await User.findByUserId(req.session.user.id);
+        const listings = await Listing.findByLandlord(req.session.user.id);
+        const reviews = await Review.findReviewsByUserId(req.session.user.id);
+        const ratingSummary = await Review.getAverageRating(req.session.user.id);
 
         if (!currentUser) {
             return res.send("User not found.");
@@ -113,9 +118,12 @@ exports.searchUser = async (req, res) => {
             user: currentUser,
             listings,
             profileImage,
-            errorMessage: "",
             results,
-            searchTerm
+            searchTerm,
+            loggedInUserId: req.session.user.id,
+            reviews,
+            avgRating: ratingSummary.avgRating,
+            totalReviews: ratingSummary.totalReviews
         });
     } catch (error) {
         console.log(error);

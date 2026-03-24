@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        enum: ["Male", "Female"],
+        enum: ["Male", "Female", "Other"],
         default: "Other"
     },
     phone: {
@@ -52,6 +52,14 @@ const User = mongoose.model("User", userSchema);
 
 exports.findByUserId = function(userId) {
     return User.findById(userId);
+};
+
+exports.findByUsernameExact = function(username) {
+    return User.findOne({ username: username });
+};
+
+exports.addUser = function(newUser) {
+    return User.create(newUser);
 };
 
 exports.editProfile = function(userId, updateData) {

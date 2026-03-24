@@ -1,35 +1,61 @@
-const {User} = require("../models/User.js");
+const User = require("../models/User");
 
 exports.displayLoginForm = (req, res) => {
-    let msg = "";
-    const username = "";
-
-    res.render("login-form", {msg, username});
+    res.render("login-form", {
+        msg: "",
+        username: ""
+    });
 };
 
 exports.handleLogin = async (req, res) => {
-    let msg = "";
     const username = req.body.username;
     const password = req.body.password;
 
-  try {
-    const user = await User.findOne({username: username});
+    try {
+        const user = await User.findByUsernameExact(username);
 
-    if (user && password === user.password) {
-        res.render("explore");
-    } else {
-        msg = "Invalid credentials.";
+        if (!user) {
+            return res.render("login-form", {
+                msg: "Invalid credentials.",
+                username
+            });
+        }
 
-        res.render("login-form", {msg, username});
+        const match = password === user.password;
+
+        if (!match) {
+            return res.render("login-form", {
+                msg: "Invalid credentials.",
+                username
+            });
+        }
+
+        req.session.user = {
+            id: user._id,
+            username: user.username
+        };
+
+        res.redirect("/explore");
+    } catch (error) {
+        console.error("Login error:", error);
+        res.status(500).send("A database error occurred. Please try again later.");
     }
-  } catch (error) {
-    console.error("Login error: ", error);
-    res.status(500).send("A database error ocurred. Please try again later.");
-  }
+};
+
+exports.displaySignupForm = (req, res) => {
+    res.render("signup-form", {
+        msg: "",
+        username: "",
+        password: "",
+        fullName: "",
+        phone: "",
+        email: "",
+        gender: "",
+        bio: ""
+    });
 };
 
 exports.handleSignup = async (req, res) => {
-    let msg = "";
     const username = req.body.username;
     const password = req.body.password;
     const fullName = req.body.fullName;
@@ -39,50 +65,86 @@ exports.handleSignup = async (req, res) => {
     const bio = req.body.bio;
 
     if (username.length < 3) {
-        msg = "Username must be at least 3 characters.";
-
-        return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
+        return res.render("signup-form", {
+            msg: "Username must be at least 3 characters.",
+            username,
+            password,
+            fullName,
+            phone,
+            email,
+            gender,
+            bio
+        });
     }
 
     if (password.length < 6) {
-        msg = "Password must be at least 6 characters.";
-
-        return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
+        return res.render("signup-form", {
+            msg: "Password must be at least 6 characters.",
+            username,
+            password,
+            fullName,
+            phone,
+            email,
+            gender,
+            bio
+        });
     }
 
     if (!email.includes("@") || !email.includes(".") || email.includes(" ")) {
-        msg = "Please enter a valid email address.";
-
-        return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
+        return res.render("signup-form", {
+            msg: "Please enter a valid email address.",
+            username,
+            password,
+            fullName,
+            phone,
+            email,
+            gender,
+            bio
+        });
     }
 
-    if(phone.length !== 8 || isNaN(phone)) {
-        msg = "Phone number must be exactly 8 digits";
-
-        return res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
+    if (phone.length !== 8 || isNaN(phone)) {
+        return res.render("signup-form", {
+            msg: "Phone number must be exactly 8 digits.",
+            username,
+            password,
+            fullName,
+            phone,
+            email,
+            gender,
+            bio
+        });
     }
 
     try {
-        const newUser = new User({username, password, fullName, phone, email, gender, bio});
-        await newUser.save();
+        const newUser = {
+            username,
+            password,
+            fullName,
+            phone,
+            email,
+            gender,
+            bio
+        };
+
+        await User.addUser(newUser);
         res.redirect("/login-form");
     } catch (error) {
+        console.error("Signup error:", error);
+
         if (error.code === 11000) {
-            return res.send("Username already taken.");
+            return res.render("signup-form", {
+                msg: "Username already taken.",
+                username,
+                password,
+                fullName,
+                phone,
+                email,
+                gender,
+                bio
+            });
         }
-        res.send("Signup failed.");
+
+        res.status(500).send("Signup failed.");
     }
-};
-
-exports.displaySignupForm = (req, res) => {
-    let msg = "";
-    const username = "";
-    const password = "";
-    const fullName = "";
-    const phone = "";
-    const email = "";
-    const gender = "";
-    const bio = "";
-
-    res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
 };

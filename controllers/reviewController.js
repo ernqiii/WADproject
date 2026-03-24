@@ -1,17 +1,21 @@
 const Review = require("../models/Review");
 
-const DEMO_REVIEWER_ID = "PUT_REVIEWER_ID_HERE";
-
 exports.createReview = async (req, res) => {
     try {
         const { reviewedUserId, rating, comment } = req.body;
+        const reviewerId = req.session.user.id;
 
         if (!reviewedUserId || !rating) {
             return res.send("Rating and reviewed user are required.");
         }
 
+        // Prevent self-review
+        if (String(reviewerId) === String(reviewedUserId)) {
+            return res.send("You cannot review yourself.");
+        }
+
         const existingReview = await Review.findReviewByReviewerAndUser(
-            DEMO_REVIEWER_ID,
+            reviewerId,
             reviewedUserId
         );
 
@@ -20,7 +24,7 @@ exports.createReview = async (req, res) => {
         }
 
         await Review.addReview({
-            reviewerId: DEMO_REVIEWER_ID,
+            reviewerId,
             reviewedUserId,
             rating,
             comment
@@ -41,6 +45,11 @@ exports.showEditReviewForm = async (req, res) => {
             return res.send("Review not found.");
         }
 
+        // Optional safety: only allow owner to edit
+        if (String(review.reviewerId) !== String(req.session.user.id)) {
+            return res.send("You are not allowed to edit this review.");
+        }
+
         res.render("editReview", { review });
     } catch (error) {
         console.log(error);
@@ -51,6 +60,17 @@ exports.showEditReviewForm = async (req, res) => {
 exports.updateReview = async (req, res) => {
     try {
         const { reviewId, rating, comment, reviewedUserId } = req.body;
+
+        const review = await Review.findReviewById(reviewId);
+
+        if (!review) {
+            return res.send("Review not found.");
+        }
+
+        // Optional safety: only allow owner to update
+        if (String(review.reviewerId) !== String(req.session.user.id)) {
+            return res.send("You are not allowed to update this review.");
+        }
 
         await Review.updateReview(reviewId, rating, comment);
 
@@ -64,6 +84,17 @@ exports.updateReview = async (req, res) => {
 exports.deleteReview = async (req, res) => {
     try {
         const { reviewId, reviewedUserId } = req.body;
+
+        const review = await Review.findReviewById(reviewId);
+
+        if (!review) {
+            return res.send("Review not found.");
+        }
+
+        // Optional safety: only allow owner to delete
+        if (String(review.reviewerId) !== String(req.session.user.id)) {
+            return res.send("You are not allowed to delete this review.");
+        }
 
         await Review.deleteReview(reviewId);
 

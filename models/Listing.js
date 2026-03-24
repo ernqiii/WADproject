@@ -10,14 +10,20 @@ const listingSchema = new mongoose.Schema({
   room_type: { type: String, required: true, enum: ['Private Room', 'Shared Room'] },
   amenities: [{ type: String, enum: ['wifi', 'parking', 'ac'] }],
   photos: [String],
+  landlord: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
-module.exports = mongoose.model('Listing', listingSchema);
+const Listing = mongoose.model('Listing', listingSchema);
 
 exports.findByLandlord = function(userId) {
     return Listing.find({ landlord: userId });
 };
 
-exports.findByListing = function(listingId){
-    return Listing.findOne({_id : listingId})
-}
+exports.findByListing = function(listingId) {
+    return Listing.findOne({ _id: listingId });
+};
+
+exports.Listing = Listing;

@@ -1,47 +1,54 @@
-require("dotenv").config({ path: "./config.env" });
-
 const express = require("express");
 const mongoose = require("mongoose");
-const path = require("path");
+const session = require("express-session");
+const dotenv = require("dotenv");
+
+dotenv.config({ path: "./config.env" });
+
+const server = express();
+
+server.set("view engine", "ejs");
+server.use(express.urlencoded({ extended: true }));
+server.use(express.json());
+
+server.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
 
 const loginRoutes = require("./routes/login-routes");
 const profileRoutes = require("./routes/profileRoutes");
-const wishlistRoutes = require("./routes/wishlist-routes");
-const createListingRoutes = require("./routes/createListingRoute");
 const exploreRoutes = require("./routes/explore");
+const reviewRoutes = require("./routes/review-routes");
 
-const app = express();
+server.use("/", loginRoutes);
+server.use("/profile", profileRoutes);
+server.use("/explore", exploreRoutes);
+server.use("/", reviewRoutes);
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-
-// Home route
-app.get("/", (req, res) => {
+// 🔥 change homepage behavior
+server.get("/", (req, res) => {
+    if (req.session.user) {
+        return res.redirect("/explore"); // CHANGED
+    }
     res.redirect("/login-form");
 });
 
-// Routes
-app.use("/", loginRoutes);
-app.use("/profile", profileRoutes);
-app.use("/", wishlistRoutes);
-app.use('/listing', createListingRoutes);
-app.use("/explore", exploreRoutes);
-
-async function startServer() {
+async function connectDB() {
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log("Connected to MongoDB Atlas");
-
-        const PORT = process.env.PORT || 8000;
-        app.listen(PORT, () => {
-            console.log(`Server running at http://localhost:${PORT}`);
-        });
+        console.log("MongoDB connected successfully");
     } catch (error) {
-        console.log("MongoDB connection error:", error);
+        console.error("MongoDB connection failed:", error.message);
+        process.exit(1);
     }
 }
 
-startServer();
+function startServer() {
+    server.listen(process.env.PORT || 8000, () => {
+        console.log("Server running at http://localhost:8000/");
+    });
+}
+
+connectDB().then(startServer);

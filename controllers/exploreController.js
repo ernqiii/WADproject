@@ -16,8 +16,8 @@ const getExploreListings = async (req, res) => {
   res.render('explore', {
     listings: sampleListings,
     filters: { location: 'all', type: 'all', gender: 'all', maxPrice: '', search: '' },
-    user: null
-  });
+    user: req.session.user
+});
 };
 
 // POST /explore/listings/:listingId/like — toggle like on a listing
@@ -26,7 +26,7 @@ const likeListing = async (req, res) => {
     const listing = await findListing(res, req.params.listingId);
     if (!listing) return;
 
-    const userId = req.session.userId;
+    const userId = req.session.user.id;
     const alreadyLiked = listing.likes.some(id => id.equals(userId));
 
     if (alreadyLiked) listing.likes = listing.likes.filter(id => !id.equals(userId));

@@ -1,8 +1,8 @@
 require("dotenv").config({ path: "./config.env" });
 
 const mongoose = require("mongoose");
-const User = require("./models/User").User;
-const Listing = require("./models/Listing").Listing;
+const User = require("../models/User").User;
+const Listing = require("../models/Listing").Listing;
 
 async function seed() {
     try {
