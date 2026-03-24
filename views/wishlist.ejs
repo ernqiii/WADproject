@@ -1,47 +1,85 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>wishlist</title>
-    </head>
-    <body>
-        <h1>Your wishlist of rooms</h1>
-        <hr>
-        
-            <% let currentWishListItem ='' %>
-            <% if (wishlist_Array.length >0){ %>
-                <% for(let i = 0; i < wishlist_Array.length; i++){%>
-                    <table>
-                        <% currentWishListItem = wishlist_Array[i] %>
-                        <% for(let j = 0; j < currentWishListItem.length; j++){%>
-                               <% if( j === 0) {%>
-                                    <tr>
-                                    <td>
-                                        <br>
-                                        <img src="<%= currentWishListItem[j]%>">
-                                        
-                                    </td>    
-                                    </tr>
-                                <% }else { %>
-                                    <tr>
-                                    <td>
-                                        <br>
-                                        <%= currentWishListItem[j]%>
-                                        
-                                    </td>    
-                                    </tr>
-                                <% } %>
+  <head>
+    <title>Wishlist</title>
+  </head>
+  <body>
+    <h1>Your wishlist of rooms</h1>
+    <hr>
+    <% if (wishlist && listingArray.length > 0) { %>
+      <% listingArray.forEach(item=> { %>
+        <% const listingItem = item.listing %>
+        <% const ranking = item.ranking %>
+        <table border="0">
+        <tr>
+            <td colspan="2">
+                <form action="/wishlist/update" method="POST">
+                    <input type="hidden" name="listingId" value="<%= item.listing._id %>">
+
+                    <label for="ranking_<%= item.listing._id %>">Ranking:</label>
+                    <select name="ranking" id="ranking_<%= item.listing._id %>">
+                        <option value="">-- Select Ranking --</option>
+                        <% for (let i = 1; i <= listingArray.length; i++) { %>
+                            <option value="<%= i %>" <%= item.ranking == i ? "selected" : "" %>><%= i %></option>
                         <% } %>
+                    </select>
+                    <button type="submit">Save Ranking</button>
+                </form>
+            </td>
+              
+        </tr>
+          <tr>
+            <td>
+              <% if (item.listing.images && item.listing.images[0]) { %>
+                <img src="<%= listingItem.images[0] %>" alt="<%= listingItem.title %> image 1">
+              <% } %>
+            </td>
+            <td>
+              <% if (item.listing.images && item.listing.images[1]) { %>
+                <img src="<%= listingItem.images[1] %>" alt="<%= listingItem.title %> image 2">
+              <% } %>
+            </td>
+            <td>
+              <% if (item.listing.images && item.listing.images[2]) { %>
+                <img src="<%= listingItem.images[2] %>" alt="<%= listingItem.title %> image 3">
+              <% } %>
+            </td>
+          </tr>
+        <tr>
+            <td >
+                <strong>
+                    <%= listingItem.title %>
+                </strong>
                 
-                    </table>
-                    <br>
-                    <form action="/checkout" method="POST">
-                        <button type="submit" name="checkout_item" value="<%= currentWishListItem[1] %>">Check Out!</button>
-                    </form>
-                <%}%>  
-            <% } else { %>
-                <h3>Nothing in your wishlist yet</h3>
-            <% } %>
-        <a href="/main">Continue Searching!</a>
+            </td>
+            <td >
+                <%= listingItem.price %>
+            </td>
+            <td>
+                <%= listingItem.location %>
+            </td>
+        </tr>
+        <tr colspan="3">
+            <td >
+                <%= listingItem.description %>
+            </td>
+            
+        </tr> 
+        <tr>
+            <td><form action="/wishlist/delete" method="POST">
+                    <input type="hidden" name="listingId" value="<%= item.listing._id %>">
+                    <button type="submit">Delete Listing</button>
+                </form>
+
+            </td>    
+        </tr>
         
-    </body>
+    </table>
+    <% }) %>
+    <% } else { %>
+      <h3>Nothing in your wishlist yet</h3>
+    <% } %>
+
+    <a href="/">Continue Searching!</a>
+  </body>
 </html>
