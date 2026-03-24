@@ -21,4 +21,3 @@ exports.findByLandlord = function(userId) {
 exports.findByListing = function(listingId){
     return Listing.findOne({listingId})
 }
-exports.Listing = Listing;
