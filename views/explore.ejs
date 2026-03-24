@@ -45,6 +45,7 @@
     <input type="number" id="price" placeholder="Max price">
     
     <button onclick="showListings()">Search</button>
+    <button onclick="resetFilters()">Reset Filters</button>
     
     <hr>
     <div id="listings"></div>
@@ -263,6 +264,16 @@
             }
 
             container.innerHTML = html;
+        }
+
+        // Reset all filters
+        function resetFilters() {
+            document.getElementById('search').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('type').value = '';
+            document.getElementById('gender').value = '';
+            document.getElementById('price').value = '';
+            showListings();
         }
 
         // Like a listing
