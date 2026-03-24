@@ -13,3 +13,11 @@ const listingSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Listing2', listingSchema);
+
+exports.findByLandlord = function(userId) {
+    return Listing.find({ landlord: userId });
+};
+
+exports.findByListing = function(listingId){
+    return Listing.findOne({_id : listingId})
+}

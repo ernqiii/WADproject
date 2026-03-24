@@ -17,4 +17,7 @@ exports.findByLandlord = function(userId) {
     return Listing.find({ landlord: userId });
 };
 
+exports.findByListing = function(listingId){
+    return Listing.findOne({listingId})
+}
 exports.Listing = Listing;

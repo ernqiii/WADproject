@@ -28,7 +28,7 @@ const addToWishlist = async (req, res) => {
     }  
   } catch (err) {
     
-    console.log(error);
+    console.log(err);
     return res.status(500).send("Error in updating wishlist");
   }
 };
