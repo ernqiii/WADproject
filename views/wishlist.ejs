@@ -6,61 +6,88 @@
   <body>
     <h1>Your wishlist of rooms</h1>
     <hr>
+
     <% if (wishlist && listingArray.length > 0) { %>
-      <% listingArray.forEach(item=> { %>
-        <% const listingItem = item.listing %>
-        <% const ranking = item.ranking %>
-        <table border="0">
-        <tr>
+      <% listingArray.forEach(function(item) { %>
+        <% const listingItem = item.listing; %>
+
+        <table border="0" >
+          <tr>
             <td colspan="2">
-                <form action="/wishlist/update" method="POST">
-                    <input type="hidden" name="listingId" value="<%= item.listing._id %>">
+              <form action="/wishlist/update" method="POST">
+                <input type="hidden" name="listingId" value="<%= listingItem._id %>">
 
-                    <label for="ranking_<%= item.listing._id %>">Ranking:</label>
-                    <select name="ranking" id="ranking_<%= item.listing._id %>">
-                        <option value="">-- Select Ranking --</option>
-                        <% for (let i = 1; i <= listingArray.length; i++) { %>
-                            <option value="<%= i %>" <%= item.ranking == i ? "selected" : "" %>><%= i %></option>
-                        <% } %>
-                    </select>
-                    <button type="submit">Save Ranking</button>
-                </form>
+                <label for="ranking_<%= listingItem._id %>">Ranking:</label>
+                <select name="ranking" id="ranking_<%= listingItem._id %>">
+                  <option value="">-- Select Ranking --</option>
+                  <% for (let i = 1; i <= listingArray.length; i++) { %>
+                    <option value="<%= i %>" <%= item.ranking == i ? "selected" : "" %>>
+                      <%= i %>
+                    </option>
+                  <% } %>
+                </select>
+
+                <button type="submit">Save Ranking</button>
+              </form>
             </td>
-              
-        </tr>
-        
-        <tr>
-            <td >
-                <strong>
-                    <%= listingItem.title %>
-                </strong>
-                
-            </td>
-            <td >
-                <%= listingItem.price %>
-            </td>
+          </tr>
+
+          <tr>
+            <td><strong>Title</strong></td>
+            <td><%= listingItem.title %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Price</strong></td>
+            <td>$<%= listingItem.price %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Region</strong></td>
+            <td><%= listingItem.region %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Location</strong></td>
+            <td><%= listingItem.location %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Room Type</strong></td>
+            <td><%= listingItem.room_type %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Roommates</strong></td>
+            <td><%= listingItem.roommates %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Amenities</strong></td>
             <td>
-                <%= listingItem.location %>
+              <% if (listingItem.amenities && listingItem.amenities.length > 0) { %>
+                <%= listingItem.amenities.join(", ") %>
+              <% } else { %>
+                None
+              <% } %>
             </td>
-        </tr>
-        
-        <tr colspan="3">
-            <td >
-                <%= listingItem.description %>
-            </td>
-            
-        </tr> 
-        <tr>
-            <td><form action="/wishlist/delete" method="POST">
-                    <input type="hidden" name="listingId" value="<%= item.listing._id %>">
-                    <button type="submit">Delete Listing</button>
-                </form>
+          </tr>
 
-            </td>    
-        </tr>
-        
-    </table>
-    <% }) %>
+          <tr>
+            <td><strong>Description</strong></td>
+            <td><%= listingItem.description %></td>
+          </tr>
+
+          <tr>
+            <td colspan="2">
+              <form action="/wishlist/delete" method="POST">
+                <input type="hidden" name="listingId" value="<%= listingItem._id %>">
+                <button type="submit">Delete Listing</button>
+              </form>
+            </td>
+          </tr>
+        </table>
+      <% }) %>
     <% } else { %>
       <h3>Nothing in your wishlist yet</h3>
     <% } %>

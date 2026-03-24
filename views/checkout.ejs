@@ -9,30 +9,24 @@
 <hr>
 
 <p><strong><%= listing.title %></strong></p>
+<p></p>
 <p>Price: $<%= listing.price %></p>
+<p>Region : <%= listingItem.region %></p>
 <p>Location: <%= listing.location %></p>
-<p><%= listing.description %></p>
-<p>
-   <table border="0">
-        <tr>
-            <td>
-            <% if (item.listing.images && item.listing.images[0]) { %>
-                <img src="<%= listingItem.images[0] %>" alt="<%= listingItem.title %> image 1">
-              <% } %>
-            </td>
-            <td>
-              <% if (item.listing.images && item.listing.images[1]) { %>
-                <img src="<%= listingItem.images[1] %>" alt="<%= listingItem.title %> image 2">
-              <% } %>
-            </td>
-            <td>
-              <% if (item.listing.images && item.listing.images[2]) { %>
-                <img src="<%= listingItem.images[2] %>" alt="<%= listingItem.title %> image 3">
-              <% } %>
-            </td>
-        </tr>
-    </table>   
-</p>
+<p>Roomtype : <%= listingItem.room_type %></p>
+<p>Roommates: <%= listingItem.roommates %></p>
+<p>Description: <%= listing.description %></p>
+<p>Gender: </p>
+
+<p>Amenities
+  <% if (listingItem.amenities && listingItem.amenities.length > 0) { %>
+        <%= listingItem.amenities.join(", ") %>
+    <% } else { %>
+          None
+  <% } %></p>
+
+
+
 
 <form action="/wishlist/checkout/submit" method="POST">
   <input type="hidden" name="listingId" value="<%= listing._id %>">
