@@ -10,5 +10,7 @@ const upload = multer({
 router.get("/", profileController.showProfile);
 router.get("/edit", profileController.showEditForm);
 router.post("/edit", upload.single("profilePicture"), profileController.submitEditProfile);
+router.post("/search", profileController.searchUser);
+router.get("/:userId", profileController.showProfile);
 
 module.exports = router;
