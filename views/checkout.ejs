@@ -8,22 +8,25 @@
 <h1>Checkout</h1>
 <hr>
 
-<p><strong><%= listing.title %></strong></p>
-<p></p>
-<p>Price: $<%= listing.price %></p>
-<p>Region : <%= listingItem.region %></p>
-<p>Location: <%= listing.location %></p>
-<p>Roomtype : <%= listingItem.room_type %></p>
-<p>Roommates: <%= listingItem.roommates %></p>
-<p>Description: <%= listing.description %></p>
-<p>Gender: </p>
+<h3><%= listing.title %></h3>
 
-<p>Amenities
-  <% if (listingItem.amenities && listingItem.amenities.length > 0) { %>
-        <%= listingItem.amenities.join(", ") %>
+  <p><strong>Type:</strong> <%= listing.room_type %></p>
+  <p><strong>Region:</strong> <%= listing.region %></p>
+  <p><strong>Location:</strong> <%= listing.location %></p>
+  <p><strong>Gender:</strong> <%= listing.gender %></p> 
+  <p><strong>Roommates:</strong> <%= listing.roommates %></p> 
+  <p><strong>Price:</strong> $<%= listing.price %>/month</p>
+  <p>
+    <strong>Amenities:</strong>
+    <% if (listing.amenities && listing.amenities.length > 0) { %>
+      <%= listing.amenities.join(", ") %>
     <% } else { %>
-          None
-  <% } %></p>
+      None
+    <% } %>
+  </p>
+
+  <p><strong>Description:</strong> <%= listing.description %></p>
+</div>
 
 
 
