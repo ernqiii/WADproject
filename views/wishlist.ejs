@@ -7,86 +7,57 @@
     <h1>Your wishlist of rooms</h1>
     <hr>
 
-    <% if (wishlist && listingArray.length > 0) { %>
+    <% if (wishlist && listingArray && listingArray.length > 0) { %>
+      <p>Found <%= listingArray.length %> wishlist item(s)</p>
+      <hr>
+
       <% listingArray.forEach(function(item) { %>
         <% const listingItem = item.listing; %>
 
-        <table border="0" >
-          <tr>
-            <td colspan="2">
-              <form action="/wishlist/update" method="POST">
-                <input type="hidden" name="listingId" value="<%= listingItem._id %>">
+       
+          <h3><%= listingItem.title %></h3>
 
-                <label for="ranking_<%= listingItem._id %>">Ranking:</label>
-                <select name="ranking" id="ranking_<%= listingItem._id %>">
-                  <option value="">-- Select Ranking --</option>
-                  <% for (let i = 1; i <= listingArray.length; i++) { %>
-                    <option value="<%= i %>" <%= item.ranking == i ? "selected" : "" %>>
-                      <%= i %>
-                    </option>
-                  <% } %>
-                </select>
+          <form action="/wishlist/update" method="POST" >
+            <input type="hidden" name="listingId" value="<%= listingItem._id %>">
 
-                <button type="submit">Save Ranking</button>
-              </form>
-            </td>
-          </tr>
-
-          <tr>
-            <td><strong>Title</strong></td>
-            <td><%= listingItem.title %></td>
-          </tr>
-
-          <tr>
-            <td><strong>Price</strong></td>
-            <td>$<%= listingItem.price %></td>
-          </tr>
-
-          <tr>
-            <td><strong>Region</strong></td>
-            <td><%= listingItem.region %></td>
-          </tr>
-
-          <tr>
-            <td><strong>Location</strong></td>
-            <td><%= listingItem.location %></td>
-          </tr>
-
-          <tr>
-            <td><strong>Room Type</strong></td>
-            <td><%= listingItem.room_type %></td>
-          </tr>
-
-          <tr>
-            <td><strong>Roommates</strong></td>
-            <td><%= listingItem.roommates %></td>
-          </tr>
-
-          <tr>
-            <td><strong>Amenities</strong></td>
-            <td>
-              <% if (listingItem.amenities && listingItem.amenities.length > 0) { %>
-                <%= listingItem.amenities.join(", ") %>
-              <% } else { %>
-                None
+            <label for="ranking_<%= listingItem._id %>"><strong>Ranking:</strong></label>
+            <select name="ranking" id="ranking_<%= listingItem._id %>">
+              <option value="">-- Select Ranking --</option>
+              <% for (let i = 1; i <= listingArray.length; i++) { %>
+                <option value="<%= i %>" <%= item.ranking == i ? "selected" : "" %>>
+                  <%= i %>
+                </option>
               <% } %>
-            </td>
-          </tr>
+            </select>
 
-          <tr>
-            <td><strong>Description</strong></td>
-            <td><%= listingItem.description %></td>
-          </tr>
+            <button type="submit">Save Ranking</button>
+          </form>
 
-          <tr>
-            <td colspan="2">
-              <form action="/wishlist/delete" method="POST">
-                <input type="hidden" name="listingId" value="<%= listingItem._id %>">
-                <button type="submit">Delete Listing</button>
-              </form>
-            </td>
-          </tr>
-        </table>
+          
+          <p><strong>Region:</strong> <%= listingItem.region %></p>
+          <p><strong>Location:</strong> <%= listingItem.location %></p>
+          <p><strong>Gender:</strong><%= listingItem.location%></p>
+          <p><strong>Room Type:</strong> <%= listingItem.room_type %></p>
+          <p><strong>Roommates:</strong> <%= listingItem.roommates %></p>
+          <p><strong>Price:</strong> $<%= listingItem.price %>/month</p>
+          <p>
+            <strong>Amenities:</strong>
+            <% if (listingItem.amenities && listingItem.amenities.length > 0) { %>
+              <%= listingItem.amenities.join(", ") %>
+            <% } else { %>
+              None
+            <% } %>
+          </p>
+
+          <p><strong>Description:</strong> <%= listingItem.description %></p>
+
+          <form action="/wishlist/delete" method="POST" style="display:inline;">
+            <input type="hidden" name="listingId" value="<%= listingItem._id %>">
+            <button type="submit">Delete Listing</button>
+          </form>
+
+          <hr>
+ 
       <% }) %>
     <% } else { %>
       <h3>Nothing in your wishlist yet</h3>
