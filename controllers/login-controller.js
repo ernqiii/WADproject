@@ -15,11 +15,11 @@ exports.handleLogin = async (req, res) => {
     const user = await User.findOne({username: username});
 
     if (user && password === user.password) {
-        res.redirect("/home");
+        res.render("explore");
     } else {
         msg = "Invalid credentials.";
 
-        res.render("login-form", {msg});
+        res.render("login-form", {msg, username});
     }
   } catch (error) {
     console.error("Login error: ", error);
@@ -64,7 +64,7 @@ exports.handleSignup = async (req, res) => {
     try {
         const newUser = new User({username, password, fullName, phone, email, gender, bio});
         await newUser.save();
-        res.redirect("/login");
+        res.redirect("/login-form");
     } catch (error) {
         if (error.code === 11000) {
             return res.send("Username already taken.");
