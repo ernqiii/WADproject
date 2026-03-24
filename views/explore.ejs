@@ -8,10 +8,10 @@
     <hr>
 
     <h3>Filters</h3>
-    
+
     <label>Search:</label>
     <input type="text" id="search" placeholder="Search listings...">
-    
+
     <label>Region:</label>
     <select id="region">
         <option value="">All Regions</option>
@@ -32,200 +32,26 @@
         <option value="Shared Room">Shared Room</option>
         <option value="Private Room">Private Room</option>
     </select>
-    
+
     <label>Gender:</label>
     <select id="gender">
         <option value="">All</option>
         <option value="Male">Male</option>
         <option value="Female">Female</option>
     </select>
-    
+
     <label>Max Price:</label>
     <input type="number" id="price" placeholder="Max price">
-    
+
     <button onclick="showListings()">Search</button>
     <button onclick="resetFilters()">Reset Filters</button>
-    
+
     <hr>
     <div id="listings"></div>
 
     <script>
-        
-        // Mock data - replace with MongoDB later
-        // Change this later
-        const data = [
-            {
-                id: 1,
-                type: 'Shared Room',
-                title: 'Cozy Room in Central District',
-                description: 'Looking for a comfortable room in the heart of the city. Close to MRT stations and amenities. Perfect for working professionals.',
-                location: 'Central',
-                specificLocation: 'City Hall',
-                gender: 'Male',
-                price: 800,
-                amenities: ['WiFi', 'Air Conditioning', 'Near MRT', 'Furnished'],
-                interested: 12,
-                comments: [
-                    { user: 'John', text: 'Is the room still available?' },
-                    { user: 'Sarah', text: 'How far is it from Raffles Place MRT?' }
-                ],
-                wishlist: 3
-            },
-            {
-                id: 2,
-                type: 'Private Room',
-                title: 'Female Roommate Wanted - East Coast',
-                description: 'I have a spacious apartment near East Coast Park and looking for a friendly female roommate.',
-                location: 'East',
-                specificLocation: 'Bedok',
-                gender: 'Female',
-                price: 950,
-                amenities: ['WiFi', 'Air Conditioning', 'Near Beach', 'Gym Access', 'Pool'],
-                interested: 8,
-                comments: [
-                    { user: 'Emily', text: 'Love the location! Is parking available?' },
-                    { user: 'Rachel', text: 'What floor is the unit on?' }
-                ],
-                wishlist: 5
-            },
-            {
-                id: 3,
-                type: 'Shared Room',
-                title: 'Affordable Room in North Region',
-                description: 'Budget-friendly option for students or young professionals. Quiet neighborhood, good transport links.',
-                location: 'North',
-                specificLocation: 'Yishun',
-                gender: 'Male',
-                price: 600,
-                amenities: ['WiFi', 'Furnished', 'Near Bus Stop', 'Quiet Area'],
-                interested: 20,
-                comments: [
-                    { user: 'Alex', text: 'Great price for the area!' },
-                    { user: 'Ben', text: 'Are utilities included?' }
-                ],
-                wishlist: 8
-            },
-            {
-                id: 4,
-                type: 'Private Room',
-                title: 'Looking for Male Roommate - West Side',
-                description: 'Clean and tidy apartment in the west. I work from home so prefer someone who is respectful and organized.',
-                location: 'West',
-                specificLocation: 'Jurong East',
-                gender: 'Male',
-                price: 750,
-                amenities: ['WiFi', 'Air Conditioning', 'Near Shopping Mall', 'Parking'],
-                interested: 15,
-                comments: [
-                    { user: 'Daniel', text: 'Is the dog friendly with strangers?' },
-                    { user: 'Marcus', text: 'How many people share the common area?' }
-                ],
-                wishlist: 6
-            },
-            {
-                id: 5,
-                type: 'Shared Room',
-                title: 'Premium Studio Room - CBD',
-                description: 'Luxury studio apartment perfect for executives. Fully furnished with modern appliances, 24/7 security.',
-                location: 'Central',
-                specificLocation: 'Tanjong Pagar',
-                gender: 'Female',
-                price: 1500,
-                amenities: ['WiFi', 'Air Conditioning', 'Gym', 'Pool', 'Security', 'Concierge'],
-                interested: 25,
-                comments: [
-                    { user: 'Lisa', text: 'Stunning place! Can I schedule a viewing?' },
-                    { user: 'Karen', text: 'Is the gym open 24/7?' }
-                ],
-                wishlist: 12
-            },
-            {
-                id: 6,
-                type: 'Private Room',
-                title: 'Roommate for Shared Condo - Northeast',
-                description: 'I am looking for a roommate to share a beautiful condo in the northeast. Great facilities including pool, gym.',
-                location: 'Northeast',
-                specificLocation: 'Sengkang',
-                gender: 'Male',
-                price: 1100,
-                amenities: ['WiFi', 'Air Conditioning', 'Gym', 'Pool', 'BBQ Area'],
-                interested: 18,
-                comments: [
-                    { user: 'James', text: 'How old is the condo?' },
-                    { user: 'Wei Ming', text: 'Is there a minimum stay period?' }
-                ],
-                wishlist: 9
-            },
-            {
-                id: 7,
-                type: 'Shared Room',
-                title: 'Simple Room near University - North',
-                description: 'Perfect for students! Walking distance to university campus, libraries, and food courts. Utilities included.',
-                location: 'North',
-                specificLocation: 'Woodlands',
-                gender: 'Female',
-                price: 550,
-                amenities: ['WiFi', 'Near University', 'Utilities Included', 'Study Desk'],
-                interested: 30,
-                comments: [
-                    { user: 'Priya', text: 'Which university is it near?' },
-                    { user: 'Amy', text: 'Can I move in mid-semester?' }
-                ],
-                wishlist: 15
-            },
-            {
-                id: 8,
-                type: 'Private Room',
-                title: 'Female Roommate - South Coast Living',
-                description: 'Beautiful seaside location with stunning views. Looking for a female roommate who enjoys outdoor activities.',
-                location: 'South',
-                specificLocation: 'Harbourfront',
-                gender: 'Female',
-                price: 1050,
-                amenities: ['WiFi', 'Air Conditioning', 'Sea View', 'Near Beach', 'Balcony'],
-                interested: 22,
-                comments: [
-                    { user: 'Natalie', text: 'The sea view sounds amazing!' },
-                    { user: 'Grace', text: 'Is the balcony shared or private?' }
-                ],
-                wishlist: 11
-            },
-            {
-                id: 9,
-                type: 'Shared Room',
-                title: 'Master Bedroom with Ensuite - Northwest',
-                description: 'Spacious master bedroom with private bathroom. Modern HDB flat with all amenities nearby.',
-                location: 'Northwest',
-                specificLocation: 'Bukit Panjang',
-                gender: 'Male',
-                price: 900,
-                amenities: ['WiFi', 'Air Conditioning', 'Ensuite Bathroom', 'Furnished', 'Near MRT'],
-                interested: 16,
-                comments: [
-                    { user: 'Ryan', text: 'Is the ensuite bathroom recently renovated?' },
-                    { user: 'Kevin', text: 'How far is the nearest MRT?' }
-                ],
-                wishlist: 7
-            },
-            {
-                id: 10,
-                type: 'Private Room',
-                title: 'Looking for Chill Roommate - Southeast',
-                description: 'Laid-back environment for working professionals. I travel frequently so you will have the place mostly to yourself.',
-                location: 'Southeast',
-                specificLocation: 'Tampines',
-                gender: 'Female',
-                price: 850,
-                amenities: ['WiFi', 'Air Conditioning', 'Parking', 'Quiet Area', 'Near MRT'],
-                interested: 14,
-                comments: [
-                    { user: 'Chloe', text: 'How often are you away?' },
-                    { user: 'Michelle', text: 'Is there a lease agreement?' }
-                ],
-                wishlist: 6
-            }
-        ];
-        // End of change this later to mongodb data
+
+        const data = <%- JSON.stringify(listings) %>;
 
         // Show listings when page loads
         showListings();
@@ -244,25 +70,29 @@
             // Loop through each listing
             for (let i = 0; i < data.length; i++) {
                 let listing = data[i];
-                
+                let listingId = listing._id || listing.id || i;
+
                 // Check search filter
                 if (searchFilter && !listing.title.toLowerCase().includes(searchFilter) && !listing.description.toLowerCase().includes(searchFilter)) {
                     continue;
                 }
-                
+
                 // Check region filter
                 if (regionFilter && listing.location !== regionFilter) continue;
 
                 // Check type filter
                 if (typeFilter && listing.type !== typeFilter) continue;
-                
+
                 // Check gender filter
                 if (genderFilter && listing.gender !== genderFilter) continue;
-                
+
                 // Check price filter
                 if (priceFilter && listing.price > priceFilter) continue;
 
                 count++;
+
+                let likeCount = listing.likes ? listing.likes.length : 0;
+                let comments = listing.comments || [];
 
                 // Build HTML for this listing
                 html += '<hr>';
@@ -274,7 +104,7 @@
                 }
                 html += '<p><strong>Gender:</strong> ' + listing.gender + '</p>';
                 html += '<p><strong>Price:</strong> $' + listing.price + '/month</p>';
-                
+
                 // Display amenities
                 if (listing.amenities && listing.amenities.length > 0) {
                     html += '<p><strong>Amenities:</strong> ';
@@ -283,28 +113,30 @@
                         if (j != listing.amenities.length - 1)
                             html += ', ';
                     }
+                    html += '</p>';
                 }
-                
+
                 // Display description
                 html += '<p><strong>Description:</strong> ' + listing.description + '</p>';
-                
-                // Image placeholder (commented for future)
-                // html += '<!-- <img src="' + listing.image + '" alt="' + listing.title + '"> -->';
-                
-                // Display comments
-                if (listing.comments && listing.comments.length > 0) {
-                    html += '<p><strong>Comments (' + listing.comments.length + '):</strong></p>';
-                    for (let k = 0; k < listing.comments.length; k++) {
-                        html += '<p>&nbsp;&nbsp;<strong>' + listing.comments[k].user + ':</strong> ' + listing.comments[k].text + '</p>';
-                    }
-                }
 
                 // Action buttons
                 html += '<p>';
-                html += '<button onclick="like(' + listing.id + ')"> Like (' + listing.interested + ')</button> ';
-                html += '<button onclick="toggleComments(' + listing.id + ')"> Comments (' + listing.comments.length + ')</button> ';
-                html += '<button onclick="wishlist(' + listing.id + ')"> Wishlist (' + listing.wishlist + ')</button>';
+                html += '<button id="like-btn-' + listingId + '" onclick="like(\'' + listingId + '\')"> Like (<span id="like-count-' + listingId + '">' + likeCount + '</span>)</button> ';
+                html += '<button onclick="toggleComments(\'' + listingId + '\')"> Comments (' + comments.length + ')</button> ';
+                html += '<button onclick="wishlist(\'' + listingId + '\')"> Wishlist</button>';
                 html += '</p>';
+
+                // Comments section (hidden by default)
+                html += '<div id="comments-' + listingId + '" style="display:none; margin-left: 20px;">';
+                if (comments.length > 0) {
+                    for (let k = 0; k < comments.length; k++) {
+                        let userName = comments[k].user?.name || comments[k].user || 'Anonymous';
+                        html += '<p><strong>' + userName + ':</strong> ' + comments[k].text + '</p>';
+                    }
+                } else {
+                    html += '<p>No comments yet.</p>';
+                }
+                html += '</div>';
             }
 
             if (count === 0) {
@@ -328,17 +160,29 @@
 
         // Like a listing
         function like(id) {
-            alert('You liked listing ' + id);
-            // TODO: Send to MongoDB
-            // fetch('/api/listings/' + id + '/like', {method: 'POST'})
+            fetch('/explore/listings/' + id + '/like', { method: 'POST' })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    document.getElementById('like-count-' + id).textContent = result.likeCount;
+                } else {
+                    alert(result.message || 'Failed to like listing');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Error liking listing');
+            });
         }
 
         // Toggle comments visibility
         function toggleComments(id) {
-            let listing = data.find(l => l.id === id);
-            if (!listing || !listing.comments.length) return;
-            let msg = listing.comments.map(c => c.user + ': ' + c.text).join('\n');
-            alert(msg);
+            let commentsDiv = document.getElementById('comments-' + id);
+            if (commentsDiv.style.display === 'none') {
+                commentsDiv.style.display = 'block';
+            } else {
+                commentsDiv.style.display = 'none';
+            }
         }
 
         // Add to wishlist

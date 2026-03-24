@@ -10,6 +10,13 @@ const listingSchema = new mongoose.Schema({
   room_type: { type: String, required: true, enum: ['Private Room', 'Shared Room'] },
   amenities: [{ type: String, enum: ['wifi', 'parking', 'ac'] }],
   photos: [String],
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  comments: [{
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    text: { type: String, required: true, trim: true },
+    createdAt: { type: Date, default: Date.now }
+  }],
+  wishlistedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 });
 
 module.exports = mongoose.model('Listing', listingSchema);

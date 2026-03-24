@@ -16,7 +16,7 @@ exports.handleLogin = async (req, res) => {
     const user = await User.findOne({username: username});
 
     if (user && password === user.password) {
-        res.render("explore");
+        res.redirect("/explore");
     } else {
         msg = "Invalid credentials.";
 
