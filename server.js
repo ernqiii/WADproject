@@ -30,7 +30,7 @@ server.use("/", reviewRoutes);
 // 🔥 change homepage behavior
 server.get("/", (req, res) => {
     if (req.session.user) {
-        return res.redirect("/explore"); // CHANGED
+        return res.redirect("/explore"); 
     }
     res.redirect("/login-form");
 });

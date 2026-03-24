@@ -11,6 +11,43 @@ async function findListing(res, listingId) {
   return listing;
 }
 
+exports.showExplore = (req, res) => {
+
+    const sampleListings = [
+        {
+            id: 1,
+            type: 'room',
+            title: 'Cozy Room in Central District',
+            description: 'Close to MRT stations and amenities.',
+            location: 'Central',
+            gender: 'Any',
+            price: 800,
+            amenities: ['WiFi', 'Air Conditioning'],
+            interested: 12,
+            comments: 5,
+            wishlist: 3
+        },
+        {
+            id: 2,
+            type: 'roommate',
+            title: 'Female Roommate Wanted - East Coast',
+            description: 'Spacious apartment near East Coast Park.',
+            location: 'East',
+            gender: 'Female',
+            price: 950,
+            amenities: ['WiFi', 'Gym', 'Pool'],
+            interested: 8,
+            comments: 3,
+            wishlist: 5
+        }
+    ];
+
+    res.render("explore", {
+        listings: sampleListings,
+        user: req.session.user   // 🔥 IMPORTANT for "Hello username"
+    });
+};
+
 // GET /explore — render the explore page with listings
 const getExploreListings = async (req, res) => {
   res.render('explore', {
