@@ -17,13 +17,11 @@ const wishlistSchema = new mongoose.Schema({
       },
       ranking: {
         type: Number,
-        min: 1
+        min: 1,
+        default : null
       },
-      // optional:
-      addedAt: {
-        type: Date,
-        default: Date.now
-      }
+      
+      
     }
   ]
 });
@@ -36,14 +34,16 @@ exports.findByUser = function(ID){
     return wishlist.findOne({user: ID})
 }
 
-exports.addToWishlist = function(newItem){
-    return wishlist.create(newItem)
-}
 
+exports.createWishlist = function(userId, items) {
+  return wishlist.create({
+    user: userId,
+    items: items,
+    
+  });
+};
 
 exports.updateWishlistItem = function(ID, items){
     return wishlist.updateOne({user:ID},{items: items})
 }
-exports.updateWishlistRanking = function(ID, ranking){
-    return wishlist.updateOne({user:ID},{ranking: ranking})
-}
+

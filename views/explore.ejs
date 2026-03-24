@@ -18,10 +18,10 @@
     <hr>
 
     <h3>Filters</h3>
-    
+
     <label>Search:</label>
     <input type="text" id="search" placeholder="Search listings...">
-    
+
     <label>Region:</label>
     <select id="region">
         <option value="">All Regions</option>
@@ -39,24 +39,23 @@
     <label>Type:</label>
     <select id="type">
         <option value="">All</option>
-        <option value="room">Room</option>
-        <option value="roommate">Roommate</option>
+        <option value="Shared Room">Shared Room</option>
+        <option value="Private Room">Private Room</option>
     </select>
-    
+
     <label>Gender:</label>
     <select id="gender">
         <option value="">All</option>
         <option value="Male">Male</option>
         <option value="Female">Female</option>
-        <option value="Any">Any</option>
     </select>
-    
+
     <label>Max Price:</label>
     <input type="number" id="price" placeholder="Max price">
-    
+
     <button onclick="showListings()">Search</button>
     <button onclick="resetFilters()">Reset Filters</button>
-    
+
     <hr>
     <div id="listings"></div>
 
@@ -129,6 +128,18 @@
                 html += '<button>Comments (' + listing.comments + ')</button> ';
                 html += '<button>Wishlist (' + listing.wishlist + ')</button>';
                 html += '</p>';
+
+                // Comments section (hidden by default)
+                html += '<div id="comments-' + listingId + '" style="display:none; margin-left: 20px;">';
+                if (comments.length > 0) {
+                    for (let k = 0; k < comments.length; k++) {
+                        let userName = comments[k].user?.name || comments[k].user || 'Anonymous';
+                        html += '<p><strong>' + userName + ':</strong> ' + comments[k].text + '</p>';
+                    }
+                } else {
+                    html += '<p>No comments yet.</p>';
+                }
+                html += '</div>';
             }
 
             if (count === 0) {

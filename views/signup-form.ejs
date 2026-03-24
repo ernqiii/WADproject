@@ -5,8 +5,13 @@
   <body>
     <h1>Sign Up</h1>
 
-    <% if (msg != "") { %>
-      <p style="color: red">Error: <%= msg %></p>
+    <% if (msg && msg.length > 0) { %>
+      <p style="color: red">Error:</p>
+      <ul style="color:red">
+        <% msg.forEach(function(m) { %>
+            <li><%= m %></li>
+        <% }); %>
+      </ul>
     <% } %>
 
     <form action="/signup-form" method="post">

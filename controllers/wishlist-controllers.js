@@ -2,43 +2,42 @@ const wishlistModel = require("../models/wishlistModel");
 const listingModel = require("../models/Listing")
 const interestFormModel =require("../models/interestFormModel");
 
+
 const addToWishlist = async (req, res) => {
-  const userId = req.session.userId;
+  const userId = req.session?.userId || "temp-user-1";
   const listingId = req.body.listingId;
+
   try {
     let wishlist = await wishlistModel.findByUser(userId);
 
-    if (!wishlist) { 
-      await wishlistModel.updateWishlist(userId);
-      console.log("successfully updated");
+    if (!wishlist) {
+      await wishlistModel.createWishlist(userId, [{ listing: listingId }]);
+      console.log("successfully created wishlist and added listing");
       return res.redirect("/explore");
-      
-    }
-    else{
-      const exists = wishlist.items.filter( item => {
+    } else {
+      const exists = wishlist.items.find(item => {
         return item.listing.toString() === listingId;
       });
 
       if (!exists) {
         wishlist.items.push({ listing: listingId });
-        await wishlistModel.updateWishlist(wishlist.user, wishlist.items);
+        await wishlistModel.updateWishlistItem(wishlist.user, wishlist.items);
         console.log("successfully updated");
       }
+
       return res.redirect("/explore");
-    }  
+    }
   } catch (err) {
-    
     console.log(err);
     return res.status(500).send("Error in updating wishlist");
   }
 };
-
 const getWishlist =  async (req, res) => {
-  const userId = req.session.userId;
+  const userId = req.session?.userId || "temp-user-1";
   try{
     let wishlist = await wishlistModel.findByUser(userId);
      if (!wishlist || !wishlist.items || wishlist.items.length === 0) { 
-      res.render("wishlist",{wishlist:"", listingArray:[]});
+      res.render("wishlist",{wishlist:null, listingArray:[]});
       
     }
     else{
@@ -67,7 +66,7 @@ const getWishlist =  async (req, res) => {
 };
   
 const updateRanking = async (req, res) => {
-  const userId = req.session.userId;
+  const userId = req.session?.userId || "temp-user-1";
   const listingId = req.body.listingId;
   const ranking = req.body.ranking;
 
@@ -88,7 +87,7 @@ const updateRanking = async (req, res) => {
 
     targetItem.ranking = ranking ? Number(ranking) : null;
 
-    await wishlistModel.updateWishlist(userId, targetItem.ranking);
+    await wishlistModel.updateWishlistItem(userId, wishlist.items);
     return res.redirect("/wishlist");
   } catch (error) {
     console.log(error);
@@ -97,7 +96,7 @@ const updateRanking = async (req, res) => {
 };
 
 const deleteWishlistItem = async (req, res) => {
-  const userId = req.session.userId;
+  const userId = req.session?.userId || "temp-user-1";
   const listingId = req.body.listingId;
 
   try {
@@ -139,7 +138,7 @@ const checkoutPage = async (req, res) => {
 };
  
 const  postCheckoutPage  = async (req, res) => {
-  const userId = req.session.userId;
+  const userId = req.session?.userId || "temp-user-1";
   const listingId = req.body.listingId;
   const name = req.body.name;
   const email = req.body.email;
