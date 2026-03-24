@@ -12,7 +12,7 @@ const listingSchema = new mongoose.Schema({
   photos: [String],
 });
 
-module.exports = mongoose.model('Listing2', listingSchema);
+module.exports = mongoose.model('Listing', listingSchema);
 
 exports.findByLandlord = function(userId) {
     return Listing.find({ landlord: userId });
