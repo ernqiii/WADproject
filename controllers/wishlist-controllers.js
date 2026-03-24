@@ -1,6 +1,6 @@
-const wishlistModel = require("../model/wishlistModel");
-const listingModel = require("../model/Listing")
-const interestFormModel =require("../model/interestFormModel");
+const wishlistModel = require("../models/wishlistModel");
+const listingModel = require("../models/Listing")
+const interestFormModel =require("../models/interestFormModel");
 
 const addToWishlist = async (req, res) => {
   const userId = req.session.userId;
