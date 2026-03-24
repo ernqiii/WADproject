@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        minLength: 3, //?
         trim: true
     },
     email: {
@@ -56,6 +55,12 @@ exports.findByUserId = function(userId) {
 
 exports.editProfile = function(userId, updateData) {
     return User.findByIdAndUpdate(userId, updateData);
+};
+
+exports.searchByUsername = function(username) {
+    return User.find({
+        username: { $regex: username, $options: "i" }
+    });
 };
 
 exports.User = User;
