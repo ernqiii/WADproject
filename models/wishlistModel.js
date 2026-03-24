@@ -40,9 +40,7 @@ exports.addToWishlist = function(newItem){
     return wishlist.create(newItem)
 }
 
-exports.deleteCount = function(wishlist){
-    return wishlist.deleteOne({_id:wishlist._id})
-}
+
 exports.updateWishlistItem = function(ID, items){
     return wishlist.updateOne({user:ID},{items: items})
 }
