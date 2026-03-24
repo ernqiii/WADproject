@@ -2,8 +2,9 @@ const User = require("../models/User.js");
 
 exports.displayLoginForm = (req, res) => {
     let msg = "";
+    const username = "";
 
-    res.render("login-form", {msg});
+    res.render("login-form", {msg, username});
 };
 
 exports.handleLogin = async (req, res) => {
@@ -74,6 +75,13 @@ exports.handleSignup = async (req, res) => {
 
 exports.displaySignupForm = (req, res) => {
     let msg = "";
+    const username = "";
+    const password = "";
+    const fullName = "";
+    const phone = "";
+    const email = "";
+    const gender = "";
+    const bio = "";
 
-    res.render("signup-form", {msg});
+    res.render("signup-form", {msg, username, password, fullName, phone, email, gender, bio});
 };
