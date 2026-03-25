@@ -25,8 +25,6 @@ exports.showProfile = async (req, res) => {
             user,
             listings,
             profileImage,
-            results: null,
-            searchTerm: "",
             loggedInUserId: req.session.user.id,
             reviews,
             avgRating: ratingSummary.avgRating,
@@ -37,6 +35,7 @@ exports.showProfile = async (req, res) => {
         res.send("Error loading profile page.");
     }
 };
+
 exports.showEditForm = async (req, res) => {
     try {
         const user = await User.findByUserId(req.session.user.id);
@@ -93,37 +92,31 @@ exports.submitEditProfile = async (req, res) => {
 exports.searchUser = async (req, res) => {
     try {
         const searchTerm = req.body.username ? req.body.username.trim() : "";
-        const currentUser = await User.findByUserId(req.session.user.id);
-        const listings = await Listing.findByLandlord(req.session.user.id);
-        const reviews = await Review.findReviewsByUserId(req.session.user.id);
-        const ratingSummary = await Review.getAverageRating(req.session.user.id);
+        const loggedInUserId = req.session.user.id;
 
-        if (!currentUser) {
-            return res.send("User not found.");
+        if (searchTerm === "") {
+            return res.render("searchResults", {
+                results: [],
+                searchTerm: "",
+                message: "Please enter a username."
+            });
         }
 
-        let profileImage = null;
+        const currentUser = await User.findByUserId(loggedInUserId);
 
-        if (currentUser.profilePicture && currentUser.profilePictureType) {
-            profileImage = `data:${currentUser.profilePictureType};base64,${currentUser.profilePicture.toString("base64")}`;
+        if (
+            currentUser &&
+            currentUser.username.toLowerCase() === searchTerm.toLowerCase()
+        ) {
+            return res.redirect("/profile");
         }
 
-        let results = [];
+        const results = await User.searchByUsername(searchTerm);
 
-        if (searchTerm !== "") {
-            results = await User.searchByUsername(searchTerm);
-        }
-
-        res.render("profile", {
-            user: currentUser,
-            listings,
-            profileImage,
+        res.render("searchResults", {
             results,
             searchTerm,
-            loggedInUserId: req.session.user.id,
-            reviews,
-            avgRating: ratingSummary.avgRating,
-            totalReviews: ratingSummary.totalReviews
+            message: results.length === 0 ? "No users found." : ""
         });
     } catch (error) {
         console.log(error);

@@ -6,7 +6,23 @@
 </head>
 <body>
 
-    <h1><%= user.username %>'s Profile</h1>
+    <table width="100%">
+        <tr>
+            <td>
+                <h1><%= user.username %>'s Profile</h1>
+            </td>
+
+            <% if (String(user._id) === String(loggedInUserId)) { %>
+                <td align="right">
+                    <form method="POST" action="/profile/search">
+                        <label>Search by username:</label>
+                        <input type="text" name="username" placeholder="Enter username" required>
+                        <button type="submit">Search</button>
+                    </form>
+                </td>
+            <% } %>
+        </tr>
+    </table>
 
     <p>
         <a href="/explore">Back to Explore</a> |
@@ -15,37 +31,6 @@
     </p>
 
     <hr>
-
-    <% if (String(user._id) === String(loggedInUserId)) { %>
-        <h2>Find Other Users</h2>
-
-        <form method="POST" action="/profile/search">
-            <label>Search by username:</label>
-            <input type="text" name="username" value="<%= searchTerm %>" placeholder="Enter username">
-            <button type="submit">Search</button>
-        </form>
-
-        <% if (results !== null) { %>
-            <br>
-            <h3>Search Results</h3>
-
-            <% if (results.length === 0) { %>
-                <p>No users found.</p>
-            <% } else { %>
-                <% results.forEach(function(foundUser) { %>
-                    <p>
-                        <strong><%= foundUser.username %></strong><br>
-                        Full Name: <%= foundUser.fullName %><br>
-                        Email: <%= foundUser.email %><br>
-                        <a href="/profile/<%= foundUser._id %>">View Profile</a>
-                    </p>
-                    <hr>
-                <% }) %>
-            <% } %>
-        <% } %>
-
-        <hr>
-    <% } %>
 
     <h2>Profile Information</h2>
 
@@ -87,12 +72,11 @@
         <% }) %>
     <% } %>
 
-    <h2>Reviews</h2>
+    <u><h2>Reviews</h2></u>
 
     <p><strong>Average Rating:</strong> <%= avgRating ? avgRating.toFixed(1) : "0.0" %> / 5</p>
     <p><strong>Total Reviews:</strong> <%= totalReviews || 0 %></p>
 
-    <!-- Leave Review -->
     <% if (String(user._id) !== String(loggedInUserId)) { %>
         <h3>Leave a Review</h3>
 
@@ -122,7 +106,6 @@
         <hr>
     <% } %>
 
-    <!-- Review List -->
     <% if (reviews.length === 0) { %>
         <p>No reviews yet.</p>
     <% } else { %>

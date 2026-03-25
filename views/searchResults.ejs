@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>User Search Results</title>
+</head>
+<body>
+
+    <h1>User Search Results</h1>
+
+    <p>
+        <a href="/profile">Back to My Profile</a>
+    </p>
+
+    <hr>
+
+    <form method="POST" action="/profile/search">
+        <label>Search by username:</label>
+        <input type="text" name="username" value="<%= searchTerm %>" placeholder="Enter username" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <hr>
+
+    <h2>Results for "<%= searchTerm %>"</h2>
+
+    <% if (searchTerm === "") { %>
+        <p>Please enter a username.</p>
+    <% } else if (results.length === 0) { %>
+        <p>No users found.</p>
+    <% } else { %>
+        <% results.forEach(function(foundUser) { %>
+            <p>
+                <strong><%= foundUser.username %></strong><br>
+                Full Name: <%= foundUser.fullName %><br>
+                Email: <%= foundUser.email %><br>
+                <a href="/profile/<%= foundUser._id %>">View Profile</a>
+            </p>
+            <hr>
+        <% }) %>
+    <% } %>
+
+</body>
+</html>
