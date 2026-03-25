@@ -42,5 +42,5 @@ exports.createForm = function(newForm) {
   return InterestForm.create(newForm);
 };
 exports.findByLandlord = function(userId) {
-    return Listing.find({ landlord: userId });
+    return InterestForm.find({ landlord: userId });
 };

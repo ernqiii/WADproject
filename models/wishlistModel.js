@@ -20,8 +20,10 @@ const wishlistSchema = new mongoose.Schema({
         min: 1,
         default : null
       },
-      
-      
+      createdAt: {
+        type: Date,
+        default: Date.now
+      }
     }
   ]
 });
