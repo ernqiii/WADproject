@@ -27,7 +27,7 @@ server.use("/profile", profileRoutes);
 server.use("/explore", exploreRoutes);
 server.use("/", reviewRoutes);
 
-// 🔥 change homepage behavior
+// change homepage behavior
 server.get("/", (req, res) => {
     if (req.session.user) {
         return res.redirect("/explore"); 

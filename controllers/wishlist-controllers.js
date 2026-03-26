@@ -138,7 +138,7 @@ const checkoutPage = async (req, res) => {
 };
  
 const postCheckoutPage = async (req, res) => {
-  const userId = req.session?.user?._id;
+  const userId = req.session?.user?.id || "temp-user-1";
   const { listingId, name, email, phone, telegram, contact_method, message, consent } = req.body;
 
   try {

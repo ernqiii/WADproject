@@ -29,6 +29,15 @@
       <% if (item.listing) { %>
         <p><strong>Location:</strong> <%= item.listing.location %></p>
         <p><strong>Price:</strong> $<%= item.listing.price %>/month</p>
+        <% if (item.listing.image && item.listing.image.data) { %>
+          <p>
+            <img src="/listing/<%= item.listing._id %>/image"
+                 alt="<%= item.listing.title %>"
+                 width="250">
+          </p>
+        <% } else { %>
+          <p>No image available</p>
+      <% } %>
       <% } %>
 
       <p><strong>Name:</strong> <%= item.interest.name %></p>

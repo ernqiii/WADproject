@@ -15,6 +15,16 @@
         <% const listingItem = item.listing; %>
 
         <h3><%= listingItem.title %></h3>
+        <% if (listingItem.image && listingItem.image.data) { %>
+          <p>
+            <img src="/listing/<%= listingItem._id %>/image"
+                 alt="<%= listingItem.title %>"
+                 width="250">
+          </p>
+        <% } else { %>
+          <p>No image available</p>
+        <% } %>
+
 
         <form action="/wishlist/update" method="POST">
           <input type="hidden" name="listingId" value="<%= listingItem._id %>">

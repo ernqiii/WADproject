@@ -9,6 +9,16 @@
 <hr>
 
 <h3><%= listing.title %></h3>
+<% if (listing.image && listing.image.data) { %>
+          <p>
+            <img src="/listing/<%= listing._id %>/image"
+                 alt="<%= listing.title %>"
+                 width="250">
+          </p>
+        <% } else { %>
+          <p>No image available</p>
+  <% } %>
+
 
   <p><strong>Type:</strong> <%= listing.room_type %></p>
   <p><strong>Region:</strong> <%= listing.region %></p>
@@ -52,7 +62,7 @@
   <input type="email" name="email" value="<%= email || '' %>">
   <br><br>
 
-  Phone:(via messages,whatsapp or phone calls)
+  Phone: (via calls, SMS, or WhatsApp)
   <input type="text" name="phone" value="<%= phone || '' %>">
   <br><br>
 

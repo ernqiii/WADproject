@@ -12,21 +12,26 @@
 <p>The landlord will be able to view your request in the system.</p>
 <hr>
 <br>
+<h2 align="center">Navigation</h2>
 
-<form action="/explore" method="GET">
-  <button type="submit">Go to Explore Page</button>
-</form>
+  <table align="center" cellpadding="10">
+    <tr>
+      <td>
+        <form action="/explore" method="GET">
+          <button type="submit">Go to Explore Page</button>
+        </form>
+      </td>
 
-<br>
+      <td>
+        <form action="/wishlist" method="GET">
+          <button type="submit">Back to Wishlist</button>
+        </form>
+      </td>
 
-<form action="/wishlist" method="GET">
-  <button type="submit">Back to Wishlist</button>
-</form>
-
-<br>
-
-<form action="/profile" method="GET">
-  <button type="submit">Go to Profile</button>
-</form>
-</body>
-</html>
+      <td>
+        <form action="/profile" method="GET">
+          <button type="submit">View your previously submitted interest forms</button>
+        </form>
+      </td>
+    </tr>
+  </table>

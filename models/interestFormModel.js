@@ -24,7 +24,7 @@ const interestFormSchema = new mongoose.Schema({
     
   },
   phone: {
-    type: [String], //rmb change back to numbers
+    type: String, //since text input is string -> thus data type is string for simplicity 
     
   },
   telegram:{
