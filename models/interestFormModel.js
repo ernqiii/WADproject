@@ -21,14 +21,28 @@ const interestFormSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true
+    
   },
   phone: {
+    type: [String], //rmb change back to numbers
+    
+  },
+  telegram:{
+    type:String,
+
+  },
+  preferredContactMethod: {
     type: String,
-    required: true
+    enum: ["email", "phone", "whatsapp", "telegram"],
+    
   },
   message: {
     type: String
+  },
+  status: {
+    type: String,
+    enum: ["Active", "Closed"],
+    default: "Active"
   },
   createdAt: {
     type: Date,
@@ -41,6 +55,24 @@ const InterestForm = mongoose.model("InterestForm", interestFormSchema, "interes
 exports.createForm = function(newForm) {
   return InterestForm.create(newForm);
 };
-exports.findByLandlord = function(userId) {
-    return InterestForm.find({ landlord: userId });
+exports.findByLandlord = function(search_criteria) {
+    return InterestForm.find(search_criteria);
 };
+exports.findByUser = function(search_criteria){
+    return InterestForm.find(search_criteria)
+}
+exports.findByInterest_and_User = function(interestId, userId){
+  return InterestForm.findOne({_id: interestId,user: userId});
+}
+exports.updateInterest = function(interestId,userId, newItem){
+  return InterestForm.updateOne({ _id: interestId, user: userId },newItem)
+}
+exports.deleteInterest = function(interestId,userId){ 
+  return InterestForm.deleteOne({_id: interestId,user: userId});
+};
+exports.findByInterest_and_Landlord= function(interestId, landlordId){
+  return InterestForm.findOne({_id: interestId,landlord: landlordId});
+}
+exports.updateStatus= function(interestId,landlordId,status){
+  return InterestForm.updateOne({_id: interestId,landlord: landlordId},{status: status});
+}

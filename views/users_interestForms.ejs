@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile</title>
+</head>
+<body>
+
+  <h1>My Interest Forms</h1>
+  <hr>
+
+  <form action="/profile" method="GET">
+    <label for="status">Filter by status:</label>
+    <select name="status" id="status">
+      <option value="" <%= selectedStatus === "" ? "selected" : "" %>>All</option>
+      <option value="Active" <%= selectedStatus === "Active" ? "selected" : "" %>>Active</option>
+      <option value="Closed" <%= selectedStatus === "Closed" ? "selected" : "" %>>Closed</option>
+    </select>
+    <button type="submit">Filter</button>
+  </form>
+
+  <br>
+
+  <% if (interestListingArray && interestListingArray.length > 0) { %>
+    <% interestListingArray.forEach(function(item) { %>
+      <hr>
+
+      <h3><%= item.listing ? item.listing.title : "Listing deleted" %></h3>
+
+      <% if (item.listing) { %>
+        <p><strong>Location:</strong> <%= item.listing.location %></p> <%# listing is gone-> interest form could still be present %>
+        <p><strong>Price:</strong> $<%= item.listing.price %>/month</p>
+      <% } %>
+
+      <p><strong>Name:</strong> <%= item.interest.name %></p>
+      <p><strong>Email:</strong> <%= item.interest.email || "Not provided" %></p>
+      <p><strong>Phone:</strong> <%= item.interest.phone || "Not provided" %></p>
+      <p><strong>Telegram:</strong> <%= item.interest.telegram || "Not provided" %></p>
+      <p><strong>Preferred Contact Method:</strong> <%= item.interest.preferredContactMethod %></p>
+      <p><strong>Message:</strong> <%= item.interest.message || "No message" %></p>
+      <p><strong>Status:</strong> <%= item.interest.status %></p>
+
+      <% if (item.interest.createdAt) { %>
+        <p><strong>Submitted On:</strong> <%= item.interest.createdAt.toDateString() %></p>
+      <% } %>
+
+      <% if (item.interest.status === "Active") { %>
+        <form action="/interest/edit" method="POST" >
+          <input type="hidden" name="interestId" value="<%= item.interest._id %>">
+          <button type="submit">Edit</button>
+        </form>
+      <% } %>
+
+      <form action="/interest/delete" method="POST">
+        <input type="hidden" name="interestId" value="<%= item.interest._id %>">
+        <button type="submit">Delete</button>
+      </form>
+
+    <% }) %>
+  <% } else { %>
+    <p>No interest forms found.</p>
+  <% } %>
+
+</body>
+</html>

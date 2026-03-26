@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Interest Form</title>
+</head>
+<body>
+    
+  <h1>Edit Interest Form</h1>
+  <hr>
+
+  <h3><%= listing ? listing.title : "Listing deleted" %></h3>
+
+  
+  <form action="/interest/update" method="POST">
+    <input type="hidden" name="interestId" value="<%= interest._id %>">
+    
+    Name:
+    <input type="text" name="name" value="<%= interest.name || '' %>" required>
+    <br><br>
+
+    <p><strong>Please fill in at least one contact method.</strong></p>
+
+    Email:
+    <input type="email" name="email" value="<%= interest.email || '' %>">
+    <br><br>
+
+    Phone:
+    <input type="text" name="phone" value="<%= interest.phone || '' %>">
+    <br><br>
+
+    Telegram:
+    <input type="text" name="telegram" value="<%= interest.telegram || '' %>">
+    <br><br>
+
+    Preferred Contact Method<strong>(this contact information has to be provided)</strong>
+    <select name="contact_method">
+      <option value="">-- Please Select One --</option>
+      <option value="email" <%= interest.preferredContactMethod === "email" ? "selected" : "" %>>Email</option>
+      <option value="phone" <%= interest.preferredContactMethod === "phone" ? "selected" : "" %>>Phone</option>
+      <option value="telegram" <%= interest.preferredContactMethod === "telegram" ? "selected" : "" %>>Telegram</option>
+      <option value="whatsapp" <%= interest.preferredContactMethod === "whatsapp" ? "selected" : "" %>>WhatsApp</option>
+    </select>
+    <br><br>
+
+    <label>Message:</label>
+    <textarea name="message"><%= interest.message || '' %></textarea>
+    <br><br>
+    <p>
+    <small>
+      By submitting this form, you agree that your contact details and message
+      will be stored for the purpose of managing your interest in this listing.
+      Your submission will be shown in your profile, and you may edit or delete it later.
+    </small>
+    </p>
+ 
+    <input type="checkbox" name="consent" required>
+        I understand that my submitted contact details and message will be stored for this interest request.
+    <br><br>
+
+
+    <button type="submit">Save Changes</button>
+  </form>
+
+</body>
+</html>
