@@ -4,6 +4,10 @@ const Review = require("../models/Review");
 
 exports.showProfile = async (req, res) => {
     try {
+        if (!req.session.user) {
+            return res.redirect("/login");
+        }
+
         const userId = req.params.userId || req.session.user.id;
 
         const user = await User.findByUserId(userId);
@@ -23,16 +27,16 @@ exports.showProfile = async (req, res) => {
 
         res.render("profile", {
             user,
-            listings,
+            listings,//: listings || [],
             profileImage,
             loggedInUserId: req.session.user.id,
-            reviews,
+            reviews,//: reviews || [],
             avgRating: ratingSummary.avgRating,
             totalReviews: ratingSummary.totalReviews
         });
     } catch (error) {
         console.log(error);
-        res.send("Error loading profile page.");
+        res.status(500).send("Error loading profile page.");
     }
 };
 
@@ -85,7 +89,7 @@ exports.submitEditProfile = async (req, res) => {
         res.redirect("/profile");
     } catch (error) {
         console.log(error);
-        res.send("Error updating profile.");
+        res.status(500).send("Error updating profile.");
     }
 };
 
