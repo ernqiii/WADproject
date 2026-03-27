@@ -27,12 +27,12 @@ exports.showProfile = async (req, res) => {
 
         res.render("profile", {
             user,
-            listings,//: listings || [],
+            listings: listings || [],
             profileImage,
             loggedInUserId: req.session.user.id,
-            reviews,//: reviews || [],
-            avgRating: ratingSummary.avgRating,
-            totalReviews: ratingSummary.totalReviews
+            reviews: reviews || [],
+            avgRating: ratingSummary ? ratingSummary.avgRating : 0,
+            totalReviews: ratingSummary ? ratingSummary.totalReviews : 0
         });
     } catch (error) {
         console.log(error);
@@ -62,7 +62,7 @@ exports.submitEditProfile = async (req, res) => {
     try {
         const { fullName, email, gender, phone, bio } = req.body;
 
-        if (!fullName || !email || !gender || !phone) {
+        if (!fullName.trim() || !email.trim() || !gender || !phone.trim()) {
             const user = await User.findByUserId(req.session.user.id);
 
             return res.render("editProfile", {
@@ -71,15 +71,74 @@ exports.submitEditProfile = async (req, res) => {
             });
         }
 
+        // check email format
+        if (!email.includes("@") || !email.includes(".") || email.includes(" ") || email.indexOf("@") > email.indexOf(".")) {
+            const user = await User.findByUserId(req.session.user.id);
+            return res.render("editProfile", {
+                user,
+                errorMessage: "Please enter a valid email address."
+            });
+        }
+
+        // check phone format
+        const cleanPhone = phone.split(" ").join("");
+
+        if (cleanPhone.trim().length !== 8|| isNaN(cleanPhone)) {
+            const user = await User.findByUserId(req.session.user.id);
+            return res.render("editProfile", {
+                user,
+                errorMessage: "Please enter a valid phone number."
+            });
+        }
+
+        // check name length
+        if (fullName.length > 50) {
+            const user = await User.findByUserId(req.session.user.id);
+            return res.render("editProfile", {
+                user,
+                errorMessage: "Name is too long."
+            });
+        }
+
+        // check bio length
+        if (bio && bio.length > 500) {
+            const user = await User.findByUserId(req.session.user.id);
+            return res.render("editProfile", {
+                user,
+                errorMessage: "Bio is too long."
+            });
+        }
+
         const updateData = {
             fullName: fullName.trim(),
             email: email.trim(),
             gender: gender.trim(),
-            phone: phone.trim(),
+            phone: cleanPhone.trim(),
             bio: bio ? bio.trim() : ""
         };
 
         if (req.file) {
+            const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+
+            // check file type
+            if (!allowedTypes.includes(req.file.mimetype)) {
+                const user = await User.findByUserId(req.session.user.id);
+                return res.render("editProfile", {
+                    user, 
+                    errorMessage: "Only JPG, JPEG, and PNG files are allowed."
+                });
+            }
+
+            // check file size
+            if (req.file.size > 2 * 1024 * 1024) {
+                const user = await User.findByUserId(req.session.user.id) 
+                return res.render("editProfile", {
+                    user, 
+                    errorMessage: "Image file is too large. Max @MB is allowed."
+                });
+                
+            }
+
             updateData.profilePicture = req.file.buffer;
             updateData.profilePictureType = req.file.mimetype;
         }
