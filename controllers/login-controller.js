@@ -56,14 +56,15 @@ exports.displaySignupForm = (req, res) => {
 };
 
 exports.handleSignup = async (req, res) => {
-    const username = req.body.username;
+    const username = req.body.username.trim();
     const password = req.body.password;
-    const fullName = req.body.fullName;
-    const phone = req.body.phone;
-    const email = req.body.email;
+    const fullName = req.body.fullName.trim();
+    const phone = req.body.phone.trim();
+    const email = req.body.email.trim();
     const gender = req.body.gender;
     const bio = req.body.bio;
 
+    // check username length
     if (username.length < 3) {
         return res.render("signup-form", {
             msg: "Username must be at least 3 characters.",
@@ -77,6 +78,7 @@ exports.handleSignup = async (req, res) => {
         });
     }
 
+    // check password length
     if (password.length < 6) {
         return res.render("signup-form", {
             msg: "Password must be at least 6 characters.",
@@ -90,7 +92,22 @@ exports.handleSignup = async (req, res) => {
         });
     }
 
-    if (!email.includes("@") || !email.includes(".") || email.includes(" ")) {
+    // check name length
+    if (fullName.length > 50) {
+        return res.render("signup-form", {
+            msg: "Name is too long.",
+            username,
+            password,
+            fullName,
+            phone,
+            email,
+            gender,
+            bio
+        });
+    }
+
+    // check email format
+    if (!email.includes("@") || !email.includes(".") || email.includes(" ") || email.indexOf("@") > email.indexOf(".")) {
         return res.render("signup-form", {
             msg: "Please enter a valid email address.",
             username,
@@ -103,9 +120,26 @@ exports.handleSignup = async (req, res) => {
         });
     }
 
-    if (phone.length !== 8 || isNaN(phone)) {
+    //check phone format
+    const cleanPhone = phone.split(" ").join("");
+
+    if (cleanPhone.trim().length !== 8 || isNaN(cleanPhone)) {
         return res.render("signup-form", {
             msg: "Phone number must be exactly 8 digits.",
+            username,
+            password,
+            fullName,
+            phone,
+            email,
+            gender,
+            bio
+        });
+    }
+
+    // check bio length
+    if (bio && bio.length > 500) {
+        return res.render("signup-form", {
+            msg: "Bio is too long.",
             username,
             password,
             fullName,
@@ -121,10 +155,10 @@ exports.handleSignup = async (req, res) => {
             username,
             password,
             fullName,
-            phone,
+            phone: cleanPhone,
             email,
             gender,
-            bio
+            bio: bio ? bio.trim() : ""
         };
 
         await User.addUser(newUser);
