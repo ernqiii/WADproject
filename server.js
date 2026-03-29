@@ -1,3 +1,8 @@
+// allow newer versions of Node.js to connect to MongoDB
+const dns = require("dns");
+dns.setDefaultResultOrder("verbatim");
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");

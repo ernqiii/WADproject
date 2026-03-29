@@ -36,19 +36,11 @@
         <option value="Southwest">Southwest</option>
     </select>
 
-    <label>Type:</label>
+    <label>Room Type:</label>
     <select id="type">
         <option value="">All</option>
-        <option value="room">Room</option>
-        <option value="roommate">Roommate</option>
-    </select>
-    
-    <label>Gender:</label>
-    <select id="gender">
-        <option value="">All</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Any">Any</option>
+        <option value="Private Room">Private Room</option>
+        <option value="Shared Room">Shared Room</option>
     </select>
     
     <label>Max Price:</label>
@@ -58,95 +50,216 @@
     <button onclick="resetFilters()">Reset Filters</button>
     
     <hr>
-    <div id="listings"></div>
+    <div id="listings">
+        <% if (listings.length === 0) { %>
+            <p>No listings found.</p>
+        <% } %>
+
+        <% for (let i = 0; i < listings.length; i++) { %>
+            <% let listing = listings[i]; %>
+            <div class="listing"
+                 data-title="<%= listing.title.toLowerCase() %>"
+                 data-region="<%= listing.region %>"
+                 data-room-type="<%= listing.room_type %>"
+                 data-price="<%= listing.price %>">
+                <hr>
+                <h3><%= listing.title %></h3>
+
+                <% if (listing.photos && listing.photos.length > 0) { %>
+                    <img src="/uploads/<%= listing.photos[0] %>" alt="<%= listing.title %>" style="max-width:200px;">
+                <% } %>
+
+                <p><strong>Region:</strong> <%= listing.region %></p>
+                <p><strong>Location:</strong> <%= listing.location %></p>
+                <p><strong>Price:</strong> $<%= listing.price %>/month</p>
+                <p><strong>Room Type:</strong> <%= listing.room_type %></p>
+                <p><strong>Roommates:</strong> <%= listing.roommates %></p>
+                <p><strong>Description:</strong> <%= listing.description %></p>
+
+                <% if (listing.amenities && listing.amenities.length > 0) { %>
+                    <p><strong>Amenities:</strong> <%= listing.amenities.join(', ') %></p>
+                <% } %>
+
+                <!-- Like Button -->
+                <button id="like-btn-<%= listing._id %>" onclick="toggleLike('<%= listing._id %>')">
+                    <% if (user && listing.likes.some(id => id.toString() === user.id.toString())) { %>
+                        Unlike (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
+                    <% } else { %>
+                        Like (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
+                    <% } %>
+                </button>
+
+                <!-- Comment Button -->
+                <button onclick="toggleComments('<%= listing._id %>')">
+                    Comments (<span id="comment-count-<%= listing._id %>"><%= listing.comments.length %></span>)
+                </button>
+
+                <!-- Wishlist Button -->
+                <button id="wishlist-btn-<%= listing._id %>" onclick="toggleWishlist('<%= listing._id %>')">
+                    <% if (user && listing.wishlistedBy.some(id => id.toString() === user.id.toString())) { %>
+                        Wishlisted
+                    <% } else { %>
+                        Wishlist
+                    <% } %>
+                </button>
+
+                <!-- Comments Section (hidden by default) -->
+                <div id="comments-<%= listing._id %>" style="display:none; margin-top:10px;">
+                    <h4>Comments</h4>
+                    <div id="comments-list-<%= listing._id %>">
+                        <% for (let j = 0; j < listing.comments.length; j++) { %>
+                            <% let comment = listing.comments[j]; %>
+                            <div id="comment-<%= comment._id %>" style="margin-bottom:8px; padding:5px; border-bottom:1px solid #ccc;">
+                                <strong><%= comment.user ? comment.user.username : 'Unknown' %></strong>
+                                <span style="font-size:0.8em; color:gray;">
+                                    — <%= new Date(comment.createdAt).toLocaleString() %>
+                                </span>
+                                <p id="comment-text-<%= comment._id %>"><%= comment.text %></p>
+
+                                <% if (user && comment.user && comment.user._id.toString() === user.id.toString()) { %>
+                                    <button onclick="editComment('<%= listing._id %>', '<%= comment._id %>')">Edit</button>
+                                    <button onclick="deleteComment('<%= listing._id %>', '<%= comment._id %>')">Delete</button>
+                                <% } %>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <% if (user) { %>
+                        <textarea id="comment-input-<%= listing._id %>" placeholder="Write a comment..." rows="2" style="width:100%;"></textarea>
+                        <button onclick="addComment('<%= listing._id %>')">Submit Comment</button>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+    </div>
 
     <script>
+        const userId = '<%= user ? user.id : "" %>';
 
-        // Mock data
-        const data = [
-            {
-                id: 1,
-                type: 'room',
-                title: 'Cozy Room in Central District',
-                description: 'Close to MRT stations and amenities.',
-                location: 'Central',
-                gender: 'Any',
-                price: 800,
-                amenities: ['WiFi', 'Air Conditioning'],
-                interested: 12,
-                comments: 5,
-                wishlist: 3
-            },
-            {
-                id: 2,
-                type: 'roommate',
-                title: 'Female Roommate Wanted - East Coast',
-                description: 'Spacious apartment near East Coast Park.',
-                location: 'East',
-                gender: 'Female',
-                price: 950,
-                amenities: ['WiFi', 'Gym', 'Pool'],
-                interested: 8,
-                comments: 3,
-                wishlist: 5
-            }
-        ];
-
-        // Load listings on start
-        showListings();
-
+        // Filter listings client-side (show/hide)
         function showListings() {
             let searchFilter = document.getElementById('search').value.toLowerCase();
             let regionFilter = document.getElementById('region').value;
             let typeFilter = document.getElementById('type').value;
-            let genderFilter = document.getElementById('gender').value;
             let priceFilter = document.getElementById('price').value;
 
-            let container = document.getElementById('listings');
-            let html = '';
-            let count = 0;
+            let items = document.querySelectorAll('.listing');
+            let visibleCount = 0;
 
-            for (let i = 0; i < data.length; i++) {
-                let listing = data[i];
+            for (let i = 0; i < items.length; i++) {
+                let el = items[i];
+                let show = true;
 
-                if (searchFilter && !listing.title.toLowerCase().includes(searchFilter)) continue;
-                if (regionFilter && listing.location !== regionFilter) continue;
-                if (typeFilter && listing.type !== typeFilter) continue;
-                if (genderFilter && listing.gender !== genderFilter) continue;
-                if (priceFilter && listing.price > priceFilter) continue;
+                if (searchFilter && !el.dataset.title.includes(searchFilter)) show = false;
+                if (regionFilter && el.dataset.region !== regionFilter) show = false;
+                if (typeFilter && el.dataset.roomType !== typeFilter) show = false;
+                if (priceFilter && Number(el.dataset.price) > Number(priceFilter)) show = false;
 
-                count++;
-
-                html += '<hr>';
-                html += '<h3>' + listing.title + '</h3>';
-                html += '<p><strong>Region:</strong> ' + listing.location + '</p>';
-                html += '<p><strong>Gender:</strong> ' + listing.gender + '</p>';
-                html += '<p><strong>Price:</strong> $' + listing.price + '</p>';
-                html += '<p><strong>Description:</strong> ' + listing.description + '</p>';
-
-                html += '<p>';
-                html += '<button>Like (' + listing.interested + ')</button> ';
-                html += '<button>Comments (' + listing.comments + ')</button> ';
-                html += '<button>Wishlist (' + listing.wishlist + ')</button>';
-                html += '</p>';
+                el.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
             }
-
-            if (count === 0) {
-                html = '<p>No listings found.</p>';
-            }
-
-            container.innerHTML = html;
         }
 
         function resetFilters() {
             document.getElementById('search').value = '';
             document.getElementById('region').value = '';
             document.getElementById('type').value = '';
-            document.getElementById('gender').value = '';
             document.getElementById('price').value = '';
             showListings();
         }
 
+        // Like toggle
+        async function toggleLike(listingId) {
+            const res = await fetch('/explore/listings/' + listingId + '/like', { method: 'POST' });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('like-count-' + listingId).textContent = data.likeCount;
+                let btn = document.getElementById('like-btn-' + listingId);
+                let countSpan = document.getElementById('like-count-' + listingId).outerHTML;
+                btn.innerHTML = data.liked ? 'Unlike (' + countSpan + ')' : 'Like (' + countSpan + ')';
+            } else {
+                alert(data.message);
+            }
+        }
+
+        // Toggle comments section
+        function toggleComments(listingId) {
+            let section = document.getElementById('comments-' + listingId);
+            section.style.display = section.style.display === 'none' ? '' : 'none';
+        }
+
+        // Add a new comment
+        async function addComment(listingId) {
+            let input = document.getElementById('comment-input-' + listingId);
+            let text = input.value.trim();
+            if (!text) return;
+
+            const res = await fetch('/explore/listings/' + listingId + '/comment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            const data = await res.json();
+            if (data.success) {
+                input.value = '';
+                // Reload page to show new comment with proper EJS rendering
+                location.reload();
+            } else {
+                alert(data.message);
+            }
+        }
+
+        // Edit a comment
+        function editComment(listingId, commentId) {
+            let textEl = document.getElementById('comment-text-' + commentId);
+            let currentText = textEl.textContent;
+
+            let newText = prompt('Edit your comment:', currentText);
+            if (newText === null || newText.trim() === '') return;
+
+            fetch('/explore/listings/' + listingId + '/comments/' + commentId, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: newText.trim() })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    textEl.textContent = newText.trim();
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
+        // Delete a comment
+        async function deleteComment(listingId, commentId) {
+            if (!confirm('Are you sure you want to delete this comment?')) return;
+
+            const res = await fetch('/explore/listings/' + listingId + '/comments/' + commentId, {
+                method: 'DELETE'
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('comment-' + commentId).remove();
+                let countEl = document.getElementById('comment-count-' + listingId);
+                countEl.textContent = Number(countEl.textContent) - 1;
+            } else {
+                alert(data.message);
+            }
+        }
+
+        // Wishlist toggle
+        async function toggleWishlist(listingId) {
+            const res = await fetch('/explore/listings/' + listingId + '/wishlist', { method: 'POST' });
+            const data = await res.json();
+            if (data.success) {
+                let btn = document.getElementById('wishlist-btn-' + listingId);
+                btn.textContent = data.wishlisted ? 'Wishlisted' : 'Wishlist';
+            } else {
+                alert(data.message);
+            }
+        }
     </script>
 
 </body>
