@@ -3,12 +3,37 @@ const mongoose = require('mongoose');
 const listingSchema = new mongoose.Schema({
   title: { type: String, required: true, maxlength: 50 },
   description: { type: String, required: true, maxlength: 200 },
-  region: { type: String, required: true, enum: ['North', 'East', 'South', 'West'] },
+  region: { type: String, required: true, enum: [
+    'North', 
+    'North-West', 
+    'North-East', 
+    'East', 
+    'South', 
+    'South-West', 
+    'South-East', 
+    'West', 
+    'Central'
+  ] },
   location: { type: String, required: true, maxlength: 50 },
   price: { type: Number, required: true, min: 0 },
-  roommates: { type: Number, required: true, min: 1 },
   room_type: { type: String, required: true, enum: ['Private Room', 'Shared Room'] },
-  amenities: [{ type: String, enum: ['wifi', 'parking', 'ac', 'washing_machine', 'microwave', 'wardrobe', 'dryer', 'fan'] }],
+  roommates: { type: Number, required: true, min: 1 },
+  my_gender: { type: String, required: true, enum: ['Male', 'Female', 'Other'] },
+  preferred_gender: { type: String, required: true, enum: ['Male', 'Female', 'Any'] },
+  amenities: [{ type: String,
+  enum: [
+    'wifi',
+    'parking',
+    'ac',
+    'washing_machine',
+    'dryer',
+    'refrigerator',
+    'microwave',
+    'fan',
+    'wardrobe',
+    'iron'
+  ]
+}],
   photos: [String],
   landlord: {
     type: mongoose.Schema.Types.ObjectId,
@@ -29,14 +54,29 @@ const listingSchema = new mongoose.Schema({
   }]
 });
 
-const Listing = mongoose.model('Listing', listingSchema);
+//const Listing = mongoose.model('Listing', listingSchema);
+const Listing = mongoose.models.Listing || mongoose.model('Listing', listingSchema);
 
-exports.findByLandlord = function(userId) {
-    return Listing.find({ landlord: userId });
+function findByLandlord(userId) {
+  return Listing.find({ landlord: userId });
+}
+
+function findByListing(listingId) {
+  return Listing.findById(listingId); 
+}
+
+module.exports = {
+  Listing,
+  findByLandlord,
+  findByListing
 };
 
-exports.findByListing = function(listingId) {
-    return Listing.findOne({ _id: listingId });
-};
+// exports.findByLandlord = function(userId) {
+//     return Listing.find({ landlord: userId });
+// };
 
-exports.Listing = Listing;
+// exports.findByListing = function(listingId) {
+//     return Listing.findOne({ _id: listingId });
+// };
+
+// exports.Listing = Listing;

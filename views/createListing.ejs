@@ -5,13 +5,13 @@
 </head>
 
 <body>
-
+ <a href="/profile">Back To Profile</a>
   <% if (error) { %>
-  <p><%= error %></p>
+  <p style="color: red"><%= error %></p>
   <% } %>
 <h1>Create a New Room Listing</h1>
 
-<form action="/listing" method="POST" enctype="multipart/form-data">
+<form id="createListing" action="/listing" method="POST" enctype="multipart/form-data">
 
   <label for="title">Listing Title</label><br>
   <input 
@@ -39,11 +39,16 @@
 
   <label for="region">Region</label><br>
   <select id="region" name="region" required>
-    <option value="">Select a region</option>
-  <option value="North"  <%= data.region === 'North'  ? 'selected' : '' %>>North</option>
-  <option value="East"   <%= data.region === 'East'   ? 'selected' : '' %>>East</option>
-  <option value="South"  <%= data.region === 'South'  ? 'selected' : '' %>>South</option>
-  <option value="West"   <%= data.region === 'West'   ? 'selected' : '' %>>West</option>
+  <option value="">Select a region</option>
+  <option value="North" <%= data.region === 'North' ? 'selected' : '' %>>North</option>
+  <option value="North-West" <%= data.region === 'North-West' ? 'selected' : '' %>>North-West</option>
+  <option value="North-East" <%= data.region === 'North-East' ? 'selected' : '' %>>North-East</option>
+  <option value="East" <%= data.region === 'East' ? 'selected' : '' %>>East</option>
+  <option value="South" <%= data.region === 'South' ? 'selected' : '' %>>South</option>
+  <option value="South-West" <%= data.region === 'South-West' ? 'selected' : '' %>>South-West</option>
+  <option value="South-East" <%= data.region === 'South-East' ? 'selected' : '' %>>South-East</option>
+  <option value="West" <%= data.region === 'West' ? 'selected' : '' %>>West</option>
+  <option value="Central" <%= data.region === 'Central' ? 'selected' : '' %>>Central</option>
   </select>
   <br><br>
 
@@ -71,7 +76,16 @@
   >
   <br><br>
 
-  <label for="roommates">Number of Roommates</label><br>
+  <label for="room_type">Room Type</label><br>
+  <select id="room_type" name="room_type" required>
+    <option value="">Select a room type</option>
+    <option value="Private Room"  <%= data.room_type === 'Private Room'  ? 'selected' : '' %>>Private Room</option>
+  <option value="Shared Room"   <%= data.room_type === 'Shared Room'   ? 'selected' : '' %>>Shared Room</option>
+  </select>
+  
+  <br><br>
+
+  <label for="roommates">Roommate Slots Available</label><br>
   <input 
     type="number" 
     id="roommates"
@@ -80,38 +94,135 @@
     required
     value="<%= data.roommates || '' %>"
   >
+  
   <br><br>
 
-  <label for="room_type">Room Type</label><br>
-  <select id="room_type" name="room_type" required>
-    <option value="">Select a room type</option>
-     <option value="Private Room"  <%= data.room_type === 'Private Room'  ? 'selected' : '' %>>Private Room</option>
-  <option value="Shared Room"   <%= data.room_type === 'Shared Room'   ? 'selected' : '' %>>Shared Room</option>
+  <label for="my_gender">My Gender</label><br>
+  <select id="my_gender" name="my_gender" required>
+  <option value="">Select your gender</option>
+  <option value="Male" <%= data.my_gender === 'Male' ? 'selected' : '' %>>Male</option>
+  <option value="Female" <%= data.my_gender === 'Female' ? 'selected' : '' %>>Female</option>
+  <option value="Other" <%= data.my_gender === 'Other' ? 'selected' : '' %>>Other</option>
+  </select>
+  <br><br>
+
+  <label for="preferred_gender">Preferred Roommate Gender</label><br>
+  <select id="preferred_gender" name="preferred_gender" required>
+  <option value="">Select preference</option>
+  <option value="Male" <%= data.preferred_gender === 'Male' ? 'selected' : '' %>>Male</option>
+  <option value="Female" <%= data.preferred_gender === 'Female' ? 'selected' : '' %>>Female</option>
+  <option value="Any" <%= data.preferred_gender === 'Any' ? 'selected' : '' %>>Any</option>
   </select>
   <br><br>
 
   <label>Amenities</label><br>
-  <input type="checkbox" id="wifi" name="amenities" value="wifi"
-     <%- data.amenities && data.amenities.includes('wifi') ? 'checked' : '' %>>
-  <label for="wifi">Wifi</label><br>
 
-  <input type="checkbox" id="parking" name="amenities" value="parking"
-    <%- data.amenities && data.amenities.includes('parking') ? 'checked' : '' %>>
-  <label for="parking">Parking</label><br>
+  <table>
+    <tr>
+      <td>
+        <label>
+          <input type="checkbox" name="amenities" value="wifi"
+          <%- data.amenities && data.amenities.includes('wifi') ? 'checked' : '' %>>
+          Wifi
+        </label>
+      </td>
+      <td>
+        <label>
+          <input type="checkbox" name="amenities" value="parking"
+          <%- data.amenities && data.amenities.includes('parking') ? 'checked' : '' %>>
+          Parking
+        </label>
+      </td>
+    </tr>
 
-  <input type="checkbox" id="ac" name="amenities" value="ac"
-  <%- data.amenities && data.amenities.includes('ac') ? 'checked' : '' %>>
-  <label for="ac">Air Conditioning</label><br>
+    <tr>
+      <td>
+        <label>
+          <input type="checkbox" name="amenities" value="ac"
+          <%- data.amenities && data.amenities.includes('ac') ? 'checked' : '' %>>
+          Air Conditioning
+        </label>
+      </td>
+      <td>
+        <label>
+          <input type="checkbox" name="amenities" value="washing_machine"
+          <%- data.amenities && data.amenities.includes('washing_machine') ? 'checked' : '' %>>
+          Washing Machine
+        </label>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <label>
+          <input type="checkbox" name="amenities" value="dryer"
+          <%- data.amenities && data.amenities.includes('dryer') ? 'checked' : '' %>>
+          Dryer
+        </label>
+      </td>
+      <td>
+        <label>
+          <input type="checkbox" name="amenities" value="refrigerator"
+          <%- data.amenities && data.amenities.includes('refrigerator') ? 'checked' : '' %>>
+          Refrigerator
+        </label>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <label>
+          <input type="checkbox" name="amenities" value="microwave"
+          <%- data.amenities && data.amenities.includes('microwave') ? 'checked' : '' %>>
+          Microwave
+        </label>
+      </td>
+      <td>
+        <label>
+          <input type="checkbox" name="amenities" value="fan"
+          <%- data.amenities && data.amenities.includes('fan') ? 'checked' : '' %>>
+          Ceiling Fan
+        </label>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <label>
+          <input type="checkbox" name="amenities" value="wardrobe"
+          <%- data.amenities && data.amenities.includes('wardrobe') ? 'checked' : '' %>>
+          Wardrobe
+        </label>
+      </td>
+      <td>
+        <label>
+          <input type="checkbox" name="amenities" value="iron"
+          <%- data.amenities && data.amenities.includes('iron') ? 'checked' : '' %>>
+          Iron
+        </label>
+      </td>
+    </tr>
+  </table>
+
   <br>
 
   <label for="photos">Upload Photos (Max 3)</label><br>
   <input type="file" id="photos" name="photos" required multiple accept="image/*">
   <br><br>
 
-  <button type="submit">Create Listing</button>
+  <button type="submit" id="submitBtn">Create Listing</button>
   <button type="reset">Clear</button>
 
 </form>
+
+<script>
+  const form = document.getElementById('createListing');
+  const submitBtn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', function() {
+    submitBtn.disabled = true;
+  });
+</script>
 
 </body>
 </html>

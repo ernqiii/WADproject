@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= listing.title %></title>
+</head>
+<body>
+
+  <a href="/profile">Back to Profile</a>
+  <br><br>  
+
+    <p><strong>Title:</strong> <%= listing.title %></p>
+    <p><strong>Description:</strong> <%= listing.description %></p>
+    <p><strong>Region:</strong> <%= listing.region %></p>
+    <p><strong>Location:</strong> <%= listing.location %></p>
+    <p><strong>Price:</strong> $<%= listing.price %> / month</p>
+    <p><strong>Room Type:</strong> <%= listing.room_type %></p>
+    <p><strong>Roommate Slots Available:</strong> <%= listing.roommates %></p>
+    <p><strong>My Gender:</strong> <%= listing.my_gender %></p>
+    <p><strong>Preferred Roommate Gender:</strong> <%= listing.preferred_gender %></p>
+
+    <% if (listing.amenities.length > 0) { %>
+      <p><strong>Amenities:</strong></p>
+      <ul>
+        <% listing.amenities.forEach(function(a) { %>
+          <li><%= a.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <% if (listing.photos.length > 0) { %>
+      <p><strong>Photos:</strong></p>
+      <% listing.photos.forEach(function(photo) { %>
+        <img src="/uploads/<%= photo %>" width="300" height="300" alt="listing photo">
+      <% }) %>
+    <% } %>
+
+    <br><br>
+    <a href="/listing/<%= listing._id %>/edit">Edit Listing</a>
+
+</body>
+</html>

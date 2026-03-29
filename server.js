@@ -7,6 +7,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const dotenv = require("dotenv");
+const path = require('path');
 
 dotenv.config({ path: "./config.env" });
 
@@ -27,12 +28,16 @@ const profileRoutes = require("./routes/profileRoutes");
 const exploreRoutes = require("./routes/explore");
 const reviewRoutes = require("./routes/review-routes");
 const wishlistRoutes = require("./routes/wishlist-routes");
+const listingRoutes = require('./routes/createListingRoute');
 
 server.use("/", loginRoutes);
 server.use("/profile", profileRoutes);
 server.use("/explore", exploreRoutes);
 server.use("/", reviewRoutes);
 server.use("/", wishlistRoutes);
+server.use("/listing", listingRoutes);
+
+server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // change homepage behavior
 server.get("/", (req, res) => {
