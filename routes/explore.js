@@ -11,11 +11,9 @@ const isLoggedIn = (req, res, next) => {
 };
 
 router.get('/',                                exploreController.getExploreListings);
-router.get('/listings/:listingId/comments',    exploreController.getComments);
 router.post('/listings/:listingId/like',       isLoggedIn, exploreController.likeListing);
 router.post('/listings/:listingId/comment',    isLoggedIn, exploreController.addComment);
 router.put('/listings/:listingId/comments/:commentId', isLoggedIn, exploreController.editComment);
 router.delete('/listings/:listingId/comments/:commentId', isLoggedIn, exploreController.deleteComment);
-router.post('/listings/:listingId/wishlist',   isLoggedIn, exploreController.addToWishlist);
 
 module.exports = router;

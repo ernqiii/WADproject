@@ -96,11 +96,7 @@
 
                 <!-- Wishlist Button -->
                 <button id="wishlist-btn-<%= listing._id %>" onclick="toggleWishlist('<%= listing._id %>')">
-                    <% if (user && listing.wishlistedBy.some(id => id.toString() === user.id.toString())) { %>
-                        Wishlisted
-                    <% } else { %>
-                        Wishlist
-                    <% } %>
+                    Wishlist
                 </button>
 
                 <!-- Comments Section (hidden by default) -->
@@ -134,8 +130,6 @@
     </div>
 
     <script>
-        const userId = '<%= user ? user.id : "" %>';
-
         // Filter listings client-side (show/hide)
         function showListings() {
             let searchFilter = document.getElementById('search').value.toLowerCase();
@@ -144,7 +138,6 @@
             let priceFilter = document.getElementById('price').value;
 
             let items = document.querySelectorAll('.listing');
-            let visibleCount = 0;
 
             for (let i = 0; i < items.length; i++) {
                 let el = items[i];
@@ -156,7 +149,6 @@
                 if (priceFilter && Number(el.dataset.price) > Number(priceFilter)) show = false;
 
                 el.style.display = show ? '' : 'none';
-                if (show) visibleCount++;
             }
         }
 
@@ -249,15 +241,19 @@
             }
         }
 
-        // Wishlist toggle
+        // Add to wishlist
         async function toggleWishlist(listingId) {
-            const res = await fetch('/explore/listings/' + listingId + '/wishlist', { method: 'POST' });
-            const data = await res.json();
-            if (data.success) {
+            const res = await fetch('/wishlist/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ listingId })
+            });
+            if (res.ok) {
                 let btn = document.getElementById('wishlist-btn-' + listingId);
-                btn.textContent = data.wishlisted ? 'Wishlisted' : 'Wishlist';
+                btn.textContent = 'Wishlisted';
+                btn.disabled = true;
             } else {
-                alert(data.message);
+                alert('Please login to add to wishlist');
             }
         }
     </script>

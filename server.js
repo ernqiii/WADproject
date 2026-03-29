@@ -1,4 +1,4 @@
-// allow newer versions of Node.js to connect to MongoDB
+// Allow any versions of Node.js to connect to MongoDB
 const dns = require("dns");
 dns.setDefaultResultOrder("verbatim");
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
@@ -26,11 +26,13 @@ const loginRoutes = require("./routes/login-routes");
 const profileRoutes = require("./routes/profileRoutes");
 const exploreRoutes = require("./routes/explore");
 const reviewRoutes = require("./routes/review-routes");
+const wishlistRoutes = require("./routes/wishlist-routes");
 
 server.use("/", loginRoutes);
 server.use("/profile", profileRoutes);
 server.use("/explore", exploreRoutes);
 server.use("/", reviewRoutes);
+server.use("/", wishlistRoutes);
 
 // change homepage behavior
 server.get("/", (req, res) => {

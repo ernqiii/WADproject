@@ -9,3 +9,5 @@ router.post("/wishlist/update", wishlistController.updateRanking);
 router.post("/wishlist/delete", wishlistController.deleteWishlistItem);
 router.post("/wishlist/checkout", wishlistController.checkoutPage);
 router.post("/wishlist/checkout/submit", wishlistController.postCheckoutPage);
+
+module.exports = router;
