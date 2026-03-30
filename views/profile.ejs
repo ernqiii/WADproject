@@ -98,6 +98,7 @@
 
     <p><strong>Average Rating:</strong> <%= avgRating ? (avgRating || 0).toFixed(1) : "0.0" %> / 5</p>
     <p><strong>Total Reviews:</strong> <%= totalReviews || 0 %></p>
+    <hr>
 
     <% if (String(user._id) !== String(loggedInUserId)) { %>
         <h3>Leave a Review</h3>
