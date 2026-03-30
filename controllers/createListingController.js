@@ -1,5 +1,6 @@
 //const Listing = require('../models/Listing');
-const { Listing, findByLandlord, findByListing } = require('../models/Listing');
+//const { Listing, findByLandlord, findByListing } = require('../models/Listing');
+const { Listing } = require('../models/Listing');
 const multer = require('multer');
 const path = require('path');
 
