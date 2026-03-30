@@ -7,12 +7,14 @@
 
     <h1>Student Housing</h1>
 
-    <!-- ✅ Welcome + Profile link + Logout -->
     <% if (user) { %>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <p>Hello, <strong><%= user.username %></strong> | <a href="/profile">Go to Profile</a></p>
+        <p>
+            Hello, <strong><%= user.username %></strong> |
+            <a href="/profile">Go to Profile</a> |
+            <a href="/wishlist">Go to Wishlist</a>
             <a href="/logout">Logout</a>
-        </div>
+
+        </p>
     <% } %>
 
     <hr>
