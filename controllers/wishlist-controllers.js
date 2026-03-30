@@ -130,6 +130,7 @@ const checkoutPage = async (req, res) => {
     else{
       return res.render("checkout",  {
             listing,
+            gender:"",
             message: "",
             name: "",
             email: "",
@@ -152,6 +153,7 @@ const postCheckoutPage = async (req, res) => {
 
   try {
     const listing = await listingModel.findByListing(listingId);
+    const gender = gender
 
     const cleanEmail = email ? email.trim() : "";
     const cleanPhone = phone ? phone.trim() : "";
@@ -166,6 +168,7 @@ const postCheckoutPage = async (req, res) => {
       return res.render("checkout", {
         listing,
         error,
+        gender,
         name: cleanName,
         email: cleanEmail,
         phone: cleanPhone,
@@ -180,6 +183,7 @@ const postCheckoutPage = async (req, res) => {
       return res.render("checkout", {
         listing,
         error,
+        gender,
         name: cleanName,
         email: cleanEmail,
         phone: cleanPhone,
@@ -194,6 +198,7 @@ const postCheckoutPage = async (req, res) => {
       return res.render("checkout", {
         listing,
         error,
+        gender,
         name: cleanName,
         email: cleanEmail,
         phone: cleanPhone,
@@ -208,6 +213,7 @@ const postCheckoutPage = async (req, res) => {
       return res.render("checkout", {
         listing,
         error,
+        gender,
         name: cleanName,
         email: cleanEmail,
         phone: cleanPhone,
@@ -222,6 +228,7 @@ const postCheckoutPage = async (req, res) => {
       return res.render("checkout", {
         listing,
         error,
+        gender,
         name: cleanName,
         email: cleanEmail,
         phone: cleanPhone,
@@ -236,6 +243,7 @@ const postCheckoutPage = async (req, res) => {
       return res.render("checkout", {
         listing,
         error,
+        gender,
         name: cleanName,
         email: cleanEmail,
         phone: cleanPhone,
@@ -250,6 +258,7 @@ const postCheckoutPage = async (req, res) => {
       return res.render("checkout", {
         listing,
         error,
+        gender,
         name: cleanName,
         email: cleanEmail,
         phone: cleanPhone,
@@ -265,6 +274,7 @@ const postCheckoutPage = async (req, res) => {
       user: userId,
       listing: listingId,
       name: cleanName,
+      gender: gender,
       email: cleanEmail,
       phone: cleanPhone,
       telegram: cleanTelegram,
