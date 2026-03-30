@@ -77,6 +77,7 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Username must be at least 3 characters.",
             username,
+            password: "",
             fullName,
             phone,
             email,
@@ -90,6 +91,7 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Password must be at least 6 characters.",
             username,
+            password: "",
             fullName,
             phone,
             email,
@@ -103,6 +105,7 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Name is too long.",
             username,
+            password: "",
             fullName,
             phone,
             email,
@@ -116,6 +119,7 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Please enter a valid email address.",
             username,
+            password: "",
             fullName,
             phone,
             email,
@@ -131,6 +135,7 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Phone number must be exactly 8 digits.",
             username,
+            password: "",
             fullName,
             phone,
             email,
@@ -144,6 +149,7 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Bio is too long.",
             username,
+            password: "",
             fullName,
             phone,
             email,
@@ -176,7 +182,7 @@ exports.handleSignup = async (req, res) => {
             return res.render("signup-form", {
                 msg: isEmail ? "Email is already registered." : "Username is already taken.",
                 username,
-                password,
+                password: "",
                 fullName,
                 phone,
                 email,
