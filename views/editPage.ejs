@@ -11,7 +11,7 @@
   <h3><%= listing ? listing.title : "Listing deleted" %></h3>
 
   
-  <form action="/interest/update" method="POST">
+  <form action="/interest/submitted/update" method="POST">
     <input type="hidden" name="interestId" value="<%= interest._id %>">
     
     <strong>Name:</strong>
