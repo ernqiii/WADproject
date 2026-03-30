@@ -30,6 +30,7 @@ exports.showProfile = async (req, res) => {
             listings: listings || [],
             profileImage,
             loggedInUserId: req.session.user.id,
+            loggedInUserRole: req.session.user.role || "user",
             reviews: reviews || [],
             avgRating: ratingSummary ? ratingSummary.avgRating : 0,
             totalReviews: ratingSummary ? ratingSummary.totalReviews : 0

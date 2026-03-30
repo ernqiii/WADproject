@@ -22,7 +22,9 @@
         </tr>
     </table>
 
-    <% if (String(user._id) === String(loggedInUserId)) { %>
+    <% if (loggedInUserRole === 'admin' && String(user._id) !== String(loggedInUserId)) { %>
+        <p><a href="/admin-profile">Back to Admin</a></p>
+    <% } else if (String(user._id) === String(loggedInUserId)) { %>
         <p>
             <a href="/explore">Back to Explore</a> |
             <a href="/wishlist">Wishlist</a> |
@@ -55,7 +57,13 @@
     <p><strong>Phone:</strong> <%= user.phone %></p>
     <p><strong>Bio:</strong> <%= user.bio %></p>
 
-    <% if (String(user._id) === String(loggedInUserId)) { %>
+    <% if (loggedInUserRole === 'admin' && String(user._id) !== String(loggedInUserId)) { %>
+        <p>
+            <form action="/admin-profile/delete-user/<%= user._id %>" method="POST" style="display:inline;">
+                <button type="submit" onclick="return confirm('Delete this user and all their data?');">Delete User</button>
+            </form>
+        </p>
+    <% } else if (String(user._id) === String(loggedInUserId)) { %>
         <p>
             <a href="/profile/edit">Edit Profile</a> |
             <form action="/profile/delete" method="POST" style="display:inline;">
