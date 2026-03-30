@@ -97,21 +97,11 @@
   
   <br><br>
 
-  <label for="my_gender">My Gender</label><br>
+  <label for="my_gender">Owner Gender</label><br>
   <select id="my_gender" name="my_gender" required>
   <option value="">Select your gender</option>
   <option value="Male" <%= data.my_gender === 'Male' ? 'selected' : '' %>>Male</option>
   <option value="Female" <%= data.my_gender === 'Female' ? 'selected' : '' %>>Female</option>
-  <option value="Other" <%= data.my_gender === 'Other' ? 'selected' : '' %>>Other</option>
-  </select>
-  <br><br>
-
-  <label for="preferred_gender">Preferred Roommate Gender</label><br>
-  <select id="preferred_gender" name="preferred_gender" required>
-  <option value="">Select preference</option>
-  <option value="Male" <%= data.preferred_gender === 'Male' ? 'selected' : '' %>>Male</option>
-  <option value="Female" <%= data.preferred_gender === 'Female' ? 'selected' : '' %>>Female</option>
-  <option value="Any" <%= data.preferred_gender === 'Any' ? 'selected' : '' %>>Any</option>
   </select>
   <br><br>
 
