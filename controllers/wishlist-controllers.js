@@ -158,7 +158,7 @@ const checkoutPage = async (req, res) => {
   }
 };
 const postCheckoutPage = async (req, res) => {
-  const userId = req.session?.user?.id;
+  const userId = req.session?.user?.id||req.session?.user?._id;
   const {
     listingId,
     name,
@@ -255,6 +255,14 @@ const postCheckoutPage = async (req, res) => {
     });
 
     console.log("Created form:", createdForm);
+    const wishlist = await wishlistModel.findByUser(userId);
+
+
+    const updatedItems = wishlist.items.filter(item => {
+      return item.listing.toString() !== listingId;
+    });
+
+    await wishlistModel.updateWishlistItem(userId, updatedItems);
 
     return res.render("postCheckout", { listing });
 
