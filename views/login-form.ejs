@@ -10,11 +10,27 @@
     <% } %>
 
     <form action="/login-form" method="post">
-        Username: <input type="text" name="username" value="<%= username ? username : ""%>" required><br>
-        Password: <input type="password" name="password" required><br>
-        <br>
-        <button type="submit">Login</button>
+
+      <table>
+        <tr>
+          <td>
+            Username:
+          </td>
+          <td>
+            <input type="text" name="username" value="<%= username ? username : ""%>" required>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Password:
+          </td>
+          <td>
+            <input type="password" name="password" required>
+          </td>
+        </tr>
+      </table>
     </form>
+    <button type="submit">Login</button>
     <p>Don't have an account? <a href="/signup-form">Sign up here!</a></p>
   </body>
 </html>
