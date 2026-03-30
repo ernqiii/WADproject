@@ -9,7 +9,7 @@ exports.getInterestDashboard = (req,res)=>{
 }
 exports.getProfile = async (req, res) => {
   try {
-    const userId = req.session.user._id; 
+    const userId = req.session.user._id||req.session?.user?.id; 
     const statusFilter = req.query.status; //at first when page first loads -> undefined 
 
     const searchCriteria = { user: userId };
@@ -22,7 +22,8 @@ exports.getProfile = async (req, res) => {
     const interests = await interestFormModel
       .findByUser(searchCriteria)
       .sort({ createdAt: -1 }); // -1 = sort newest to oldest, 1 = sort oldest to newest
-
+      
+    
     const interestListingArray = [];
 
     for (const interest of interests) {
@@ -33,7 +34,8 @@ exports.getProfile = async (req, res) => {
         listing: listing // one model listing
       });
     }
-
+    console.log("hi")
+    console.log(interests)
     res.render("users_interestForms", {
       interestListingArray,
       selectedStatus: statusFilter || "" // need "" -> page first loads -> its undefined -> ensure that theres a value to it 
@@ -45,7 +47,7 @@ exports.getProfile = async (req, res) => {
 };
 exports.getEditInterestPage = async (req, res) => {
   const interestId = req.body.interestId;
-  const userId = req.session.user._id;
+  const userId = req.session.user._id||req.session?.user?.id;
   
   try {
     
@@ -62,6 +64,7 @@ exports.getEditInterestPage = async (req, res) => {
     res.render("editPage", {
       interest,
       listing,
+      errors: []
     });
   } catch (error) {
     console.log(error);
@@ -71,21 +74,27 @@ exports.getEditInterestPage = async (req, res) => {
 
 exports.updateInterest = async (req, res) => {
   const interestId = req.body.interestId;
-  const userId = req.session.user._id;
+  const userId = req.session?.user?._id ||req.session?.user?.id
 
-  const { name, gender, email, phone, telegram, contact_method, message, consent } = req.body;
+  const {
+    name,
+    gender,
+    email,
+    phone,
+    telegram,
+    contact_method,
+    message,
+    consent} = req.body;
 
   const cleanName = name ? name.trim() : "";
   const cleanEmail = email ? email.trim() : "";
   const cleanPhone = phone ? phone.trim() : "";
   const cleanTelegram = telegram ? telegram.trim() : "";
   const cleanMessage = message ? message.trim() : "";
-  let error = "";
+  
+
   try {
-    
-
     const interest = await interestFormModel.findByInterest_and_User(interestId, userId);
-
 
     if (!interest) {
       return res.status(404).send("Interest form not found");
@@ -96,129 +105,89 @@ exports.updateInterest = async (req, res) => {
     }
 
     const listing = await listingModel.findByListing(interest.listing);
-    if (!consent) {
-      error = "Please agree to our policy before submitting.";
-      return res.render("checkout", {
-        listing,
-        error,
-        gender,
-        name: cleanName,
-        email: cleanEmail,
-        phone: cleanPhone,
-        telegram: cleanTelegram,
-        contact_method,
-        message: cleanMessage,
-      });
+
+    if (!listing) {
+      return res.status(404).send("Listing not found");
     }
 
+    const errors = [];
 
- 
+    if (!cleanName) {
+      errors.push("Please enter your name.");
+    }
+
+    if (!gender) {
+      errors.push("Please select your gender.");
+    }
+
+    if (!consent) {
+      errors.push("Please agree to our policy before submitting.");
+    }
 
     if (!cleanEmail && !cleanPhone && !cleanTelegram) {
-      error = "Please provide at least one contact method.";
-      const updatedInterest = interest.toObject();  //convert moongoose object to JS object 
-      updatedInterest.gender = gender;
-      updatedInterest.name = cleanName;
-      updatedInterest.email = cleanEmail;
-      updatedInterest.phone = cleanPhone;
-      updatedInterest.telegram = cleanTelegram;
-      updatedInterest.preferredContactMethod = contact_method;
-      updatedInterest.message = cleanMessage;
-      return res.render("editInterest", {
-        listing,
-        error,
-        interest: updatedInterest
-      });
+      errors.push("Please provide at least one contact method: email, phone, or Telegram.");
     }
 
     if (!contact_method) {
-      error = "Please select a preferred contact method.";
-      const updatedInterest = interest.toObject();  //convert moongoose object to JS object 
-      updatedInterest.gender = gender;
-      updatedInterest.name = cleanName;
-      updatedInterest.email = cleanEmail;
-      updatedInterest.phone = cleanPhone;
-      updatedInterest.telegram = cleanTelegram;
-      updatedInterest.preferredContactMethod = contact_method;
-      updatedInterest.message = cleanMessage;
-      return res.render("editInterest", {
-        listing,
-        error,
-        interest: updatedInterest
-      });
+      errors.push("Please select a preferred contact method.");
     }
 
     if (contact_method === "email" && !cleanEmail) {
-      error = "You selected email as preferred contact method, so email is required.";
-      const updatedInterest = interest.toObject();  //convert moongoose object to JS object 
-      updatedInterest.gender = gender;
-      updatedInterest.name = cleanName;
-      updatedInterest.email = cleanEmail;
-      updatedInterest.phone = cleanPhone;
-      updatedInterest.telegram = cleanTelegram;
-      updatedInterest.preferredContactMethod = contact_method;
-      updatedInterest.message = cleanMessage;
-      return res.render("editInterest", {
-        listing,
-        error,
-        interest: updatedInterest
-      });
+      errors.push("You selected email as the preferred contact method, so email is required.");
     }
 
-    if ((contact_method === "phone" || contact_method === "whatsapp") && !cleanPhone) {
-      error = "You selected phone/WhatsApp as preferred contact method, so phone is required.";
-      const updatedInterest = interest.toObject();  //convert moongoose object to JS object 
-      updatedInterest.gender = gender;
-      updatedInterest.name = cleanName;
-      updatedInterest.email = cleanEmail;
-      updatedInterest.phone = cleanPhone;
-      updatedInterest.telegram = cleanTelegram;
-      updatedInterest.preferredContactMethod = contact_method;
-      updatedInterest.message = cleanMessage;
-      return res.render("editInterest", {
-        listing,
-        error,
-        interest: updatedInterest
-      });
+    if (contact_method === "phone" && !cleanPhone) {
+      errors.push("You selected phone as the preferred contact method, so phone is required.");
+    }
+
+    if (contact_method === "whatsapp" && !cleanPhone) {
+      errors.push("You selected WhatsApp as the preferred contact method, so phone is required.");
     }
 
     if (contact_method === "telegram" && !cleanTelegram) {
-      error = "You selected Telegram as preferred contact method, so Telegram is required.";
-      const updatedInterest = interest.toObject();  //convert moongoose object to JS object 
-      updatedInterest.gender = gender;
+      errors.push("You selected Telegram as the preferred contact method, so Telegram is required.");
+    }
+
+    if (errors.length > 0) {
+      const updatedInterest = interest.toObject();
+
       updatedInterest.name = cleanName;
+      updatedInterest.gender = gender;
       updatedInterest.email = cleanEmail;
       updatedInterest.phone = cleanPhone;
       updatedInterest.telegram = cleanTelegram;
       updatedInterest.preferredContactMethod = contact_method;
       updatedInterest.message = cleanMessage;
-      return res.render("editInterest", {
+
+      return res.render("editPage", {
         listing,
-        error,
+        errors,
         interest: updatedInterest
       });
     }
-    let updateItems = {
 
-          name: cleanName,
-          gender: gender,
-          email: cleanEmail,
-          phone: cleanPhone,
-          telegram: cleanTelegram,
-          preferredContactMethod: contact_method,
-          message: cleanMessage
-        }
-    await interestFormModel.updateInterest(interestId,userId,updateItems);
+    const updateItems = {
+      name: cleanName,
+      gender,
+      email: cleanEmail,
+      phone: cleanPhone,
+      telegram: cleanTelegram,
+      preferredContactMethod: contact_method,
+      message: cleanMessage
+    };
 
-    res.redirect("/interest/submitted");//check route
+    await interestFormModel.updateInterest(interestId, userId, updateItems);
+
+    return res.redirect("/interest/submitted");
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Failed to update interest form");
+    console.log("UPDATE INTEREST ERROR:", error);
+    console.log("Validation error details:", error.errors);
+    return res.status(500).send("Failed to update interest form");
   }
 };
 exports.deleteInterest = async (req, res) => {
   const interestId = req.body.interestId;
-  const userId = req.session.user._id;
+  const userId = req.session.user._id ||req.session?.user?.id;
   try {
     const interest = await interestFormModel.findByInterest_and_User(interestId, userId);
 
@@ -245,7 +214,7 @@ exports.deleteInterest = async (req, res) => {
 
 exports.getLandlordRequestsPage = async (req, res) => {
   try {
-    const landlordId = req.session.user._id;
+    const landlordId = req.session.user._id ||req.session?.user?.id;
     const statusFilter = req.query.status;
 
     const searchCriteria = { landlord: landlordId };
@@ -280,7 +249,7 @@ exports.getLandlordRequestsPage = async (req, res) => {
 };
 exports.updateInterestStatus = async (req, res) => { //to update status for landlords
   try {
-    const landlordId = req.session.user._id;
+    const landlordId = req.session.user._id||req.session?.user?.id;
     const interestId = req.body.interestId;
     const status = req.body.status;
     console.log(landlordId)

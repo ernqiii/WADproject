@@ -7,12 +7,20 @@
 
 <h1>Checkout</h1>
 <hr>
-
-<h3><%= listing.title %>  — <a href="/profile/<%= listing.landlord._id %>"><%= listing.landlord.username %></a></h3>
+<% if (errors && errors.length > 0) { %>
+  <div style="color:red;">
+    <ul>
+      <% errors.forEach(function(err) { %>
+        <li><%= err %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+<h3><%= listing.title %></h3>
 
   <% if (listing.photos && listing.photos.length > 0) { %>
-      <% listing.photos.forEach(function(photo) { %>
-          <img src="/uploads/<%= photo %>" alt="<%= listing.title %>" width="250" height="250">
+            <% listing.photos.forEach(function(photo) { %>
+                <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="250" height="250" alt="listing photo">
       <% }); %>
         
   <% } else { %>
@@ -60,9 +68,11 @@
   <br><br>
   <strong>Gender:</strong>
   <select name="gender">
-      <option value="male">Male</option>
-      <option value="female">Female</option>
+      <option value="">-- Please Select One --</option>
+      <option value="male" <%= gender === "male" ? "selected" : "" %>>Male</option>
+      <option value="female"<%= gender === "female" ? "selected" : "" %>>Female</option>
   </select><br>
+  
   
   <p><u><strong>Please fill in at least one contact method</u></strong></p>
   
@@ -105,9 +115,7 @@
 
   <button type="submit">Submit Request</button>
 </form>
-<% if (error){ %>
-  <strong><%= error  %></strong>
-<% } %>
+
 
 </body>
 </html>
