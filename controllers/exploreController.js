@@ -1,4 +1,5 @@
 const { Listing } = require('../models/Listing');
+const wishlistModel = require('../models/wishlistModel');
 
 // Helper: find a listing by ID or send a 404 response
 async function findListing(res, listingId) {
@@ -16,13 +17,23 @@ const getExploreListings = async (req, res) => {
     const listings = await Listing.find()
       .populate('landlord', 'username email')
       .populate('comments.user', 'username');
+
+    let wishlistedIds = [];
+    if (req.session.user) {
+      const wishlist = await wishlistModel.findByUser(req.session.user.id);
+      if (wishlist) {
+        wishlistedIds = wishlist.items.map(item => item.listing.toString());
+      }
+    }
+
     res.render('explore', {
       listings,
-      user: req.session.user
+      user: req.session.user,
+      wishlistedIds
     });
   } catch (error) {
     console.error('Error fetching listings:', error);
-    res.render('explore', { listings: [], user: req.session.user });
+    res.render('explore', { listings: [], user: req.session.user, wishlistedIds: [] });
   }
 };
 

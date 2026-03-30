@@ -32,7 +32,8 @@ exports.handleLogin = async (req, res) => {
 
         req.session.user = {
             id: user._id,
-            username: user.username
+            username: user.username,
+            fullName: user.fullName
         };
 
         res.redirect("/explore");
