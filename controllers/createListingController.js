@@ -16,7 +16,10 @@ const multer = require('multer');
 //   },
 //   limits: { files: 3 }
 // });
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ 
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 2 * 1024 * 1024 }
+ });
 
 const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
@@ -25,6 +28,13 @@ exports.handleUpload = (view) => (req, res, next) => {
     if (err && (err.code === 'LIMIT_FILE_COUNT' || err.code === 'LIMIT_UNEXPECTED_FILE')) {
       return res.render(view, {
         error: 'Maximum 3 photos allowed!',
+        data: { ...req.body, _id: req.params.id },
+        amenities: []
+      });
+    }
+    if (err && err.code === 'LIMIT_FILE_SIZE') {
+      return res.render(view, {
+        error: 'Each photo must be under 2MB!',
         data: { ...req.body, _id: req.params.id },
         amenities: []
       });

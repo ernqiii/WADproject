@@ -25,14 +25,52 @@
   <p><strong>Description:</strong> <%= listing.description %></p>
 
   <% if (listing.amenities && listing.amenities.length > 0) { %>
-    <p><strong>Amenities:</strong> <%= listing.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %></p>
+    <p><strong>Amenities:</strong></p>
+    <ul>
+      <% listing.amenities.forEach(function(a) { %>
+        <li><%= a.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %></li>
+      <% }) %>
+    </ul>
   <% } %>
 
-  <p><strong>Likes:</strong> <%= listing.likes.length %></p>
+  <% if (listing.photos && listing.photos.length > 0) { %>
+    <p><strong>Photos:</strong></p>
+    <% listing.photos.forEach(function(photo) { %>
+      <% if (typeof photo === 'string') { %>
+        <img src="/uploads/<%= photo %>" width="300" height="300" alt="listing photo">
+      <% } else if (photo.data && photo.contentType) { %>
+        <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="300" height="300" alt="listing photo">
+      <% } %>
+    <% }) %>
+  <% } %>
 
-  <div style="margin-top:10px;">
-    <strong>Comments: <%= listing.comments.length %></strong>
-    <div style="margin-top:8px;">
+  <br>
+
+  <!-- Like Button -->
+  <button id="like-btn-<%= listing._id %>" onclick="toggleLike('<%= listing._id %>')">
+    <% if (user && listing.likes.some(id => id.toString() === user.id.toString())) { %>
+      Unlike (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
+    <% } else { %>
+      Like (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
+    <% } %>
+  </button>
+
+  <!-- Comment Button -->
+  <button onclick="toggleComments('<%= listing._id %>')">
+    Comments (<span id="comment-count-<%= listing._id %>"><%= listing.comments.length %></span>)
+  </button>
+
+  <!-- Wishlist Button -->
+  <button id="wishlist-btn-<%= listing._id %>"
+    <%= isWishlisted ? 'disabled' : '' %>
+    onclick="toggleWishlist('<%= listing._id %>')">
+    <%= isWishlisted ? 'Wishlisted' : 'Wishlist' %>
+  </button>
+
+  <!-- Comments Section -->
+  <div id="comments-<%= listing._id %>" style="margin-top:10px;">
+    <h4>Comments</h4>
+    <div id="comments-list-<%= listing._id %>">
       <% for (let j = 0; j < listing.comments.length; j++) { %>
         <% let comment = listing.comments[j]; %>
         <div id="comment-<%= comment._id %>" style="margin-bottom:8px; padding:5px; border-bottom:1px solid #ccc;">
