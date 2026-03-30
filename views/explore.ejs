@@ -7,11 +7,12 @@
 
     <h1>Student Housing</h1>
 
-    <!-- ✅ Welcome + Profile link -->
     <% if (user) { %>
         <p>
             Hello, <strong><%= user.username %></strong> |
-            <a href="/profile">Go to Profile</a>
+            <a href="/profile">Go to Profile</a> |
+            <a href="/wishlist">Go to Wishlist</a>
+
         </p>
     <% } %>
 
