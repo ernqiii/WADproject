@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>Roommate Finder | Home</title>
+    </head>
+    <body>
+        <h1>Find your perfect roommate!</h1>
+        <p>The simplest way to find your perfect roommate.</p>
+        
+        <% if (user) { %>
+            <p>
+                <a href="/explore">Explore</a> | 
+                <a href="/profile">My Profile</a> | 
+                <a href="/logout">Logout</a>
+            </p>
+        <% } else { %>
+            <p>
+                <a href="/login-form">Login</a> | 
+                <a href="/signup-form">Sign Up</a>
+            </p>
+        <% } %>
+
+        <hr>
+
+        <% if (user) { %>
+            <p>Welcome back, <%= user.username %>!</p>
+            <br>
+            <a href="/explore">Continue exploring!</a>
+        <% } else { %>
+            <p>Ready to start finding a roommate?</p>
+            <a href="/signup">Create your account here!</a>
+        <% } %>
+    </body>
+</html>

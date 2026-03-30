@@ -24,6 +24,7 @@ server.use(session({
     saveUninitialized: false // Prevents a new, empty session from being saved to the store.
 }));
 
+const indexRoutes = require("./routes/index-routes");
 const loginRoutes = require("./routes/login-routes");
 const profileRoutes = require("./routes/profileRoutes");
 const exploreRoutes = require("./routes/explore");
@@ -32,7 +33,8 @@ const wishlistRoutes = require("./routes/wishlist-routes");
 const listingRoutes = require('./routes/createListingRoute');
 const interestRoutes = require("./routes/interest-routes")
 
-server.use("/", loginRoutes);
+server.use("/", indexRoutes);
+server.use("/login", loginRoutes);
 server.use("/profile", profileRoutes);
 server.use("/explore", exploreRoutes);
 server.use("/", reviewRoutes);
