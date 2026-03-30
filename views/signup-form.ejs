@@ -9,22 +9,72 @@
       <p style="color: red">Error: <%= msg %></p>
     <% } %>
 
+    
     <form action="/signup-form" method="post">
-        Username: <input type="text" name="username" value="<%= username ? username : ""%>" required><br>
-        Password: <input type="password" name="password" value="<%= password ? password : ""%>" required><br>
-        Full Name: <input type="text" name="fullName" value="<%= fullName ? fullName : ""%>" required><br>
-        Phone: <input type="text" name="phone" value="<%= phone ? phone : ""%>" required><br>
-        Email: <input type="text" name="email" value="<%= email ? email : ""%>" required><br>
+      <table>
+        <tr>
+          <td>
+            Username:
+          </td>
+          <td>
+            <input type="text" name="username" value="<%= username ? username : ""%>" required>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Password:
+          </td>
+          <td>
+            <input type="password" name="password" value="<%= password ? password : ""%>" required>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Full Name:
+          </td>
+          <td>
+            <input type="text" name="fullName" value="<%= fullName ? fullName : ""%>" required>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Phone:
+          </td>
+          <td>
+            <input type="text" name="phone" value="<%= phone ? phone : ""%>" required>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Email:
+          </td>
+          <td>
+            <input type="text" name="email" value="<%= email ? email : ""%>" required>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Gender:
+          </td>
+          <td>
+            <select name="gender">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+          </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Bio:
+          </td>
+          <td>
+            <textarea name="bio" required></textarea>
+          </td>
+        </tr>
+      </table>
 
-        Gender: 
-        <select name="gender">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select><br>
-
-        Bio: <textarea name="bio" required></textarea><br>
-        <br>
-        <button type="submit">Sign Up</button>
+      <br>
+      <button type="submit">Sign Up</button>
     </form>
   </body>
 </html>
