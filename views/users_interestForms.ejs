@@ -42,7 +42,7 @@
     <% } %>
 
       <p><strong>Name:</strong> <%= item.interest.name %></p>
-      <p><strong>Gender:</strong> <%= item.gender.name %></p>
+      <p><strong>Gender:</strong> <%= item.interest.gender %></p>
       <p><strong>Email:</strong> <%= item.interest.email || "Not provided" %></p>
       <p><strong>Phone:</strong> <%= item.interest.phone || "Not provided" %></p>
       <p><strong>Telegram:</strong> <%= item.interest.telegram || "Not provided" %></p>
@@ -55,13 +55,13 @@
       <% } %>
 
       <% if (item.interest.status === "Active") { %>
-        <form action="/interest/edit" method="POST" >
+        <form action="/interest/submitted/edit" method="POST" >
           <input type="hidden" name="interestId" value="<%= item.interest._id %>">
           <button type="submit">Edit</button>
         </form>
       <% } %>
 
-      <form action="/interest/delete" method="POST">
+      <form action="/interest/submitted/delete" method="POST">
         <input type="hidden" name="interestId" value="<%= item.interest._id %>">
         <button type="submit">Delete</button>
       </form>

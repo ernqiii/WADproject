@@ -1,6 +1,7 @@
 const wishlistModel = require("../models/wishlistModel");
 const listingModel = require("../models/Listing")
 const interestFormModel =require("../models/interestFormModel");
+const userModel = require("../models/User")
 
 
 const addToWishlist = async (req, res) => {
@@ -48,9 +49,12 @@ const getWishlist = async (req, res) => {
       const listingObject = await listingModel.findByListing(item.listing);
 
       if (listingObject) {
+        const landlordUser = await userModel.findById(listingObject.landlord);
+
         listingArray.push({
           listing: listingObject,
-          ranking: item.ranking ?? null
+          ranking: item.ranking ?? null,
+          landlordUser: landlordUser || null
         });
       }
     }
@@ -155,11 +159,11 @@ const checkoutPage = async (req, res) => {
  
 const postCheckoutPage = async (req, res) => {
   const userId = req.session?.user?.id ;
-  const { listingId, name, email, phone, telegram, contact_method, message, consent } = req.body;
+  const { listingId, name, email, phone, telegram, contact_method, message, consent , gender} = req.body;
 
   try {
     const listing = await listingModel.findByListing(listingId);
-    const gender = gender
+    
 
     const cleanEmail = email ? email.trim() : "";
     const cleanPhone = phone ? phone.trim() : "";
