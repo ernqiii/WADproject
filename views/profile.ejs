@@ -24,12 +24,19 @@
         </tr>
     </table>
 
-    <p>
-        <a href="/explore">Back to Explore</a> |
-        <a href="/wishlist">Wishlist</a> |
-        <a href="/listing/new">New Listing</a> |
-        <a href="/interest">Interest Forms</a>    
-    </p>
+    <% if (String(user._id) === String(loggedInUserId)) { %>
+        <p>
+            <a href="/explore">Back to Explore</a> |
+            <a href="/wishlist">Wishlist</a> |
+            <a href="/listing/new">New Listing</a> |
+            <a href="/interest">Interest Forms</a>
+        </p>
+    <% } else { %>
+        <p>
+            <a href="/explore">Back to Explore</a> |
+            <a href="/profile">My Profile</a>
+        </p>
+    <% } %>
 
     <hr>
 
@@ -91,6 +98,7 @@
 
     <p><strong>Average Rating:</strong> <%= avgRating ? (avgRating || 0).toFixed(1) : "0.0" %> / 5</p>
     <p><strong>Total Reviews:</strong> <%= totalReviews || 0 %></p>
+    <hr>
 
     <% if (String(user._id) !== String(loggedInUserId)) { %>
         <h3>Leave a Review</h3>
@@ -127,7 +135,11 @@
         <% reviews.forEach(function(review) { %>
             <p>
                 <strong>Reviewer:</strong>
-                <%= review.reviewerId ? review.reviewerId.username : "Unknown User" %><br>
+                <% if (review.reviewerId) { %>
+                    <a href="/profile/<%= review.reviewerId._id %>"><%= review.reviewerId.username %></a>
+                <% } else { %>
+                    Unknown User
+                <% } %><br>
 
                 <strong>Rating:</strong> <%= review.rating %> / 5<br>
 

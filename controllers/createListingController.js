@@ -54,7 +54,6 @@ exports.createListing = (req, res) => {
         room_type: req.body.room_type,
         roommates: req.body.roommates,
         my_gender: req.body.my_gender,       
-        preferred_gender: req.body.preferred_gender,
         amenities,
         photos: req.files.map(f => f.filename),
         landlord: req.session.user.id
@@ -118,7 +117,6 @@ exports.updateListing = (req, res) => {
         roommates: req.body.roommates,
         room_type: req.body.room_type,
         my_gender: req.body.my_gender,
-        preferred_gender: req.body.preferred_gender,
         amenities,
         ...(req.files.length > 0 && { photos: req.files.map(f => f.filename) })
       };
