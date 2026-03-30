@@ -134,7 +134,7 @@ exports.submitEditProfile = async (req, res) => {
                 const user = await User.findByUserId(req.session.user.id) 
                 return res.render("editProfile", {
                     user, 
-                    errorMessage: "Image file is too large. Max @MB is allowed."
+                    errorMessage: "Image file is too large. Max 2MB is allowed."
                 });
                 
             }
