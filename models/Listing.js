@@ -33,7 +33,7 @@ const listingSchema = new mongoose.Schema({
     'iron'
   ]
 }],
-  photos: [String],
+  photos: [{ data: Buffer, contentType: String }],
   landlord: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

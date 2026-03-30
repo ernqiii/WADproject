@@ -198,7 +198,7 @@
     <% if (data.photos && data.photos.length > 0) { %>
       <p>Current photos:</p>
       <% data.photos.forEach(function(photo) { %>
-        <img src="/uploads/<%= photo %>" width="250" height="250" alt="listing photo">
+        <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="250" height="250" alt="listing photo">
       <% }) %>
     <% } %>
     <br>

@@ -1,20 +1,43 @@
 //const Listing = require('../models/Listing');
 //const { Listing, findByLandlord, findByListing } = require('../models/Listing');
+// const multer = require('multer');
+// const path = require('path');
 const { Listing } = require('../models/Listing');
 const multer = require('multer');
-const path = require('path');
+// const upload = multer({ 
+//   dest: path.join(__dirname, '../uploads/'), 
+//   fileFilter: function (req, file, cb) {
+//     if (file.mimetype.startsWith('image/')) {
+//       cb(null, true);
+//     } else {
+//       cb(new Error('Only image files are allowed!'), false);
+//     }
+//   },
+//   limits: { files: 3 }
+// });
+const upload = multer({ storage: multer.memoryStorage() });
 
-const upload = multer({ 
-  dest: path.join(__dirname, '../uploads/'), 
-  fileFilter: function (req, file, cb) {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed!'), false);
+const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+exports.handleUpload = (view) => (req, res, next) => {
+  upload.array('photos', 3)(req, res, (err) => {
+    if (err && (err.code === 'LIMIT_FILE_COUNT' || err.code === 'LIMIT_UNEXPECTED_FILE')) {
+      return res.render(view, {
+        error: 'Maximum 3 photos allowed!',
+        data: { ...req.body, _id: req.params.id },
+        amenities: []
+      });
     }
-  },
-  limits: { files: 3 }
-});
+    if (err) {
+      return res.render(view, {
+        error: 'Upload error: ' + err.message,
+        data: { ...req.body, _id: req.params.id },
+        amenities: []
+      });
+    }
+    next();
+  });
+};
 
 const normalizeAmenities = (amenities) => {
   if (!amenities) return [];
@@ -26,48 +49,51 @@ exports.newListing = (req, res) => {
   res.render('createListing', { error: null, data: {}, user: req.session.user });
 };
 
-exports.createListing = (req, res) => {
-  upload.array('photos', 3)(req, res, async function(err) {  
-    if (err) {
-      if (err.code === 'LIMIT_FILE_COUNT') {
-        return res.render('createListing', { error: 'Error: Maximum 3 photos allowed!', 
-            data: req.body, amenities: normalizeAmenities(req.body.amenities)
+exports.createListing = async (req, res) => {
+  const amenities = normalizeAmenities(req.body.amenities);
+ 
+  try {
+    // if (req.files && req.files.length > 3) {
+    //   return res.render('createListing', {
+    //     error: 'Maximum 3 photos allowed!',
+    //     data: req.body, amenities
+    //   });
+    // }
+ 
+    for (const file of (req.files || [])) {
+      if (!allowedTypes.includes(file.mimetype)) {
+        return res.render('createListing', {
+          error: 'Only JPG, JPEG and PNG images are allowed!',
+          data: req.body, amenities
         });
       }
-      return res.render('createListing', { error: 'Upload error: ' + err.message,
-        data: req.body, amenities: normalizeAmenities(req.body.amenities)
-      });
     }
-
-    let amenities = req.body.amenities;
-    if (!amenities) amenities = [];
-    else if (!Array.isArray(amenities)) amenities = [amenities];
-
-    
-    try {
-      const listing = new Listing({
-        title: req.body.title,
-        description: req.body.description,
-        region: req.body.region,
-        location: req.body.location,
-        price: req.body.price,
-        room_type: req.body.room_type,
-        roommates: req.body.roommates,
-        my_gender: req.body.my_gender,       
-        amenities,
-        photos: req.files.map(f => f.filename),
-        landlord: req.session.user.id
-      });
-
-      await listing.save();
-      res.redirect('/profile');
-    } catch (e) {
-        console.log('Mongoose error:', e.message);
-      res.render('createListing', { error: e.message, 
-        data: req.body, amenities: normalizeAmenities(req.body.amenities)
-      });
-    }
-  });
+ 
+    const photos = (req.files || []).map(f => ({
+      data: f.buffer,
+      contentType: f.mimetype
+    }));
+ 
+    const listing = new Listing({
+      title: req.body.title,
+      description: req.body.description,
+      region: req.body.region,
+      location: req.body.location,
+      price: req.body.price,
+      room_type: req.body.room_type,
+      roommates: req.body.roommates,
+      my_gender: req.body.my_gender,
+      amenities,
+      photos,
+      landlord: req.session.user.id
+    });
+ 
+    await listing.save();
+    res.redirect('/profile');
+  } catch (e) {
+    console.log('Mongoose error:', e.message);
+    res.render('createListing', { error: e.message, data: req.body, amenities });
+  }
 };
 
 exports.editListing = async (req, res) => {
@@ -85,56 +111,65 @@ exports.editListing = async (req, res) => {
   }
 };
 
-exports.updateListing = (req, res) => {
-  upload.array('photos', 3)(req, res, async function(err) {
-    const amenities = normalizeAmenities(req.body.amenities);
-
-    try {
-      const oldListing = await Listing.findById(req.params.id);
-      if (!oldListing) return res.send('Listing not found');
-
-      // Ownership check
-      if (oldListing.landlord.toString() !== req.session.user.id) {
-        return res.send('Not authorized');
-      }
-
-      if (err) {
-        let errorMsg = err.code === 'LIMIT_FILE_COUNT'
-          ? 'Maximum 3 photos allowed!'
-          : 'Upload error: ' + err.message;
+exports.updateListing = async (req, res) => {
+  const amenities = normalizeAmenities(req.body.amenities);
+ 
+  try {
+    const oldListing = await Listing.findById(req.params.id);
+    if (!oldListing) return res.send('Listing not found');
+ 
+    if (oldListing.landlord.toString() !== req.session.user.id) {
+      return res.send('Not authorized');
+    }
+ 
+    // if (req.files && req.files.length > 3) {
+    //   return res.render('editListing', {
+    //     error: 'Maximum 3 photos allowed!',
+    //     data: { ...req.body, _id: req.params.id }, amenities
+    //   });
+    // }
+ 
+    for (const file of (req.files || [])) {
+      if (!allowedTypes.includes(file.mimetype)) {
         return res.render('editListing', {
-          data: { ...req.body, _id: req.params.id },
-          error: errorMsg
+          error: 'Only JPG, JPEG and PNG images are allowed!',
+          data: { ...req.body, _id: req.params.id }, amenities
         });
       }
-
-      const updateData = {
-        title: req.body.title,
-        description: req.body.description,
-        region: req.body.region,
-        location: req.body.location,
-        price: req.body.price,
-        roommates: req.body.roommates,
-        room_type: req.body.room_type,
-        my_gender: req.body.my_gender,
-        amenities,
-        ...(req.files.length > 0 && { photos: req.files.map(f => f.filename) })
-      };
-
-      const listing = await Listing.findByIdAndUpdate(
-        req.params.id,
-        updateData,
-        { runValidators: true, returnDocument: 'after' }
-      );
-
-      res.redirect('/listing/' + listing._id);
-    } catch (e) {
-      res.render('editListing', {
-        data: { ...req.body, _id: req.params.id },
-        error: e.message
-      });
     }
-  });
+ 
+    const updateData = {
+      title: req.body.title,
+      description: req.body.description,
+      region: req.body.region,
+      location: req.body.location,
+      price: req.body.price,
+      roommates: req.body.roommates,
+      room_type: req.body.room_type,
+      my_gender: req.body.my_gender,
+      amenities,
+    };
+ 
+    if (req.files && req.files.length > 0) {
+      updateData.photos = req.files.map(f => ({
+        data: f.buffer,
+        contentType: f.mimetype
+      }));
+    }
+ 
+    const listing = await Listing.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { runValidators: true, returnDocument: 'after' }
+    );
+ 
+    res.redirect('/listing/' + listing._id);
+  } catch (e) {
+    res.render('editListing', {
+      data: { ...req.body, _id: req.params.id },
+      error: e.message
+    });
+  }
 };
 
 exports.deleteListing = async (req, res) => {
@@ -163,3 +198,4 @@ exports.viewListing = async (req, res) => {
     res.send('Error: ' + e.message);
   }
 };
+
