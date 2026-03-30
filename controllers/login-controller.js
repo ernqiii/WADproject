@@ -107,7 +107,7 @@ exports.handleSignup = async (req, res) => {
     }
 
     // check email format
-    if (!email.includes("@") || !email.includes(".") || email.includes(" ") || email.indexOf("@") > email.indexOf(".")) {
+    if (!email.includes("@") || !email.includes(".") || email.includes(" ")) {
         return res.render("signup-form", {
             msg: "Please enter a valid email address.",
             username,
