@@ -72,7 +72,7 @@ exports.submitEditProfile = async (req, res) => {
         }
 
         // check email format
-        if (!email.includes("@") || !email.includes(".") || email.includes(" ") || email.indexOf("@") > email.indexOf(".")) {
+        if (!email.includes("@") || !email.includes(".") || email.includes(" ")) {
             const user = await User.findByUserId(req.session.user.id);
             return res.render("editProfile", {
                 user,
