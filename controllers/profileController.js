@@ -152,6 +152,19 @@ exports.submitEditProfile = async (req, res) => {
     }
 };
 
+exports.deleteUser = async (req, res) => {
+    try {
+        await Listing.Listing.deleteMany({ landlord: req.session.user.id });
+        await User.deleteUserById(req.session.user.id);
+        req.session.destroy(() => {
+            res.redirect("/login-form");
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error deleting account.");
+    }
+};
+
 exports.searchUser = async (req, res) => {
     try {
         const searchTerm = req.body.username ? req.body.username.trim() : "";

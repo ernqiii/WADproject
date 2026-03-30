@@ -87,7 +87,7 @@
                  data-price="<%= listing.price %>"
                  data-gender="<%= listing.my_gender %>"
                  data-location="<%= listing.location.toLowerCase() %>">
-                <h3><%= listing.title %> — <a href="/profile/<%= listing.landlord._id %>"><%= listing.landlord.username %></a></h3>
+                <h3><%= listing.title %><% if (listing.landlord) { %> — <a href="/profile/<%= listing.landlord._id %>"><%= listing.landlord.username %></a><% } %></h3>
 
                 <% if (listing.photos && listing.photos.length > 0) { %>
                     <% listing.photos.forEach(function(photo) { %>

@@ -73,4 +73,8 @@ exports.searchByUsername = function(username) {
     });
 };
 
+exports.deleteUserById = function(userId) {
+    return User.deleteOne({ _id: userId });
+};
+
 exports.User = User;
