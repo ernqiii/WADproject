@@ -55,6 +55,12 @@ exports.displaySignupForm = (req, res) => {
     });
 };
 
+exports.handleLogout = (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/login-form");
+    });
+};
+
 exports.handleSignup = async (req, res) => {
     const username = req.body.username.trim();
     const password = req.body.password;
@@ -107,7 +113,7 @@ exports.handleSignup = async (req, res) => {
     }
 
     // check email format
-    if (!email.includes("@") || !email.includes(".") || email.includes(" ") || email.indexOf("@") > email.indexOf(".")) {
+    if (!email.includes("@") || !email.includes(".") || email.includes(" ")) {
         return res.render("signup-form", {
             msg: "Please enter a valid email address.",
             username,
