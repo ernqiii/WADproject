@@ -4,19 +4,55 @@ const Review = require("../models/Review");
 
 exports.showAdminProfile = async (req, res) => {
     try {
-        const users = await User.User.find({});
-        const listings = await Listing.find({}).populate("landlord", "username");
-        const reviews = await Review.Review.find({}).populate("reviewerId", "username").populate("reviewedUserId", "username");
+        const allUsers = await User.User.find({});
+        const allListings = await Listing.find({}).populate("landlord", "username");
+        const allReviews = await Review.Review.find({}).populate("reviewerId", "username").populate("reviewedUserId", "username");
 
         res.render("admin-profile", {
             user: req.session.user,
-            users,
-            listings,
-            reviews
+            results: null,
+            searchTerm: "",
+            allUsers,
+            allListings,
+            allReviews
         });
     } catch (error) {
         console.log(error);
         res.status(500).send("Error loading admin profile.");
+    }
+};
+
+exports.searchUsers = async (req, res) => {
+    try {
+        const searchTerm = req.body.username ? req.body.username.trim() : "";
+
+        const matchedUsers = await User.User.find({
+            username: { $regex: searchTerm, $options: "i" },
+            role: { $ne: "admin" }
+        });
+
+        const results = await Promise.all(matchedUsers.map(async (u) => {
+            const listings = await Listing.find({ landlord: u._id }).lean();
+            const reviews = await Review.Review.find({ reviewedUserId: u._id })
+                .populate("reviewerId", "username").lean();
+            return { u, listings, reviews };
+        }));
+
+        const allUsers = await User.User.find({});
+        const allListings = await Listing.find({}).populate("landlord", "username");
+        const allReviews = await Review.Review.find({}).populate("reviewerId", "username").populate("reviewedUserId", "username");
+
+        res.render("admin-profile", {
+            user: req.session.user,
+            results,
+            searchTerm,
+            allUsers,
+            allListings,
+            allReviews
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error searching users.");
     }
 };
 

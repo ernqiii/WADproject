@@ -2,27 +2,99 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Admin Profile</title>
+    <title>Admin Dashboard</title>
 </head>
 <body>
 
-    <h1>Welcome, admin: <%= user.username %>!</h1>
-    <p>
-        <a href="/explore">Explore</a> |
-        <a href="/logout">Logout</a>
-    </p>
+    <table width="100%">
+        <tr>
+            <td><h1>Welcome, admin: <%= user.username %>!</h1></td>
+            <td align="right"><a href="/logout">Logout</a></td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <h2>Search Users</h2>
+    <form action="/admin-profile/search" method="POST">
+        <input type="text" name="username" placeholder="Search by username" value="<%= searchTerm %>">
+        <button type="submit">Search</button>
+    </form>
+
+    <% if (results !== null) { %>
+        <% if (results.length === 0) { %>
+            <p>No users found for "<%= searchTerm %>".</p>
+        <% } else { %>
+            <h3>Search Results for "<%= searchTerm %>"</h3>
+            <% results.forEach(function(result) { %>
+                <% const u = result.u; %>
+                <h4>
+                    User: <a href="/profile/<%= u._id %>"><%= u.username %></a>
+                    <form action="/admin-profile/delete-user/<%= u._id %>" method="POST" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Delete user <%= u.username %> and all their data?');">Delete User</button>
+                    </form>
+                </h4>
+                <p><strong>Email:</strong> <%= u.email %> | <strong>Full Name:</strong> <%= u.fullName %> | <strong>Gender:</strong> <%= u.gender %> | <strong>Phone:</strong> <%= u.phone %></p>
+                <p><strong>Bio:</strong> <%= u.bio || "—" %></p>
+
+                <strong>Listings (<%= result.listings.length %>):</strong>
+                <% if (result.listings.length === 0) { %>
+                    <p>No listings.</p>
+                <% } else { %>
+                    <% result.listings.forEach(function(listing) { %>
+                        <p>
+                            &nbsp;&nbsp;<a href="/listing/<%= listing._id %>"><%= listing.title %></a>
+                            — $<%= listing.price %>/month — <%= listing.region %>
+                            <form action="/admin-profile/delete-listing/<%= listing._id %>" method="POST" style="display:inline;">
+                                <button type="submit" onclick="return confirm('Delete this listing?');">Delete Listing</button>
+                            </form>
+                        </p>
+                        <% if (listing.comments && listing.comments.length > 0) { %>
+                            <ul>
+                                <% listing.comments.forEach(function(comment) { %>
+                                    <li>
+                                        "<%= comment.text %>"
+                                        <form action="/admin-profile/delete-comment/<%= listing._id %>/<%= comment._id %>" method="POST" style="display:inline;">
+                                            <button type="submit" onclick="return confirm('Delete this comment?');">Delete Comment</button>
+                                        </form>
+                                    </li>
+                                <% }) %>
+                            </ul>
+                        <% } %>
+                    <% }) %>
+                <% } %>
+
+                <strong>Reviews Received (<%= result.reviews.length %>):</strong>
+                <% if (result.reviews.length === 0) { %>
+                    <p>No reviews.</p>
+                <% } else { %>
+                    <% result.reviews.forEach(function(review) { %>
+                        <p>
+                            &nbsp;&nbsp;From: <%= review.reviewerId ? review.reviewerId.username : 'Deleted User' %>
+                            — Rating: <%= review.rating %>/5
+                            — "<%= review.comment || 'No comment' %>"
+                            <form action="/admin-profile/delete-review/<%= review._id %>" method="POST" style="display:inline;">
+                                <button type="submit" onclick="return confirm('Delete this review?');">Delete Review</button>
+                            </form>
+                        </p>
+                    <% }) %>
+                <% } %>
+                <hr>
+            <% }) %>
+        <% } %>
+    <% } %>
 
     <hr>
 
     <h2>Manage Users</h2>
-    <% if (users.length === 0) { %>
+    <% if (allUsers.length === 0) { %>
         <p>No users found.</p>
     <% } else { %>
-        <% users.forEach(function(u) { %>
+        <% allUsers.forEach(function(u) { %>
             <% if (u.role !== 'admin') { %>
                 <p>
                     <strong><a href="/profile/<%= u._id %>"><%= u.username %></a></strong>
-                    (<%= u.email %>) — Role: <%= u.role %>
+                    (<%= u.email %>)
                     <form action="/admin-profile/delete-user/<%= u._id %>" method="POST" style="display:inline;">
                         <button type="submit" onclick="return confirm('Delete user <%= u.username %> and all their data?');">Delete User</button>
                     </form>
@@ -34,10 +106,10 @@
     <hr>
 
     <h2>Manage Listings</h2>
-    <% if (listings.length === 0) { %>
+    <% if (allListings.length === 0) { %>
         <p>No listings found.</p>
     <% } else { %>
-        <% listings.forEach(function(listing) { %>
+        <% allListings.forEach(function(listing) { %>
             <p>
                 <strong><a href="/listing/<%= listing._id %>"><%= listing.title %></a></strong>
                 — by <%= listing.landlord ? listing.landlord.username : 'Deleted User' %>
@@ -46,7 +118,6 @@
                     <button type="submit" onclick="return confirm('Delete this listing?');">Delete Listing</button>
                 </form>
             </p>
-
             <% if (listing.comments && listing.comments.length > 0) { %>
                 <ul>
                     <% listing.comments.forEach(function(comment) { %>
@@ -65,10 +136,10 @@
     <hr>
 
     <h2>Manage Reviews</h2>
-    <% if (reviews.length === 0) { %>
+    <% if (allReviews.length === 0) { %>
         <p>No reviews found.</p>
     <% } else { %>
-        <% reviews.forEach(function(review) { %>
+        <% allReviews.forEach(function(review) { %>
             <p>
                 <strong>By:</strong> <%= review.reviewerId ? review.reviewerId.username : 'Deleted User' %>
                 → <strong>On:</strong> <%= review.reviewedUserId ? review.reviewedUserId.username : 'Deleted User' %>
