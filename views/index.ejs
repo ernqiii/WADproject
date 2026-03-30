@@ -3,21 +3,18 @@
         <title>Roommate Finder | Home</title>
     </head>
     <body>
-        <h1>Find your perfect roommate!</h1>
-        <p>The simplest way to find your perfect roommate.</p>
-        
-        <% if (user) { %>
-            <p>
-                <a href="/explore">Explore</a> | 
+        <header>
+            <h1>Find your perfect roommate!</h1>
+            <p>The simplest way to find your perfect roommate.</p>
+
+            <strong>Roommate Finder</strong> | 
+            <% if (user) { %>
                 <a href="/profile">My Profile</a> | 
                 <a href="/logout">Logout</a>
-            </p>
-        <% } else { %>
-            <p>
-                <a href="/login-form">Login</a> | 
-                <a href="/signup-form">Sign Up</a>
-            </p>
-        <% } %>
+            <% } else { %>
+                <a href="/login-form">Login</a>
+            <% } %>
+        </header>
 
         <hr>
 
