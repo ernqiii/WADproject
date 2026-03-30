@@ -32,38 +32,44 @@ const addToWishlist = async (req, res) => {
     return res.status(500).send("Error in updating wishlist");
   }
 };
-const getWishlist =  async (req, res) => {
+const getWishlist = async (req, res) => {
   const userId = req.session?.user?.id;
-  try{
+
+  try {
     let wishlist = await wishlistModel.findByUser(userId);
-     if (!wishlist || !wishlist.items || wishlist.items.length === 0) { 
-      res.render("wishlist",{wishlist:null, listingArray:[]});
-      
+
+    if (!wishlist || !wishlist.items || wishlist.items.length === 0) {
+      return res.render("wishlist", { wishlist: null, listingArray: [] });
     }
-    else{
-      const listingArray = []
-      for (const item of wishlist.items) {
-        const listingObject = await listingModel.findByListing(item.listing);
+
+    const listingArray = [];
+
+    for (const item of wishlist.items) {
+      const listingObject = await listingModel.findByListing(item.listing);
+
+      if (listingObject) {
         listingArray.push({
           listing: listingObject,
-          ranking: item.ranking || null
+          ranking: item.ranking ?? null
         });
       }
-      listingArray.sort((a, b) => {
-        if (a.ranking == null && b.ranking == null) return 0;
-        if (a.ranking == null) return 1;
-        if (b.ranking == null) return -1;
-        return a.ranking - b.ranking;
-      });
-      res.render("wishlist",{wishlist, listingArray})
     }
-  }
-  catch(error){
+
+    listingArray.sort((a, b) => {
+      if (a.ranking == null && b.ranking == null) return 0;
+      if (a.ranking == null) return 1;
+      if (b.ranking == null) return -1;
+      return a.ranking - b.ranking;
+    });
+
+    return res.render("wishlist", { wishlist, listingArray });
+
+  } catch (error) {
     console.log(error);
     return res.status(500).send("Error in loading wishlist");
-
   }
 };
+
   
 const updateRanking = async (req, res) => {
   const userId = req.session?.user?.id;

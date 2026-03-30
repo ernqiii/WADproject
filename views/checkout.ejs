@@ -8,11 +8,11 @@
 <h1>Checkout</h1>
 <hr>
 
-<h3><%= listing.title %> <%= listing.title %> <%= listing.title %> — <a href="/profile/<%= listing.landlord._id %>"><%= listing.landlord.username %></a></h3>
+<h3><%= listing.title %>  — <a href="/profile/<%= listing.landlord._id %>"><%= listing.landlord.username %></a></h3>
 
-  <% if (listingItem.photos && listingItem.photos.length > 0) { %>
-      <% listingItem.photos.forEach(function(photo) { %>
-          <img src="/uploads/<%= photo %>" alt="<%= listingItem.title %>" width="250" height="250">
+  <% if (listing.photos && listing.photos.length > 0) { %>
+      <% listing.photos.forEach(function(photo) { %>
+          <img src="/uploads/<%= photo %>" alt="<%= listing.title %>" width="250" height="250">
       <% }); %>
         
   <% } else { %>
