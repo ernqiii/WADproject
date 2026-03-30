@@ -67,7 +67,7 @@
 
                 <% if (listing.photos && listing.photos.length > 0) { %>
                     <% listing.photos.forEach(function(photo) { %>
-                        <img src="/uploads/<%= photo %>" alt="<%= listing.title %>" style="max-width:200px;">
+                        <img src="/uploads/<%= photo %>" alt="<%= listing.title %>" width="250" height="250">
                     <% }); %>
                 <% } %>
 
