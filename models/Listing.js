@@ -18,8 +18,7 @@ const listingSchema = new mongoose.Schema({
   price: { type: Number, required: true, min: 0 },
   room_type: { type: String, required: true, enum: ['Private Room', 'Shared Room'] },
   roommates: { type: Number, required: true, min: 1 },
-  my_gender: { type: String, required: true, enum: ['Male', 'Female', 'Other'] },
-  preferred_gender: { type: String, required: true, enum: ['Male', 'Female', 'Any'] },
+  my_gender: { type: String, required: true, enum: ['Male', 'Female'] },
   amenities: [{ type: String,
   enum: [
     'wifi',
