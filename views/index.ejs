@@ -3,12 +3,13 @@
         <title>Roommate Finder | Home</title>
     </head>
     <body>
-        <header>
+        <header align="center">
             <h1>Find your perfect roommate!</h1>
             <p>The simplest way to find your perfect roommate.</p>
 
             <strong>Roommate Finder</strong> | 
             <% if (user) { %>
+                <a href="/wishlist">My Wishlist</a> | 
                 <a href="/profile">My Profile</a> | 
                 <a href="/logout">Logout</a>
             <% } else { %>
@@ -18,13 +19,23 @@
 
         <hr>
 
-        <% if (user) { %>
-            <p>Welcome back, <%= user.username %>!</p>
-            <br>
-            <a href="/explore">Continue exploring!</a>
-        <% } else { %>
-            <p>Ready to start finding a roommate?</p>
-            <a href="/signup">Create your account here!</a>
-        <% } %>
+        <main align="center">
+            <% if (user) { %>
+                <h3>Welcome back, <%= user.fullName %>!</h3>
+                <p>What do you want to do today?</p>
+                <p>Explore more <a href="/explore">Listings</a>.</p>
+                
+                <p><a href="/lsiitng/new">Create</a> a new listing for your room.</p>
+
+                <p>View your saved rooms in your <a href="/wishlist">Wishlist</a>.</p>
+
+            <% } else { %>
+                <p>Ready to join our community and start finding a roommate?</p>
+                <a href="/signup-form"><strong>Create your account here!</strong></a>
+                <br><br>
+                <p>Already have an account?</p>
+                <a href="/login-form"><strong>Login here!</strong></a>
+            <% } %>
+        </main>
     </body>
 </html>
