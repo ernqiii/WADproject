@@ -12,7 +12,7 @@
             Hello, <strong><%= user.username %></strong> |
             <a href="/profile">Go to Profile</a> |
             <a href="/wishlist">Go to Wishlist</a> |
-            <a href="/logout">Logout</a>
+            <a href="/logout">Logout</a> |
 
         </p>
     <% } %>
@@ -105,8 +105,11 @@
                 </button>
 
                 <!-- Wishlist Button -->
-                <button id="wishlist-btn-<%= listing._id %>" onclick="toggleWishlist('<%= listing._id %>')">
-                    Wishlist
+                <% const wishlisted = wishlistedIds.includes(listing._id.toString()); %>
+                <button id="wishlist-btn-<%= listing._id %>"
+                    <% if (wishlisted) { %>disabled<% } %>
+                    onclick="toggleWishlist('<%= listing._id %>')">
+                    <%= wishlisted ? 'Wishlisted' : 'Wishlist' %>
                 </button>
 
                 <!-- Comments Section (hidden by default) -->
