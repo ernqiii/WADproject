@@ -60,7 +60,6 @@
                  data-region="<%= listing.region.toLowerCase() %>"
                  data-room-type="<%= listing.room_type %>"
                  data-price="<%= listing.price %>">
-                <hr>
                 <h3><%= listing.title %></h3>
 
                 <% if (listing.photos && listing.photos.length > 0) { %>
@@ -77,7 +76,7 @@
                 <p><strong>Description:</strong> <%= listing.description %></p>
 
                 <% if (listing.amenities && listing.amenities.length > 0) { %>
-                    <p><strong>Amenities:</strong> <%= listing.amenities.join(', ') %></p>
+                    <p><strong>Amenities:</strong> <%= listing.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %></p>
                 <% } %>
 
                 <!-- Like Button -->
@@ -125,6 +124,7 @@
                         <button onclick="addComment('<%= listing._id %>')">Submit Comment</button>
                     <% } %>
                 </div>
+                <hr>
             </div>
         <% } %>
     </div>
