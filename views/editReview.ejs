@@ -8,6 +8,8 @@
 
     <h1>Edit Review</h1>
 
+    <p><a href="/profile/<%= review.reviewedUserId %>">Back to Profile</a></p>
+
     <form method="POST" action="/reviews/update">
         <input type="hidden" name="reviewId" value="<%= review._id %>">
         <input type="hidden" name="reviewedUserId" value="<%= review.reviewedUserId %>">
