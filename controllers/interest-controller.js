@@ -73,7 +73,7 @@ exports.updateInterest = async (req, res) => {
   const interestId = req.body.interestId;
   const userId = req.session.user._id;
 
-  const { name, email, phone, telegram, contact_method, message, consent } = req.body;
+  const { name, gender, email, phone, telegram, contact_method, message, consent } = req.body;
 
   const cleanName = name ? name.trim() : "";
   const cleanEmail = email ? email.trim() : "";
@@ -101,6 +101,7 @@ exports.updateInterest = async (req, res) => {
       return res.render("checkout", {
         listing,
         error,
+        gender,
         name: cleanName,
         email: cleanEmail,
         phone: cleanPhone,
@@ -116,7 +117,7 @@ exports.updateInterest = async (req, res) => {
     if (!cleanEmail && !cleanPhone && !cleanTelegram) {
       error = "Please provide at least one contact method.";
       const updatedInterest = interest.toObject();  //convert moongoose object to JS object 
-
+      updatedInterest.gender = gender;
       updatedInterest.name = cleanName;
       updatedInterest.email = cleanEmail;
       updatedInterest.phone = cleanPhone;
@@ -133,7 +134,7 @@ exports.updateInterest = async (req, res) => {
     if (!contact_method) {
       error = "Please select a preferred contact method.";
       const updatedInterest = interest.toObject();  //convert moongoose object to JS object 
-
+      updatedInterest.gender = gender;
       updatedInterest.name = cleanName;
       updatedInterest.email = cleanEmail;
       updatedInterest.phone = cleanPhone;
@@ -150,7 +151,7 @@ exports.updateInterest = async (req, res) => {
     if (contact_method === "email" && !cleanEmail) {
       error = "You selected email as preferred contact method, so email is required.";
       const updatedInterest = interest.toObject();  //convert moongoose object to JS object 
-
+      updatedInterest.gender = gender;
       updatedInterest.name = cleanName;
       updatedInterest.email = cleanEmail;
       updatedInterest.phone = cleanPhone;
@@ -167,7 +168,7 @@ exports.updateInterest = async (req, res) => {
     if ((contact_method === "phone" || contact_method === "whatsapp") && !cleanPhone) {
       error = "You selected phone/WhatsApp as preferred contact method, so phone is required.";
       const updatedInterest = interest.toObject();  //convert moongoose object to JS object 
-
+      updatedInterest.gender = gender;
       updatedInterest.name = cleanName;
       updatedInterest.email = cleanEmail;
       updatedInterest.phone = cleanPhone;
@@ -184,7 +185,7 @@ exports.updateInterest = async (req, res) => {
     if (contact_method === "telegram" && !cleanTelegram) {
       error = "You selected Telegram as preferred contact method, so Telegram is required.";
       const updatedInterest = interest.toObject();  //convert moongoose object to JS object 
-
+      updatedInterest.gender = gender;
       updatedInterest.name = cleanName;
       updatedInterest.email = cleanEmail;
       updatedInterest.phone = cleanPhone;
@@ -198,7 +199,9 @@ exports.updateInterest = async (req, res) => {
       });
     }
     let updateItems = {
+
           name: cleanName,
+          gender: gender,
           email: cleanEmail,
           phone: cleanPhone,
           telegram: cleanTelegram,

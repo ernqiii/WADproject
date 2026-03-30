@@ -14,21 +14,27 @@
   <form action="/interest/update" method="POST">
     <input type="hidden" name="interestId" value="<%= interest._id %>">
     
-    Name:
+    <strong>Name:</strong>
     <input type="text" name="name" value="<%= interest.name || '' %>" required>
     <br><br>
 
+    <strong>Gender:</strong>
+    <select name="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select><br>
+
     <p><strong>Please fill in at least one contact method.</strong></p>
 
-    Email:
+    <strong>Email:</strong>
     <input type="email" name="email" value="<%= interest.email || '' %>">
     <br><br>
 
-    Phone: (via calls, SMS, or WhatsApp)
-    <input type="text" name="phone" value="<%= interest.phone || '' %>">
+    <strong>>Phone:</strong>
+    <input type="text" name="phone" value="<%= interest.phone || '' %>"> (via calls, SMS, or WhatsApp)
     <br><br>
 
-    Telegram:
+    <strong>Telegram:</strong>
     <input type="text" name="telegram" value="<%= interest.telegram || '' %>">
     <br><br>
 
@@ -42,7 +48,7 @@
     </select>
     <br><br>
 
-    <label>Message:</label>
+    <strong>Message:</strong>
     <textarea name="message"><%= interest.message || '' %></textarea>
     <br><br>
     <p>

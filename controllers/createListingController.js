@@ -158,7 +158,7 @@ exports.viewListing = async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id);
     if (!listing) return res.send('Listing not found');
-    res.render('viewListing', { listing });
+    res.render('viewListing', { listing, user: req.session.user || null });
   } catch (e) {
     res.send('Error: ' + e.message);
   }
