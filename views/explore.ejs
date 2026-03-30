@@ -122,20 +122,14 @@
                 </button>
 
                 <!-- Wishlist Button -->
-<<<<<<< HEAD
                 <% if (!user || listing.landlord._id.toString() !== user.id.toString()) { %>
-                    <button id="wishlist-btn-<%= listing._id %>" onclick="toggleWishlist('<%= listing._id %>')">
-                        Wishlist
+                    <% const wishlisted = wishlistedIds.includes(listing._id.toString()); %>
+                    <button id="wishlist-btn-<%= listing._id %>"
+                        <% if (wishlisted) { %>disabled<% } %>
+                        onclick="toggleWishlist('<%= listing._id %>')">
+                        <%= wishlisted ? 'Wishlisted' : 'Wishlist' %>
                     </button>
                 <% } %>
-=======
-                <% const wishlisted = wishlistedIds.includes(listing._id.toString()); %>
-                <button id="wishlist-btn-<%= listing._id %>"
-                    <% if (wishlisted) { %>disabled<% } %>
-                    onclick="toggleWishlist('<%= listing._id %>')">
-                    <%= wishlisted ? 'Wishlisted' : 'Wishlist' %>
-                </button>
->>>>>>> 655027d35f50b734486b2be71a0ba1f27af855a8
 
                 <!-- Comments Section (hidden by default) -->
                 <div id="comments-<%= listing._id %>" style="display:none; margin-top:10px;">
