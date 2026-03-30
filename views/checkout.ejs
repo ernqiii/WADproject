@@ -13,7 +13,7 @@
           <p>
             <img src="/listing/<%= listing._id %>/image"
                  alt="<%= listing.title %>"
-                 width="250">
+                 width="250" height="250">
           </p>
         <% } else { %>
           <p>No image available</p>
@@ -52,21 +52,21 @@
 
 <%# But if message was never defined at all, JavaScript errors before it can even evaluate ||. %>
 <br>
-  Name:
+  <strong>Name:</strong>
   <input type="text" name="name" value="<%= name || '' %>" required> 
   <br><br>
   
   <p><u><strong>Please fill in at least one contact method</u></strong></p>
   
-  Email:
+  <strong>Email:</strong>
   <input type="email" name="email" value="<%= email || '' %>">
   <br><br>
 
-  Phone: (via calls, SMS, or WhatsApp)
-  <input type="text" name="phone" value="<%= phone || '' %>">
+  <strong>Phone:</strong>
+  <input type="text" name="phone" value="<%= phone || '' %>"> (via calls, SMS, or WhatsApp)
   <br><br>
 
-  Telegram:
+  <strong>Telegram:</strong>
   <input type="text" name="telegram" value="<%= telegram || '' %>">
   <br><br>
 
@@ -80,7 +80,7 @@
     <option value="whatsapp" <%= contact_method === "whatsapp" ? "selected" : "" %>>Whatsapp</option>
   </select>
   <br><br>
-  Message:
+  <strong>Message:</strong>
   <textarea name="message" placeholder="Send a Message" ><%= message || '' %></textarea><%# the data rention not within the text area  part %>
   <br><br>
   <p>

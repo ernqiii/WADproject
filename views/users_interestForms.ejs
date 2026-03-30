@@ -33,11 +33,13 @@
           <p>
             <img src="/listing/<%= item.listing._id %>/image"
                  alt="<%= item.listing.title %>"
-                 width="250">
+                 width="250" height="250">
           </p>
         <% } else { %>
           <p>No image available</p>
       <% } %>
+    
+    <% } %>
 
       <p><strong>Name:</strong> <%= item.interest.name %></p>
       <p><strong>Email:</strong> <%= item.interest.email || "Not provided" %></p>

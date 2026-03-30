@@ -4,7 +4,7 @@ const interestFormModel =require("../models/interestFormModel");
 
 
 const addToWishlist = async (req, res) => {
-  const userId = req.session?.user?.id || "temp-user-1";
+  const userId = req.session?.user?.id ;
   const listingId = req.body.listingId;
 
   try {
@@ -33,7 +33,7 @@ const addToWishlist = async (req, res) => {
   }
 };
 const getWishlist =  async (req, res) => {
-  const userId = req.session?.user?.id || "temp-user-1";
+  const userId = req.session?.user?.id;
   try{
     let wishlist = await wishlistModel.findByUser(userId);
      if (!wishlist || !wishlist.items || wishlist.items.length === 0) { 
@@ -66,7 +66,7 @@ const getWishlist =  async (req, res) => {
 };
   
 const updateRanking = async (req, res) => {
-  const userId = req.session?.user?.id || "temp-user-1";
+  const userId = req.session?.user?.id;
   const listingId = req.body.listingId;
   const ranking = req.body.ranking;
 
@@ -96,7 +96,7 @@ const updateRanking = async (req, res) => {
 };
 
 const deleteWishlistItem = async (req, res) => {
-  const userId = req.session?.user?.id || "temp-user-1";
+  const userId = req.session?.user?.id ;
   const listingId = req.body.listingId;
 
   try {
@@ -128,7 +128,16 @@ const checkoutPage = async (req, res) => {
       return res.redirect("/wishlist");
     }
     else{
-      return res.render("checkout", { listing });
+      return res.render("checkout",  {
+            listing,
+            message: "",
+            name: "",
+            email: "",
+            contact_method : "",
+            phone: "",
+            telegram: "",
+            error:""
+          }); 
     }
 
   } catch (error) {
@@ -138,7 +147,7 @@ const checkoutPage = async (req, res) => {
 };
  
 const postCheckoutPage = async (req, res) => {
-  const userId = req.session?.user?.id || "temp-user-1";
+  const userId = req.session?.user?.id ;
   const { listingId, name, email, phone, telegram, contact_method, message, consent } = req.body;
 
   try {
