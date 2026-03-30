@@ -69,16 +69,16 @@
         <p>No listings posted yet.</p>
     <% } else { %>
         <% listings.forEach(function(listing) { %>
-      <p><strong>Title:</strong> <%= listing.title %></p>
-      <p><strong>Region:</strong> <%= listing.region %></p>
-      <p><strong>Price:</strong> $<%= listing.price %> / month</p>
+      <p><strong><%= listing.title %></strong></p>
 
         <% if (listing.photos.length > 0) { %>
-        <p><strong>Photos:</strong></p>
         <% listing.photos.forEach(function(photo) { %>
         <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" alt="listing photo" width="250" height="250">
         <% }) %>
         <% } %>
+
+      <p><strong>Region:</strong> <%= listing.region %></p>
+      <p><strong>Price:</strong> $<%= listing.price %> / month</p>
       <br>
         <a href="/listing/<%= listing._id %>">View Details</a>
         <% if (String(user._id) === String(loggedInUserId)) { %>
