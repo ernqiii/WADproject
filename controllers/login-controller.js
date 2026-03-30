@@ -55,6 +55,12 @@ exports.displaySignupForm = (req, res) => {
     });
 };
 
+exports.handleLogout = (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/login-form");
+    });
+};
+
 exports.handleSignup = async (req, res) => {
     const username = req.body.username.trim();
     const password = req.body.password;
