@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const bcrypt = require("bcrypt");
 
 exports.displayLoginForm = (req, res) => {
     res.render("login-form", {
@@ -21,7 +22,7 @@ exports.handleLogin = async (req, res) => {
             });
         }
 
-        const match = password === user.password;
+        const match = await bcrypt.compare(password, user.password);
 
         if (!match) {
             return res.render("login-form", {
@@ -76,7 +77,6 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Username must be at least 3 characters.",
             username,
-            password,
             fullName,
             phone,
             email,
@@ -90,7 +90,6 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Password must be at least 6 characters.",
             username,
-            password,
             fullName,
             phone,
             email,
@@ -104,7 +103,6 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Name is too long.",
             username,
-            password,
             fullName,
             phone,
             email,
@@ -118,7 +116,6 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Please enter a valid email address.",
             username,
-            password,
             fullName,
             phone,
             email,
@@ -134,7 +131,6 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Phone number must be exactly 8 digits.",
             username,
-            password,
             fullName,
             phone,
             email,
@@ -148,7 +144,6 @@ exports.handleSignup = async (req, res) => {
         return res.render("signup-form", {
             msg: "Bio is too long.",
             username,
-            password,
             fullName,
             phone,
             email,
@@ -158,9 +153,11 @@ exports.handleSignup = async (req, res) => {
     }
 
     try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const newUser = {
             username,
-            password,
+            password: hashedPassword,
             fullName,
             phone: cleanPhone,
             email,
@@ -174,8 +171,10 @@ exports.handleSignup = async (req, res) => {
         console.error("Signup error:", error);
 
         if (error.code === 11000) {
+            const isEmail = error.message.includes("email");
+
             return res.render("signup-form", {
-                msg: "Username already taken.",
+                msg: isEmail ? "Email is already registered." : "Username is already taken.",
                 username,
                 password,
                 fullName,
