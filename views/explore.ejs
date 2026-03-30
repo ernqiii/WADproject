@@ -7,12 +7,12 @@
 
     <h1>Student Housing</h1>
 
-    <!-- ✅ Welcome + Profile link -->
+    <!-- ✅ Welcome + Profile link + Logout -->
     <% if (user) { %>
-        <p>
-            Hello, <strong><%= user.username %></strong> |
-            <a href="/profile">Go to Profile</a>
-        </p>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <p>Hello, <strong><%= user.username %></strong> | <a href="/profile">Go to Profile</a></p>
+            <a href="/logout">Logout</a>
+        </div>
     <% } %>
 
     <hr>
@@ -26,14 +26,14 @@
     <select id="region">
         <option value="">All Regions</option>
         <option value="North">North</option>
-        <option value="South">South</option>
+        <option value="North-West">North-West</option>
+        <option value="North-East">North-East</option>
         <option value="East">East</option>
+        <option value="South">South</option>
+        <option value="South-West">South-West</option>
+        <option value="South-East">South-East</option>
         <option value="West">West</option>
         <option value="Central">Central</option>
-        <option value="Northeast">Northeast</option>
-        <option value="Northwest">Northwest</option>
-        <option value="Southeast">Southeast</option>
-        <option value="Southwest">Southwest</option>
     </select>
 
     <label>Room Type:</label>
@@ -44,29 +44,29 @@
     </select>
     
     <label>Max Price:</label>
-    <input type="number" id="price" placeholder="Max price">
+    <input type="number" id="price">
     
     <button onclick="showListings()">Search</button>
     <button onclick="resetFilters()">Reset Filters</button>
     
     <hr>
     <div id="listings">
-        <% if (listings.length === 0) { %>
-            <p>No listings found.</p>
-        <% } %>
+        <p id="no-results" style="display:<%= listings.length === 0 ? '' : 'none' %>;">No listings found.</p>
 
         <% for (let i = 0; i < listings.length; i++) { %>
             <% let listing = listings[i]; %>
             <div class="listing"
                  data-title="<%= listing.title.toLowerCase() %>"
-                 data-region="<%= listing.region %>"
+                 data-region="<%= listing.region.toLowerCase() %>"
                  data-room-type="<%= listing.room_type %>"
                  data-price="<%= listing.price %>">
                 <hr>
                 <h3><%= listing.title %></h3>
 
                 <% if (listing.photos && listing.photos.length > 0) { %>
-                    <img src="/uploads/<%= listing.photos[0] %>" alt="<%= listing.title %>" style="max-width:200px;">
+                    <% listing.photos.forEach(function(photo) { %>
+                        <img src="/uploads/<%= photo %>" alt="<%= listing.title %>" width="250" height="250">
+                    <% }); %>
                 <% } %>
 
                 <p><strong>Region:</strong> <%= listing.region %></p>
@@ -144,12 +144,15 @@
                 let show = true;
 
                 if (searchFilter && !el.dataset.title.includes(searchFilter)) show = false;
-                if (regionFilter && el.dataset.region !== regionFilter) show = false;
+                if (regionFilter && el.dataset.region !== regionFilter.toLowerCase()) show = false;
                 if (typeFilter && el.dataset.roomType !== typeFilter) show = false;
                 if (priceFilter && Number(el.dataset.price) > Number(priceFilter)) show = false;
 
                 el.style.display = show ? '' : 'none';
             }
+
+            let anyVisible = Array.from(items).some(el => el.style.display !== 'none');
+            document.getElementById('no-results').style.display = anyVisible ? 'none' : '';
         }
 
         function resetFilters() {

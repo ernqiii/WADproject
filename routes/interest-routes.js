@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const interestController = require("../controllers/interest-controller");
-router.get("/interest",userController.getInterestDashboard);
+const userController = require("../controllers/profileController")
+router.get("/interest",interestController.getInterestDashboard);
 
 
 // show user profile with submitted interest forms
