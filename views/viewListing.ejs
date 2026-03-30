@@ -33,44 +33,15 @@
     </ul>
   <% } %>
 
-  <% if (listing.photos && listing.photos.length > 0) { %>
-    <p><strong>Photos:</strong></p>
-    <% listing.photos.forEach(function(photo) { %>
-      <% if (typeof photo === 'string') { %>
-        <img src="/uploads/<%= photo %>" width="300" height="300" alt="listing photo">
-      <% } else if (photo.data && photo.contentType) { %>
-        <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="300" height="300" alt="listing photo">
-      <% } %>
-    <% }) %>
-  <% } %>
-
   <br>
 
-  <!-- Like Button -->
-  <button id="like-btn-<%= listing._id %>" onclick="toggleLike('<%= listing._id %>')">
-    <% if (user && listing.likes.some(id => id.toString() === user.id.toString())) { %>
-      Unlike (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
+  <p><strong>Likes:</strong> <%= listing.likes.length %></p>
+  <p><strong>Comments:</strong> <%= listing.comments.length %></p>
+
+  <div style="margin-top:10px;">
+    <% if (listing.comments.length === 0) { %>
+      <p>There are no comments.</p>
     <% } else { %>
-      Like (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
-    <% } %>
-  </button>
-
-  <!-- Comment Button -->
-  <button onclick="toggleComments('<%= listing._id %>')">
-    Comments (<span id="comment-count-<%= listing._id %>"><%= listing.comments.length %></span>)
-  </button>
-
-  <!-- Wishlist Button -->
-  <button id="wishlist-btn-<%= listing._id %>"
-    <%= isWishlisted ? 'disabled' : '' %>
-    onclick="toggleWishlist('<%= listing._id %>')">
-    <%= isWishlisted ? 'Wishlisted' : 'Wishlist' %>
-  </button>
-
-  <!-- Comments Section -->
-  <div id="comments-<%= listing._id %>" style="margin-top:10px;">
-    <h4>Comments</h4>
-    <div id="comments-list-<%= listing._id %>">
       <% for (let j = 0; j < listing.comments.length; j++) { %>
         <% let comment = listing.comments[j]; %>
         <div id="comment-<%= comment._id %>" style="margin-bottom:8px; padding:5px; border-bottom:1px solid #ccc;">
@@ -86,7 +57,7 @@
           <% } %>
         </div>
       <% } %>
-    </div>
+    <% } %>
 
     <% if (user) { %>
       <textarea id="comment-input-<%= listing._id %>" placeholder="Write a comment..." rows="2" style="width:100%;"></textarea>
