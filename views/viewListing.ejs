@@ -56,11 +56,6 @@
         </div>
       <% } %>
     <% } %>
-
-    <% if (user) { %>
-      <textarea id="comment-input-<%= listing._id %>" placeholder="Write a comment..." rows="2" style="width:100%;"></textarea>
-      <button onclick="addComment('<%= listing._id %>')">Submit Comment</button>
-    <% } %>
   </div>
 
   <br><br>
