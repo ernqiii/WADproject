@@ -59,7 +59,7 @@
       id="location"
       name="location" 
       placeholder="Address"
-      maxlength="50"
+      maxlength="100"
       value="<%= data.location || '' %>"
       required
     >
@@ -194,7 +194,7 @@
     </table>
     <br>
 
-    <label for="photos">Upload Photos (Max 3)</label><br>
+    <label for="photos">Upload Photos (Max 3, 2MB each)</label><br>
     <% if (data.photos && data.photos.length > 0) { %>
       <p>Current photos:</p>
       <% data.photos.forEach(function(photo) { %>

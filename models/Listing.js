@@ -14,7 +14,7 @@ const listingSchema = new mongoose.Schema({
     'West', 
     'Central'
   ] },
-  location: { type: String, required: true, maxlength: 50 },
+  location: { type: String, required: true, maxlength: 100 },
   price: { type: Number, required: true, min: 0 },
   room_type: { type: String, required: true, enum: ['Private Room', 'Shared Room'] },
   roommates: { type: Number, required: true, min: 1 },

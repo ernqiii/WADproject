@@ -1,21 +1,9 @@
 //const Listing = require('../models/Listing');
 //const { Listing, findByLandlord, findByListing } = require('../models/Listing');
-// const multer = require('multer');
-// const path = require('path');
 const { Listing } = require('../models/Listing');
 const wishlistModel = require('../models/wishlistModel');
 const multer = require('multer');
-// const upload = multer({ 
-//   dest: path.join(__dirname, '../uploads/'), 
-//   fileFilter: function (req, file, cb) {
-//     if (file.mimetype.startsWith('image/')) {
-//       cb(null, true);
-//     } else {
-//       cb(new Error('Only image files are allowed!'), false);
-//     }
-//   },
-//   limits: { files: 3 }
-// });
+
 const upload = multer({ 
   storage: multer.memoryStorage(),
   limits: { fileSize: 2 * 1024 * 1024 }
@@ -64,13 +52,6 @@ exports.createListing = async (req, res) => {
   const amenities = normalizeAmenities(req.body.amenities);
  
   try {
-    // if (req.files && req.files.length > 3) {
-    //   return res.render('createListing', {
-    //     error: 'Maximum 3 photos allowed!',
-    //     data: req.body, amenities
-    //   });
-    // }
- 
     for (const file of (req.files || [])) {
       if (!allowedTypes.includes(file.mimetype)) {
         return res.render('createListing', {
@@ -132,13 +113,6 @@ exports.updateListing = async (req, res) => {
     if (oldListing.landlord.toString() !== req.session.user.id) {
       return res.send('Not authorized');
     }
- 
-    // if (req.files && req.files.length > 3) {
-    //   return res.render('editListing', {
-    //     error: 'Maximum 3 photos allowed!',
-    //     data: { ...req.body, _id: req.params.id }, amenities
-    //   });
-    // }
  
     for (const file of (req.files || [])) {
       if (!allowedTypes.includes(file.mimetype)) {

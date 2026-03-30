@@ -58,8 +58,6 @@
     <% } %>
   </div>
 
-  <br><br>
-
   <% if (user && listing.landlord && String(listing.landlord) === String(user.id)) { %>
     <a href="/listing/<%= listing._id %>/edit">Edit</a>
   <% } %>

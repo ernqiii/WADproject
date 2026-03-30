@@ -58,7 +58,7 @@
     id="location"
     name="location" 
     placeholder="Address"
-    maxlength="50"
+    maxlength="100"
     value="<%= data.location || '' %>"
     required
   >
@@ -196,7 +196,7 @@
 
   <br>
 
-  <label for="photos">Upload Photos (Max 3)</label><br>
+  <label for="photos">Upload Photos (Max 3, 2MB each)</label><br>
   <input type="file" id="photos" name="photos" required multiple accept="image/*">
   <br><br>
 
