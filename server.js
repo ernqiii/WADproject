@@ -17,10 +17,11 @@ server.set("view engine", "ejs");
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
 
+const secret = process.env.SECRET;
 server.use(session({
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: false
+    secret: secret, // sign the session ID cookie. should be a long, random, and secure string, preferably stored in an environment variable
+    resave: false, // Prevents the session from being saved back to the session store if nothing has changed.
+    saveUninitialized: false // Prevents a new, empty session from being saved to the store.
 }));
 
 const loginRoutes = require("./routes/login-routes");
