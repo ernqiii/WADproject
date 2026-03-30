@@ -22,7 +22,7 @@
     <h3>Filters</h3>
     
     <label>Search:</label>
-    <input type="text" id="search" placeholder="Search listings...">
+    <input type="text" id="search">
     
     <label>Region:</label>
     <select id="region">
@@ -45,7 +45,7 @@
         <option value="Shared Room">Shared Room</option>
     </select>
     
-    <label>Owner Gender:</label>
+    <label>Owner's Gender:</label>
     <select id="gender">
         <option value="">All</option>
         <option value="Male">Male</option>
@@ -55,8 +55,10 @@
     <label>Max Price:</label>
     <input type="number" id="price">
     
-    <button onclick="showListings()">Search</button>
-    <button onclick="resetFilters()">Reset Filters</button>
+    <div style="display:flex; justify-content:space-between;">
+        <button onclick="showListings()">Search</button>
+        <button onclick="resetFilters()">Reset Filters</button>
+    </div>
     
     <hr>
     <div id="listings">
@@ -82,7 +84,7 @@
                 <p><strong>Location:</strong> <%= listing.location %></p>
                 <p><strong>Price:</strong> $<%= listing.price %>/month</p>
                 <p><strong>Room Type:</strong> <%= listing.room_type %></p>
-                <p><strong>Owner Gender:</strong> <%= listing.my_gender %></p>
+                <p><strong>Owner's Gender:</strong> <%= listing.my_gender %></p>
                 <p><strong>Roommates:</strong> <%= listing.roommates %></p>
                 <p><strong>Description:</strong> <%= listing.description %></p>
 
@@ -112,7 +114,7 @@
                     <%= wishlisted ? 'Wishlisted' : 'Wishlist' %>
                 </button>
 
-                <!-- Comments Section (hidden by default) -->
+                <!-- Comments Section (hidden by default) -->rs
                 <div id="comments-<%= listing._id %>" style="display:none; margin-top:10px;">
                     <h4>Comments</h4>
                     <div id="comments-list-<%= listing._id %>">
