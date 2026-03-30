@@ -3,6 +3,7 @@
 // const multer = require('multer');
 // const path = require('path');
 const { Listing } = require('../models/Listing');
+const wishlistModel = require('../models/wishlistModel');
 const multer = require('multer');
 // const upload = multer({ 
 //   dest: path.join(__dirname, '../uploads/'), 
@@ -191,9 +192,18 @@ exports.deleteListing = async (req, res) => {
 
 exports.viewListing = async (req, res) => {
   try {
-    const listing = await Listing.findById(req.params.id);
+    const listing = await Listing.findById(req.params.id).populate('comments.user', 'username');
     if (!listing) return res.send('Listing not found');
-    res.render('viewListing', { listing });
+
+    let isWishlisted = false;
+    if (req.session.user) {
+      const wishlist = await wishlistModel.findByUser(req.session.user.id);
+      if (wishlist) {
+        isWishlisted = wishlist.items.some(item => item.listing.toString() === listing._id.toString());
+      }
+    }
+
+    res.render('viewListing', { listing, user: req.session.user || null, isWishlisted });
   } catch (e) {
     res.send('Error: ' + e.message);
   }

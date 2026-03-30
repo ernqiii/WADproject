@@ -14,13 +14,12 @@
       <% listingArray.forEach(function(item) { %>
         <% const listingItem = item.listing; %>
 
-        <h3><%= listingItem.title %></h3>
-        <% if (listingItem.image && listingItem.image.data) { %>
-          <p>
-            <img src="/listing/<%= listingItem._id %>/image"
-                 alt="<%= listingItem.title %>"
-                 width="250" height="250">
-          </p>
+        <h3><%= listingItem.title %> — <a href="/profile/<%= listingItem.landlord._id %>"><%= listingItem.landlord.username %></a></h3>
+        <% if (listingItem.photos && listingItem.photos.length > 0) { %>
+            <% listingItem.photos.forEach(function(photo) { %>
+                <img src="/uploads/<%= photo %>" alt="<%= listingItem.title %>" width="250" height="250">
+            <% }); %>
+             
         <% } else { %>
           <p>No image available</p>
         <% } %>
@@ -44,10 +43,12 @@
 
         <p><strong>Region:</strong> <%= listingItem.region %></p>
         <p><strong>Location:</strong> <%= listingItem.location %></p>
-        <p><strong>Gender:</strong> <%= listingItem.gender %></p>
-        <p><strong>Room Type:</strong> <%= listingItem.room_type %></p>
-        <p><strong>Roommates:</strong> <%= listingItem.roommates %></p>
         <p><strong>Price:</strong> $<%= listingItem.price %>/month</p>
+        
+        <p><strong>Room Type:</strong> <%= listingItem.room_type %></p>
+        <p><strong>Owner's Gender:</strong> <%= listingItem.my_gender %></p>
+        <p><strong>Roommates:</strong> <%= listingItem.roommates %></p>
+        <p><strong>Description:</strong> <%= listingItem.description %></p>
         <p>
           <strong>Amenities:</strong>
           <% if (listingItem.amenities && listingItem.amenities.length > 0) { %>
@@ -57,7 +58,7 @@
           <% } %>
         </p>
 
-        <p><strong>Description:</strong> <%= listingItem.description %></p>
+        
 
         <form action="/wishlist/delete" method="POST" style="display:inline;">
           <input type="hidden" name="listingId" value="<%= listingItem._id %>">
