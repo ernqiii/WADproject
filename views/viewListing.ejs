@@ -8,57 +8,31 @@
   <a href="/profile/<%= listing.landlord %>">Back to Profile</a>
   <br><br>
 
-  <p><strong>Title:</strong> <%= listing.title %></p>
-  <p><strong>Description:</strong> <%= listing.description %></p>
+  <h3><%= listing.title %></h3>
+
+  <% if (listing.photos && listing.photos.length > 0) { %>
+    <% listing.photos.forEach(function(photo) { %>
+      <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="250" height="250" alt="listing photo">
+    <% }); %>
+  <% } %>
+
   <p><strong>Region:</strong> <%= listing.region %></p>
   <p><strong>Location:</strong> <%= listing.location %></p>
-  <p><strong>Price:</strong> $<%= listing.price %> / month</p>
+  <p><strong>Price:</strong> $<%= listing.price %>/month</p>
   <p><strong>Room Type:</strong> <%= listing.room_type %></p>
-  <p><strong>Roommate Slots Available:</strong> <%= listing.roommates %></p>
-  <p><strong>Owner Gender:</strong> <%= listing.my_gender %></p>
+  <p><strong>Owner's Gender:</strong> <%= listing.my_gender %></p>
+  <p><strong>Roommates:</strong> <%= listing.roommates %></p>
+  <p><strong>Description:</strong> <%= listing.description %></p>
 
-    <% if (listing.amenities.length > 0) { %>
-      <p><strong>Amenities:</strong></p>
-      <ul>
-        <% listing.amenities.forEach(function(a) { %>
-          <li><%= a.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %></li>
-        <% }) %>
-      </ul>
-    <% } %>
+  <% if (listing.amenities && listing.amenities.length > 0) { %>
+    <p><strong>Amenities:</strong> <%= listing.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %></p>
+  <% } %>
 
-    <% if (listing.photos && listing.photos.length > 0) { %>
-      <p><strong>Photos:</strong></p>
-      <% listing.photos.forEach(function(photo) { %>
-        <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="250" height="250" alt="listing photo">
-    <% }) %>
-    <% } %>
-  <br>
+  <p><strong>Likes:</strong> <%= listing.likes.length %></p>
 
-  <!-- Like Button -->
-  <button id="like-btn-<%= listing._id %>" onclick="toggleLike('<%= listing._id %>')">
-    <% if (user && listing.likes.some(id => id.toString() === user.id.toString())) { %>
-      Unlike (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
-    <% } else { %>
-      Like (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
-    <% } %>
-  </button>
-
-  <!-- Comment Button -->
-  <button onclick="toggleComments('<%= listing._id %>')">
-    Comments (<span id="comment-count-<%= listing._id %>"><%= listing.comments.length %></span>)
-  </button>
-
-  <!-- Wishlist Button -->
-  <button id="wishlist-btn-<%= listing._id %>"
-    <% if (isWishlisted) { %>disabled<% } %>
-    onclick="toggleWishlist('<%= listing._id %>')">
-    <%= isWishlisted ? 'Wishlisted' : 'Wishlist' %>
-  </button>
-
-  <!-- Comments Section (hidden by default) -->
-  <div id="comments-<%= listing._id %>" style="margin-top:10px;">
-    <h4>Comments</h4>
-    <div id="comments-list-<%= listing._id %>">
+  <div style="margin-top:10px;">
+    <strong>Comments: <%= listing.comments.length %></strong>
+    <div style="margin-top:8px;">
       <% for (let j = 0; j < listing.comments.length; j++) { %>
         <% let comment = listing.comments[j]; %>
         <div id="comment-<%= comment._id %>" style="margin-bottom:8px; padding:5px; border-bottom:1px solid #ccc;">
@@ -89,24 +63,6 @@
   <% } %>
 
   <script>
-    async function toggleLike(listingId) {
-      const res = await fetch('/explore/listings/' + listingId + '/like', { method: 'POST' });
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById('like-count-' + listingId).textContent = data.likeCount;
-        let btn = document.getElementById('like-btn-' + listingId);
-        let countSpan = document.getElementById('like-count-' + listingId).outerHTML;
-        btn.innerHTML = data.liked ? 'Unlike (' + countSpan + ')' : 'Like (' + countSpan + ')';
-      } else {
-        alert(data.message);
-      }
-    }
-
-    function toggleComments(listingId) {
-      let section = document.getElementById('comments-' + listingId);
-      section.style.display = section.style.display === 'none' ? '' : 'none';
-    }
-
     async function addComment(listingId) {
       let input = document.getElementById('comment-input-' + listingId);
       let text = input.value.trim();
@@ -154,27 +110,11 @@
       const data = await res.json();
       if (data.success) {
         document.getElementById('comment-' + commentId).remove();
-        let countEl = document.getElementById('comment-count-' + listingId);
-        countEl.textContent = Number(countEl.textContent) - 1;
       } else {
         alert(data.message);
       }
     }
 
-    async function toggleWishlist(listingId) {
-      const res = await fetch('/wishlist/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ listingId })
-      });
-      if (res.ok) {
-        let btn = document.getElementById('wishlist-btn-' + listingId);
-        btn.textContent = 'Wishlisted';
-        btn.disabled = true;
-      } else {
-        alert('Please login to add to wishlist');
-      }
-    }
   </script>
 
 </body>
