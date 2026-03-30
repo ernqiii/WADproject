@@ -30,7 +30,8 @@ const exploreRoutes = require("./routes/explore");
 const reviewRoutes = require("./routes/review-routes");
 const wishlistRoutes = require("./routes/wishlist-routes");
 const listingRoutes = require('./routes/createListingRoute');
-const interestRoutes = require("./routes/interest-routes")
+const interestRoutes = require("./routes/interest-routes");
+const adminRoutes = require("./routes/admin-routes");
 
 server.use("/", indexRoutes);
 server.use("/login", loginRoutes);
@@ -39,7 +40,8 @@ server.use("/explore", exploreRoutes);
 server.use("/", reviewRoutes);
 server.use("/", wishlistRoutes);
 server.use("/listing", listingRoutes);
-server.use("/",interestRoutes)
+server.use("/", interestRoutes);
+server.use("/admin-profile", adminRoutes);
 
 
 // change homepage behavior

@@ -34,9 +34,13 @@ exports.handleLogin = async (req, res) => {
         req.session.user = {
             id: user._id,
             username: user.username,
-            fullName: user.fullName
+            fullName: user.fullName,
+            role: user.role
         };
 
+        if (user.role === "admin") {
+            return res.redirect("/admin-profile");
+        }
         res.redirect("/explore");
     } catch (error) {
         console.error("Login error:", error);
@@ -71,6 +75,7 @@ exports.handleSignup = async (req, res) => {
     const email = req.body.email.trim();
     const gender = req.body.gender;
     const bio = req.body.bio;
+    const role = "user";
 
     // check username length
     if (username.length < 3) {
@@ -168,7 +173,8 @@ exports.handleSignup = async (req, res) => {
             phone: cleanPhone,
             email,
             gender,
-            bio: bio ? bio.trim() : ""
+            bio: bio ? bio.trim() : "",
+            role
         };
 
         await User.addUser(newUser);

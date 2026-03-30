@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Profile</title>
+</head>
+<body>
+
+    <h1>Welcome, admin: <%= user.username %>!</h1>
+    <p><a href="/logout">Logout</a></p>
+
+    <hr>
+
+    <h2>Manage Users</h2>
+    <% if (users.length === 0) { %>
+        <p>No users found.</p>
+    <% } else { %>
+        <% users.forEach(function(u) { %>
+            <% if (u.role !== 'admin') { %>
+                <p>
+                    <strong><a href="/profile/<%= u._id %>"><%= u.username %></a></strong>
+                    (<%= u.email %>) — Role: <%= u.role %>
+                    <form action="/admin-profile/delete-user/<%= u._id %>" method="POST" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Delete user <%= u.username %> and all their data?');">Delete User</button>
+                    </form>
+                </p>
+            <% } %>
+        <% }) %>
+    <% } %>
+
+    <hr>
+
+    <h2>Manage Listings</h2>
+    <% if (listings.length === 0) { %>
+        <p>No listings found.</p>
+    <% } else { %>
+        <% listings.forEach(function(listing) { %>
+            <p>
+                <strong><a href="/listing/<%= listing._id %>"><%= listing.title %></a></strong>
+                — by <%= listing.landlord ? listing.landlord.username : 'Deleted User' %>
+                — $<%= listing.price %>/month
+                <form action="/admin-profile/delete-listing/<%= listing._id %>" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Delete this listing?');">Delete Listing</button>
+                </form>
+            </p>
+
+            <% if (listing.comments && listing.comments.length > 0) { %>
+                <ul>
+                    <% listing.comments.forEach(function(comment) { %>
+                        <li>
+                            "<%= comment.text %>"
+                            <form action="/admin-profile/delete-comment/<%= listing._id %>/<%= comment._id %>" method="POST" style="display:inline;">
+                                <button type="submit" onclick="return confirm('Delete this comment?');">Delete Comment</button>
+                            </form>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } %>
+        <% }) %>
+    <% } %>
+
+    <hr>
+
+    <h2>Manage Reviews</h2>
+    <% if (reviews.length === 0) { %>
+        <p>No reviews found.</p>
+    <% } else { %>
+        <% reviews.forEach(function(review) { %>
+            <p>
+                <strong>By:</strong> <%= review.reviewerId ? review.reviewerId.username : 'Deleted User' %>
+                → <strong>On:</strong> <%= review.reviewedUserId ? review.reviewedUserId.username : 'Deleted User' %>
+                — Rating: <%= review.rating %>/5
+                — "<%= review.comment || 'No comment' %>"
+                <form action="/admin-profile/delete-review/<%= review._id %>" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Delete this review?');">Delete Review</button>
+                </form>
+            </p>
+        <% }) %>
+    <% } %>
+
+</body>
+</html>
