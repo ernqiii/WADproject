@@ -30,6 +30,7 @@ const exploreRoutes = require("./routes/explore");
 const reviewRoutes = require("./routes/review-routes");
 const wishlistRoutes = require("./routes/wishlist-routes");
 const listingRoutes = require('./routes/createListingRoute');
+const interestRoutes = require("./routes/interest-routes")
 
 server.use("/", loginRoutes);
 server.use("/profile", profileRoutes);
@@ -37,6 +38,7 @@ server.use("/explore", exploreRoutes);
 server.use("/", reviewRoutes);
 server.use("/", wishlistRoutes);
 server.use("/listing", listingRoutes);
+server.use("/",interestRoutes)
 
 server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
