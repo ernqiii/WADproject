@@ -20,6 +20,7 @@ const wishlistSchema = new mongoose.Schema({
         min: 1,
         default : null
       },
+
       createdAt: {
         type: Date,
         default: Date.now
@@ -48,4 +49,3 @@ exports.createWishlist = function(userId, items) {
 exports.updateWishlistItem = function(ID, items){
     return wishlist.updateOne({user:ID},{items: items})
 }
-

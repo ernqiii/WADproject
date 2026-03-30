@@ -5,7 +5,7 @@ const userModel = require("../models/User")
 
 
 const addToWishlist = async (req, res) => {
-  const userId = req.session?.user?.id ;
+  const userId = req.session?.user?.id ||req.session?.user?._id;
   const listingId = req.body.listingId;
 
   try {
@@ -34,7 +34,7 @@ const addToWishlist = async (req, res) => {
   }
 };
 const getWishlist = async (req, res) => {
-  const userId = req.session?.user?.id;
+  const userId = req.session?.user?.id||req.session?.user?._id;
 
   try {
     let wishlist = await wishlistModel.findByUser(userId);
@@ -49,7 +49,7 @@ const getWishlist = async (req, res) => {
       const listingObject = await listingModel.findByListing(item.listing);
 
       if (listingObject) {
-        const landlordUser = await userModel.findById(listingObject.landlord);
+        const landlordUser = await userModel.findByUserId(listingObject.landlord);
 
         listingArray.push({
           listing: listingObject,
@@ -76,7 +76,7 @@ const getWishlist = async (req, res) => {
 
   
 const updateRanking = async (req, res) => {
-  const userId = req.session?.user?.id;
+  const userId = req.session?.user?.id||req.session?.user?._id;
   const listingId = req.body.listingId;
   const ranking = req.body.ranking;
 
@@ -106,7 +106,7 @@ const updateRanking = async (req, res) => {
 };
 
 const deleteWishlistItem = async (req, res) => {
-  const userId = req.session?.user?.id ;
+  const userId = req.session?.user?.id ||req.session?.user?._id;
   const listingId = req.body.listingId;
 
   try {
@@ -137,154 +137,115 @@ const checkoutPage = async (req, res) => {
     if (!listing) {
       return res.redirect("/wishlist");
     }
-    else{
-      return res.render("checkout",  {
-            listing,
-            gender:"",
-            message: "",
-            name: "",
-            email: "",
-            contact_method : "",
-            phone: "",
-            telegram: "",
-            error:""
-          }); 
-    }
+
+    const formData = {
+      listing,
+      errors: [],
+      gender: "",
+      message: "",
+      name: "",
+      email: "",
+      contact_method: "",
+      phone: "",
+      telegram: ""
+    };
+
+    return res.render("checkout", formData);
 
   } catch (error) {
-    console.log(error);
+    console.log("CHECKOUT PAGE ERROR:", error);
     return res.status(500).send("Error loading checkout page");
   }
 };
- 
 const postCheckoutPage = async (req, res) => {
-  const userId = req.session?.user?.id ;
-  const { listingId, name, email, phone, telegram, contact_method, message, consent , gender} = req.body;
+  const userId = req.session?.user?.id||req.session?.user?._id;
+  const {
+    listingId,
+    name,
+    email,
+    phone,
+    telegram,
+    contact_method,
+    message,
+    consent,
+    gender
+  } = req.body;
 
   try {
     const listing = await listingModel.findByListing(listingId);
-    
 
+    if (!listing) {
+      return res.status(404).send("Listing not found");
+    }
+
+    if (!listing.landlord) {
+      return res.status(400).send("Listing landlord not found");
+    }
+
+    const cleanName = name ? name.trim() : "";
     const cleanEmail = email ? email.trim() : "";
     const cleanPhone = phone ? phone.trim() : "";
     const cleanTelegram = telegram ? telegram.trim() : "";
-    const cleanName = name ? name.trim() : "";
     const cleanMessage = message ? message.trim() : "";
 
-    let error = "";
+    const errors = [];
+
+    if (!cleanName) {
+      errors.push("Please enter your name.");
+    }
+
+    if (!gender) {
+      errors.push("Please select your gender.");
+    }
 
     if (!consent) {
-      error = "Please agree to our policy before submitting.";
-      return res.render("checkout", {
-        listing,
-        error,
-        gender,
-        name: cleanName,
-        email: cleanEmail,
-        phone: cleanPhone,
-        telegram: cleanTelegram,
-        contact_method,
-        message: cleanMessage,
-      });
+      errors.push("Please agree to our policy before submitting.");
     }
 
     if (!cleanEmail && !cleanPhone && !cleanTelegram) {
-      error = "Please provide at least one contact method: email, phone, or Telegram.";
-      return res.render("checkout", {
-        listing,
-        error,
-        gender,
-        name: cleanName,
-        email: cleanEmail,
-        phone: cleanPhone,
-        telegram: cleanTelegram,
-        contact_method,
-        message: cleanMessage,
-      });
+      errors.push("Please provide at least one contact method: email, phone, or Telegram.");
     }
 
     if (!contact_method) {
-      error = "Please select a preferred contact method.";
-      return res.render("checkout", {
-        listing,
-        error,
-        gender,
-        name: cleanName,
-        email: cleanEmail,
-        phone: cleanPhone,
-        telegram: cleanTelegram,
-        contact_method,
-        message: cleanMessage,
-      });
+      errors.push("Please select a preferred contact method.");
     }
 
     if (contact_method === "email" && !cleanEmail) {
-      error = "You selected email as the preferred contact method, so email is required.";
-      return res.render("checkout", {
-        listing,
-        error,
-        gender,
-        name: cleanName,
-        email: cleanEmail,
-        phone: cleanPhone,
-        telegram: cleanTelegram,
-        contact_method,
-        message: cleanMessage,
-      });
+      errors.push("You selected email as the preferred contact method, so email is required.");
     }
 
     if (contact_method === "phone" && !cleanPhone) {
-      error = "You selected phone as the preferred contact method, so phone is required.";
-      return res.render("checkout", {
-        listing,
-        error,
-        gender,
-        name: cleanName,
-        email: cleanEmail,
-        phone: cleanPhone,
-        telegram: cleanTelegram,
-        contact_method,
-        message: cleanMessage,
-      });
+      errors.push("You selected phone as the preferred contact method, so phone is required.");
     }
 
     if (contact_method === "whatsapp" && !cleanPhone) {
-      error = "You selected WhatsApp as the preferred contact method, so phone is required.";
-      return res.render("checkout", {
-        listing,
-        error,
-        gender,
-        name: cleanName,
-        email: cleanEmail,
-        phone: cleanPhone,
-        telegram: cleanTelegram,
-        contact_method,
-        message: cleanMessage,
-      });
+      errors.push("You selected WhatsApp as the preferred contact method, so phone is required.");
     }
 
     if (contact_method === "telegram" && !cleanTelegram) {
-      error = "You selected Telegram as the preferred contact method, so Telegram is required.";
+      errors.push("You selected Telegram as the preferred contact method, so Telegram is required.");
+    }
+
+    if (errors.length > 0) {
       return res.render("checkout", {
         listing,
-        error,
-        gender,
+        errors: errors,
         name: cleanName,
+        gender,
         email: cleanEmail,
         phone: cleanPhone,
         telegram: cleanTelegram,
         contact_method,
-        message: cleanMessage,
+        message: cleanMessage
       });
     }
-    console.log(listing)
-    console.log(listing.landlord)
-    await interestFormModel.createForm({
+
+    const createdForm = await interestFormModel.createForm({
       landlord: listing.landlord,
       user: userId,
       listing: listingId,
       name: cleanName,
-      gender: gender,
+      gender,
       email: cleanEmail,
       phone: cleanPhone,
       telegram: cleanTelegram,
@@ -293,11 +254,22 @@ const postCheckoutPage = async (req, res) => {
       status: "Active"
     });
 
+    console.log("Created form:", createdForm);
+    const wishlist = await wishlistModel.findByUser(userId);
+
+
+    const updatedItems = wishlist.items.filter(item => {
+      return item.listing.toString() !== listingId;
+    });
+
+    await wishlistModel.updateWishlistItem(userId, updatedItems);
+
     return res.render("postCheckout", { listing });
 
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Failed to submit interest form");
+    console.log("POST CHECKOUT ERROR:", error);
+    console.log("Validation error details:", error.errors);
+    return res.status(500).send("Failed to submit interest form");
   }
 };
 

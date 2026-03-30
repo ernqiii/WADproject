@@ -4,25 +4,37 @@
   <title>Edit Interest Form</title>
 </head>
 <body>
-    
   <h1>Edit Interest Form</h1>
   <hr>
 
   <h3><%= listing ? listing.title : "Listing deleted" %></h3>
 
-  
+  <% if (errors && errors.length > 0) { %>
+    <div style="color: red;">
+      <p><strong>Please fix the following:</strong></p>
+      <ul>
+        <% errors.forEach(function(err) { %>
+          <li><%= err %></li>
+        <% }) %>
+      </ul>
+    </div>
+    <hr>
+  <% } %>
+
   <form action="/interest/submitted/update" method="POST">
     <input type="hidden" name="interestId" value="<%= interest._id %>">
-    
+
     <strong>Name:</strong>
-    <input type="text" name="name" value="<%= interest.name || '' %>" required>
+    <input type="text" name="name" value="<%= interest.name || '' %>">
     <br><br>
 
     <strong>Gender:</strong>
     <select name="gender">
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-    </select><br>
+      <option value="">-- Please Select One --</option>
+      <option value="male" <%= interest.gender === "male" ? "selected" : "" %>>Male</option>
+      <option value="female" <%= interest.gender === "female" ? "selected" : "" %>>Female</option>
+    </select>
+    <br><br>
 
     <p><strong>Please fill in at least one contact method.</strong></p>
 
@@ -30,7 +42,7 @@
     <input type="email" name="email" value="<%= interest.email || '' %>">
     <br><br>
 
-    <strong>>Phone:</strong>
+    <strong>Phone:</strong>
     <input type="text" name="phone" value="<%= interest.phone || '' %>"> (via calls, SMS, or WhatsApp)
     <br><br>
 
@@ -38,7 +50,7 @@
     <input type="text" name="telegram" value="<%= interest.telegram || '' %>">
     <br><br>
 
-    Preferred Contact Method<strong>(this contact information has to be provided)</strong>
+    <strong>Preferred Contact Method</strong> (this contact information has to be provided)
     <select name="contact_method">
       <option value="">-- Please Select One --</option>
       <option value="email" <%= interest.preferredContactMethod === "email" ? "selected" : "" %>>Email</option>
@@ -49,23 +61,26 @@
     <br><br>
 
     <strong>Message:</strong>
-    <textarea name="message"><%= interest.message || '' %></textarea>
-    <br><br>
-    <p>
-    <small>
-      By submitting this form, you agree that your contact details and message
-      will be stored for the purpose of managing your interest in this listing.
-      Your submission will be shown in your profile, and you may edit or delete it later.
-    </small>
-    </p>
- 
-    <input type="checkbox" name="consent" required>
-        I understand that my submitted contact details and message will be stored for this interest request.
+    <br>
+    <textarea name="message" rows="5" cols="40"><%= interest.message || '' %></textarea>
     <br><br>
 
+    <p>
+      <small>
+        By submitting this form, you agree that your contact details and message
+        will be stored for the purpose of managing your interest in this listing.
+        Your submission will be shown in your profile, and you may edit or delete it later.
+      </small>
+    </p>
+
+    <input
+      type="checkbox"
+      name="consent"
+      value="yes">
+    I understand that my submitted contact details and message will be stored for this interest request.
+    <br><br>
 
     <button type="submit">Save Changes</button>
   </form>
-
 </body>
 </html>

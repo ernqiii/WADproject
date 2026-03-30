@@ -14,17 +14,18 @@
       <% listingArray.forEach(function(item) { %>
         <% const listingItem = item.listing; %>
 
-        <h3><%= listingItem.title %></h3>
-
-        <% if (item.landlordUser) { %>
+        <h3><%= listingItem.title %> — <% if (item.landlordUser) { %>
           <a href="/profile/<%= item.landlordUser._id %>">
             <%= item.landlordUser.username %>
           </a>
-        <% } %>
+        <% } %></h3>
+
+     
         <% if (listingItem.photos && listingItem.photos.length > 0) { %>
             <% listingItem.photos.forEach(function(photo) { %>
-                <img src="/uploads/<%= photo %>" alt="<%= listingItem.title %>" width="250" height="250">
+                <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="250" height="250" alt="listing photo">
             <% }); %>
+   
              
         <% } else { %>
           <p>No image available</p>
@@ -86,6 +87,6 @@
     <% } %>
 
     <br>
-    <a href="/">Continue Searching!</a>
+    <a href="/explore">Continue Searching!</a>
   </body>
 </html>
