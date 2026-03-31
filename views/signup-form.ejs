@@ -25,7 +25,15 @@
             Password:
           </td>
           <td>
-            <input type="password" name="password" value="<%= password ? password : ""%>" required>
+            <input type="password" name="password" required>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Confirm Password:
+          </td>
+          <td>
+            <input type="password" name="confirmPassword" required>
           </td>
         </tr>
         <tr>
@@ -68,7 +76,7 @@
             Bio:
           </td>
           <td>
-            <textarea name="bio" required></textarea>
+            <textarea name="bio" required><%= bio ? bio : "" %></textarea>
           </td>
         </tr>
       </table>
