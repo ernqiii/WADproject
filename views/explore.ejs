@@ -21,53 +21,102 @@
 
     <h3>Filters</h3>
 
-    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-        <div>
-            <label>Search location:</label>
-            <input type="text" id="location">
+    <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div>
+                <label>Search location:</label>
+                <input type="text" id="location">
+            </div>
+            <button id="search-btn" onclick="showListings()">Search</button>
+            <button id="toggle-filters-btn" onclick="toggleMoreFilters()">More Filters</button>
         </div>
 
-        <div>
-            <label>Region:</label>
-            <select id="region">
-                <option value="">All Regions</option>
-                <option value="North">North</option>
-                <option value="North-West">North-West</option>
-                <option value="North-East">North-East</option>
-                <option value="East">East</option>
-                <option value="South">South</option>
-                <option value="South-West">South-West</option>
-                <option value="South-East">South-East</option>
-                <option value="West">West</option>
-                <option value="Central">Central</option>
-            </select>
-        </div>
+        <div id="more-filters" style="display:none; flex-direction:column; gap:10px;">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <div>
+                    <label>Region:</label>
+                    <select id="region">
+                        <option value="">All Regions</option>
+                        <option value="North">North</option>
+                        <option value="North-West">North-West</option>
+                        <option value="North-East">North-East</option>
+                        <option value="East">East</option>
+                        <option value="South">South</option>
+                        <option value="South-West">South-West</option>
+                        <option value="South-East">South-East</option>
+                        <option value="West">West</option>
+                        <option value="Central">Central</option>
+                    </select>
+                </div>
 
-        <div>
-            <label>Room Type:</label>
-            <select id="type">
-                <option value="">All</option>
-                <option value="Private Room">Private Room</option>
-                <option value="Shared Room">Shared Room</option>
-            </select>
-        </div>
+                <div>
+                    <label>Room Type:</label>
+                    <select id="type">
+                        <option value="">All</option>
+                        <option value="Private Room">Private Room</option>
+                        <option value="Shared Room">Shared Room</option>
+                    </select>
+                </div>
 
-        <div>
-            <label>Owner's Gender:</label>
-            <select id="gender">
-                <option value="">All</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
-        </div>
+                <div>
+                    <label>Gender:</label>
+                    <select id="gender">
+                        <option value="">All</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
 
-        <div>
-            <label>Max Price:</label>
-            <input type="number" id="price">
-        </div>
+                <div>
+                    <label>Min Price:</label>
+                    <input type="number" id="min-price">
+                </div>
 
-        <button onclick="showListings()">Search</button>
-        <button onclick="resetFilters()" style="margin-left:auto;">Reset Filters</button>
+                <div>
+                    <label>Max Price:</label>
+                    <input type="number" id="price">
+                </div>
+
+                <div>
+                    <label>Sort by Price:</label>
+                    <select id="sort-price">
+                        <option value="">Default</option>
+                        <option value="asc">Lowest to Highest</option>
+                        <option value="desc">Highest to Lowest</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label>Amenities:</label>
+                <table>
+                    <tr>
+                        <td><label><input type="checkbox" class="amenity-filter" value="wifi"> Wifi</label></td>
+                        <td><label><input type="checkbox" class="amenity-filter" value="parking"> Parking</label></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" class="amenity-filter" value="ac"> Air Conditioning</label></td>
+                        <td><label><input type="checkbox" class="amenity-filter" value="washing_machine"> Washing Machine</label></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" class="amenity-filter" value="dryer"> Dryer</label></td>
+                        <td><label><input type="checkbox" class="amenity-filter" value="refrigerator"> Refrigerator</label></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" class="amenity-filter" value="microwave"> Microwave</label></td>
+                        <td><label><input type="checkbox" class="amenity-filter" value="fan"> Ceiling Fan</label></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" class="amenity-filter" value="wardrobe"> Wardrobe</label></td>
+                        <td><label><input type="checkbox" class="amenity-filter" value="iron"> Iron</label></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div>
+                <button onclick="resetFilters()">Reset Filters</button>
+            </div>
+        </div>
     </div>
     
     <hr>
@@ -82,7 +131,8 @@
                  data-room-type="<%= listing.room_type %>"
                  data-price="<%= listing.price %>"
                  data-gender="<%= listing.my_gender %>"
-                 data-location="<%= listing.location.toLowerCase() %>">
+                 data-location="<%= listing.location.toLowerCase() %>"
+                 data-amenities="<%= listing.amenities ? listing.amenities.join(',') : '' %>">
                 <h3><%= listing.title %><% if (listing.landlord) { %> — <a href="/profile/<%= listing.landlord._id %>"><%= listing.landlord.username %></a><% } %></h3>
 
                 <% if (listing.photos && listing.photos.length > 0) { %>
@@ -95,7 +145,7 @@
                 <p><strong>Location:</strong> <%= listing.location %></p>
                 <p><strong>Price:</strong> $<%= listing.price %>/month</p>
                 <p><strong>Room Type:</strong> <%= listing.room_type %></p>
-                <p><strong>Owner's Gender:</strong> <%= listing.my_gender %></p>
+                <p><strong>Preferred Gender:</strong> <%= listing.my_gender %></p>
                 <p><strong>Roommates:</strong> <%= listing.roommates %></p>
                 <p><strong>Description:</strong> <%= listing.description %></p>
 
@@ -159,39 +209,66 @@
     </div>
 
     <script>
+        function toggleMoreFilters() {
+            let panel = document.getElementById('more-filters');
+            let toggleBtn = document.getElementById('toggle-filters-btn');
+            let isHidden = panel.style.display === 'none';
+            panel.style.display = isHidden ? 'flex' : 'none';
+            toggleBtn.textContent = isHidden ? 'Less Filters' : 'More Filters';
+        }
+
         // Filter listings client-side (show/hide)
         function showListings() {
             let regionFilter = document.getElementById('region').value;
             let typeFilter = document.getElementById('type').value;
-            let priceFilter = document.getElementById('price').value;
+            let minPriceFilter = document.getElementById('min-price').value;
+            let maxPriceFilter = document.getElementById('price').value;
             let genderFilter = document.getElementById('gender').value;
             let locationFilter = document.getElementById('location').value.toLowerCase();
+            let checkedAmenities = Array.from(document.querySelectorAll('.amenity-filter:checked')).map(cb => cb.value);
+            let sortPrice = document.getElementById('sort-price').value;
 
-            let items = document.querySelectorAll('.listing');
+            let items = Array.from(document.querySelectorAll('.listing'));
 
-            for (let i = 0; i < items.length; i++) {
-                let el = items[i];
+            items.forEach(el => {
                 let show = true;
 
                 if (regionFilter && el.dataset.region !== regionFilter.toLowerCase()) show = false;
                 if (typeFilter && el.dataset.roomType !== typeFilter) show = false;
-                if (priceFilter && Number(el.dataset.price) > Number(priceFilter)) show = false;
+                if (minPriceFilter && Number(el.dataset.price) < Number(minPriceFilter)) show = false;
+                if (maxPriceFilter && Number(el.dataset.price) > Number(maxPriceFilter)) show = false;
                 if (genderFilter && el.dataset.gender !== genderFilter) show = false;
                 if (locationFilter && !el.dataset.location.includes(locationFilter)) show = false;
+                if (checkedAmenities.length > 0) {
+                    let listingAmenities = el.dataset.amenities.split(',');
+                    if (!checkedAmenities.every(a => listingAmenities.includes(a))) show = false;
+                }
 
                 el.style.display = show ? '' : 'none';
+            });
+
+            if (sortPrice) {
+                let container = document.getElementById('listings');
+                let visible = items.filter(el => el.style.display !== 'none');
+                visible.sort((a, b) => sortPrice === 'asc'
+                    ? Number(a.dataset.price) - Number(b.dataset.price)
+                    : Number(b.dataset.price) - Number(a.dataset.price));
+                visible.forEach(el => container.appendChild(el));
             }
 
-            let anyVisible = Array.from(items).some(el => el.style.display !== 'none');
+            let anyVisible = items.some(el => el.style.display !== 'none');
             document.getElementById('no-results').style.display = anyVisible ? 'none' : '';
         }
 
         function resetFilters() {
             document.getElementById('region').value = '';
             document.getElementById('type').value = '';
+            document.getElementById('min-price').value = '';
             document.getElementById('price').value = '';
             document.getElementById('gender').value = '';
             document.getElementById('location').value = '';
+            document.getElementById('sort-price').value = '';
+            document.querySelectorAll('.amenity-filter').forEach(cb => cb.checked = false);
             showListings();
         }
 
@@ -229,8 +306,18 @@
             const data = await res.json();
             if (data.success) {
                 input.value = '';
-                // Reload page to show new comment with proper EJS rendering
-                location.reload();
+                const c = data.comment;
+                const commentDiv = document.createElement('div');
+                commentDiv.id = 'comment-' + c._id;
+                commentDiv.style.cssText = 'margin-bottom:8px; padding:5px; border-bottom:1px solid #ccc;';
+                commentDiv.innerHTML =
+                    '<strong>' + (c.user ? c.user.username : 'Unknown') + '</strong>' +
+                    '<span style="font-size:0.8em; color:gray;"> — ' + new Date(c.createdAt).toLocaleString() + '</span>' +
+                    '<p id="comment-text-' + c._id + '">' + c.text + '</p>' +
+                    '<button onclick="editComment(\'' + listingId + '\', \'' + c._id + '\')">Edit</button> ' +
+                    '<button onclick="deleteComment(\'' + listingId + '\', \'' + c._id + '\')">Delete</button>';
+                document.getElementById('comments-list-' + listingId).appendChild(commentDiv);
+                document.getElementById('comment-count-' + listingId).textContent = data.commentCount;
             } else {
                 alert(data.message);
             }

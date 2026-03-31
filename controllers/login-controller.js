@@ -54,7 +54,6 @@ exports.displaySignupForm = (req, res) => {
         username: "",
         password: "",
         fullName: "",
-        phone: "",
         email: "",
         gender: "",
         bio: ""
@@ -70,8 +69,8 @@ exports.handleLogout = (req, res) => {
 exports.handleSignup = async (req, res) => {
     const username = req.body.username.trim();
     const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
     const fullName = req.body.fullName.trim();
-    const phone = req.body.phone.trim();
     const email = req.body.email.trim();
     const gender = req.body.gender;
     const bio = req.body.bio;
@@ -83,8 +82,8 @@ exports.handleSignup = async (req, res) => {
             msg: "Username must be at least 3 characters.",
             username,
             password: "",
+            confirmPassword: "",
             fullName,
-            phone,
             email,
             gender,
             bio
@@ -97,8 +96,22 @@ exports.handleSignup = async (req, res) => {
             msg: "Password must be at least 6 characters.",
             username,
             password: "",
+            confirmPassword: "",
             fullName,
-            phone,
+            email,
+            gender,
+            bio
+        });
+    }
+
+    // check password and confirmPassword match
+    if (password != confirmPassword) {
+        return res.render("signup-form", {
+            msg: "Passwords do not match.",
+            username,
+            password: "",
+            confirmPassword: "",
+            fullName,
             email,
             gender,
             bio
@@ -111,8 +124,8 @@ exports.handleSignup = async (req, res) => {
             msg: "Name is too long.",
             username,
             password: "",
+            confirmPassword: "",
             fullName,
-            phone,
             email,
             gender,
             bio
@@ -125,24 +138,8 @@ exports.handleSignup = async (req, res) => {
             msg: "Please enter a valid email address.",
             username,
             password: "",
+            confirmPassword: "",
             fullName,
-            phone,
-            email,
-            gender,
-            bio
-        });
-    }
-
-    //check phone format
-    const cleanPhone = phone.split(" ").join("");
-
-    if (cleanPhone.trim().length !== 8 || isNaN(cleanPhone)) {
-        return res.render("signup-form", {
-            msg: "Phone number must be exactly 8 digits.",
-            username,
-            password: "",
-            fullName,
-            phone,
             email,
             gender,
             bio
@@ -155,8 +152,8 @@ exports.handleSignup = async (req, res) => {
             msg: "Bio is too long.",
             username,
             password: "",
+            confirmPassword: "",
             fullName,
-            phone,
             email,
             gender,
             bio
@@ -170,7 +167,6 @@ exports.handleSignup = async (req, res) => {
             username,
             password: hashedPassword,
             fullName,
-            phone: cleanPhone,
             email,
             gender,
             bio: bio ? bio.trim() : "",
@@ -190,7 +186,6 @@ exports.handleSignup = async (req, res) => {
                 username,
                 password: "",
                 fullName,
-                phone,
                 email,
                 gender,
                 bio
