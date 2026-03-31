@@ -23,10 +23,6 @@
 
     <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
         <div>
-            <label>Search listing:</label>
-            <input type="text" id="search">
-        </div>
-        <div>
             <label>Search location:</label>
             <input type="text" id="location">
         </div>
@@ -165,7 +161,6 @@
     <script>
         // Filter listings client-side (show/hide)
         function showListings() {
-            let searchFilter = document.getElementById('search').value.toLowerCase();
             let regionFilter = document.getElementById('region').value;
             let typeFilter = document.getElementById('type').value;
             let priceFilter = document.getElementById('price').value;
@@ -178,7 +173,6 @@
                 let el = items[i];
                 let show = true;
 
-                if (searchFilter && !el.dataset.title.includes(searchFilter)) show = false;
                 if (regionFilter && el.dataset.region !== regionFilter.toLowerCase()) show = false;
                 if (typeFilter && el.dataset.roomType !== typeFilter) show = false;
                 if (priceFilter && Number(el.dataset.price) > Number(priceFilter)) show = false;
@@ -193,7 +187,6 @@
         }
 
         function resetFilters() {
-            document.getElementById('search').value = '';
             document.getElementById('region').value = '';
             document.getElementById('type').value = '';
             document.getElementById('price').value = '';
