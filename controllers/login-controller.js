@@ -15,6 +15,7 @@ exports.handleLogin = async (req, res) => {
     try {
         const user = await User.findByUsernameExact(username);
 
+        // check if username exists
         if (!user) {
             return res.render("login-form", {
                 msg: "Invalid credentials.",
@@ -24,6 +25,7 @@ exports.handleLogin = async (req, res) => {
 
         const match = await bcrypt.compare(password, user.password);
 
+        // check if password is correct
         if (!match) {
             return res.render("login-form", {
                 msg: "Invalid credentials.",
@@ -38,6 +40,7 @@ exports.handleLogin = async (req, res) => {
             role: user.role
         };
 
+        // check if user is admin
         if (user.role === "admin") {
             return res.redirect("/admin-profile");
         }
@@ -165,40 +168,40 @@ exports.handleSignup = async (req, res) => {
     }
 
 
-if (req.file) {
-    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (req.file) {
+        const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
 
-    // check file type
-    if (!allowedTypes.includes(req.file.mimetype)) {
-        return res.render("signup-form", {
-            msg: "Only JPG, JPEG, and PNG files are allowed.",
-            username,
-            password: "",
-            fullName,
-            phone,
-            email,
-            gender,
-            bio
-        });
-    }
+        // check file type
+        if (!allowedTypes.includes(req.file.mimetype)) {
+            return res.render("signup-form", {
+                msg: "Only JPG, JPEG, and PNG files are allowed.",
+                username,
+                password: "",
+                fullName,
+                phone,
+                email,
+                gender,
+                bio
+            });
+        }
 
-    // check file size
-    if (req.file.size > 2 * 1024 * 1024) {
-        return res.render("signup-form", {
-            msg: "Image file is too large. Max 2MB is allowed.",
-            username,
-            password: "",
-            fullName,
-            phone,
-            email,
-            gender,
-            bio
-        });
-    }
+        // check file size
+        if (req.file.size > 2 * 1024 * 1024) {
+            return res.render("signup-form", {
+                msg: "Image file is too large. Max 2MB is allowed.",
+                username,
+                password: "",
+                fullName,
+                phone,
+                email,
+                gender,
+                bio
+            });
+        }
 
-    profilePicture = req.file.buffer;
-    profilePictureType = req.file.mimetype;
-    }
+        profilePicture = req.file.buffer;
+        profilePictureType = req.file.mimetype;
+        }
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
