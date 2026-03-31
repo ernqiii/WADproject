@@ -68,8 +68,22 @@
                 </div>
 
                 <div>
+                    <label>Min Price:</label>
+                    <input type="number" id="min-price">
+                </div>
+
+                <div>
                     <label>Max Price:</label>
                     <input type="number" id="price">
+                </div>
+
+                <div>
+                    <label>Sort by Price:</label>
+                    <select id="sort-price">
+                        <option value="">Default</option>
+                        <option value="asc">Lowest to Highest</option>
+                        <option value="desc">Highest to Lowest</option>
+                    </select>
                 </div>
             </div>
 
@@ -207,20 +221,22 @@
         function showListings() {
             let regionFilter = document.getElementById('region').value;
             let typeFilter = document.getElementById('type').value;
-            let priceFilter = document.getElementById('price').value;
+            let minPriceFilter = document.getElementById('min-price').value;
+            let maxPriceFilter = document.getElementById('price').value;
             let genderFilter = document.getElementById('gender').value;
             let locationFilter = document.getElementById('location').value.toLowerCase();
             let checkedAmenities = Array.from(document.querySelectorAll('.amenity-filter:checked')).map(cb => cb.value);
+            let sortPrice = document.getElementById('sort-price').value;
 
-            let items = document.querySelectorAll('.listing');
+            let items = Array.from(document.querySelectorAll('.listing'));
 
-            for (let i = 0; i < items.length; i++) {
-                let el = items[i];
+            items.forEach(el => {
                 let show = true;
 
                 if (regionFilter && el.dataset.region !== regionFilter.toLowerCase()) show = false;
                 if (typeFilter && el.dataset.roomType !== typeFilter) show = false;
-                if (priceFilter && Number(el.dataset.price) > Number(priceFilter)) show = false;
+                if (minPriceFilter && Number(el.dataset.price) < Number(minPriceFilter)) show = false;
+                if (maxPriceFilter && Number(el.dataset.price) > Number(maxPriceFilter)) show = false;
                 if (genderFilter && el.dataset.gender !== genderFilter) show = false;
                 if (locationFilter && !el.dataset.location.includes(locationFilter)) show = false;
                 if (checkedAmenities.length > 0) {
@@ -229,18 +245,29 @@
                 }
 
                 el.style.display = show ? '' : 'none';
+            });
+
+            if (sortPrice) {
+                let container = document.getElementById('listings');
+                let visible = items.filter(el => el.style.display !== 'none');
+                visible.sort((a, b) => sortPrice === 'asc'
+                    ? Number(a.dataset.price) - Number(b.dataset.price)
+                    : Number(b.dataset.price) - Number(a.dataset.price));
+                visible.forEach(el => container.appendChild(el));
             }
 
-            let anyVisible = Array.from(items).some(el => el.style.display !== 'none');
+            let anyVisible = items.some(el => el.style.display !== 'none');
             document.getElementById('no-results').style.display = anyVisible ? 'none' : '';
         }
 
         function resetFilters() {
             document.getElementById('region').value = '';
             document.getElementById('type').value = '';
+            document.getElementById('min-price').value = '';
             document.getElementById('price').value = '';
             document.getElementById('gender').value = '';
             document.getElementById('location').value = '';
+            document.getElementById('sort-price').value = '';
             document.querySelectorAll('.amenity-filter').forEach(cb => cb.checked = false);
             showListings();
         }
@@ -279,8 +306,18 @@
             const data = await res.json();
             if (data.success) {
                 input.value = '';
-                // Reload page to show new comment with proper EJS rendering
-                location.reload();
+                const c = data.comment;
+                const commentDiv = document.createElement('div');
+                commentDiv.id = 'comment-' + c._id;
+                commentDiv.style.cssText = 'margin-bottom:8px; padding:5px; border-bottom:1px solid #ccc;';
+                commentDiv.innerHTML =
+                    '<strong>' + (c.user ? c.user.username : 'Unknown') + '</strong>' +
+                    '<span style="font-size:0.8em; color:gray;"> — ' + new Date(c.createdAt).toLocaleString() + '</span>' +
+                    '<p id="comment-text-' + c._id + '">' + c.text + '</p>' +
+                    '<button onclick="editComment(\'' + listingId + '\', \'' + c._id + '\')">Edit</button> ' +
+                    '<button onclick="deleteComment(\'' + listingId + '\', \'' + c._id + '\')">Delete</button>';
+                document.getElementById('comments-list-' + listingId).appendChild(commentDiv);
+                document.getElementById('comment-count-' + listingId).textContent = data.commentCount;
             } else {
                 alert(data.message);
             }
