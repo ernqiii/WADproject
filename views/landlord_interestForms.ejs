@@ -8,7 +8,7 @@
   <h1>Incoming Interest Requests</h1>
   <hr>
 
-  <form action="/landlord/requests" method="GET">
+  <form action="/interest/received" method="GET">
     <label for="status">Filter by status:</label>
     <select name="status" id="status">
       <option value="" <%= selectedStatus === "" ? "selected" : "" %>>All</option>
@@ -24,20 +24,27 @@
     <% interestListingArray.forEach(function(item) { %>
       <hr>
 
-      <h3><%= item.listing ? item.listing.title : "Listing deleted" %></h3>
-
+      <h3>
+        <%= item.listing ? item.listing.title : "Listing deleted" %>
+        <% if (item.senderUser) { %>
+          — Request from
+          <a href="/profile/<%= item.senderUser._id %>">
+            <%= item.senderUser.username %>
+          </a>
+        <% } %>
+      </h3>
       <% if (item.listing) { %>
         <p><strong>Location:</strong> <%= item.listing.location %></p>
         <p><strong>Price:</strong> $<%= item.listing.price %>/month</p>
-        <% if (item.listing.image && item.listing.image.data) { %>
-          <p>
-            <img src="/listing/<%= item.listing._id %>/image"
-                 alt="<%= item.listing.title %>"
-                 width="250">
-          </p>
+        <% if (item.listing.photos && item.listing.photos.length > 0) { %>
+            <% item.listing.photos.forEach(function(photo) { %>
+                <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="250" height="250" alt="listing photo">
+            <% }); %>
+   
+             
         <% } else { %>
           <p>No image available</p>
-      <% } %>
+        <% } %>
       <% } %>
 
       <p><strong>Name:</strong> <%= item.interest.name %></p>
@@ -53,7 +60,7 @@
         <p><strong>Submitted On:</strong> <%= item.interest.createdAt.toDateString() %></p>
       <% } %>
 
-      <form action="/landlord/interest/update-status" method="POST">
+      <form action="/interest/received/update-status" method="POST">
         <input type="hidden" name="interestId" value="<%= item.interest._id %>">
 
         <label>Update Status:</label>
