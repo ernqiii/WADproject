@@ -74,7 +74,7 @@ exports.createListing = async (req, res) => {
       price: req.body.price,
       room_type: req.body.room_type,
       roommates: req.body.roommates,
-      my_gender: req.body.my_gender,
+      gender: req.body.gender,
       amenities,
       photos,
       landlord: req.session.user.id
@@ -131,7 +131,7 @@ exports.updateListing = async (req, res) => {
       price: req.body.price,
       roommates: req.body.roommates,
       room_type: req.body.room_type,
-      my_gender: req.body.my_gender,
+      gender: req.body.gender,
       amenities,
     };
  
