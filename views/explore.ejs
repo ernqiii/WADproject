@@ -27,67 +27,82 @@
                 <label>Search location:</label>
                 <input type="text" id="location">
             </div>
+            <button id="search-btn" onclick="showListings()">Search</button>
             <button id="toggle-filters-btn" onclick="toggleMoreFilters()">More Filters</button>
         </div>
 
         <div id="more-filters" style="display:none; flex-direction:column; gap:10px;">
-        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-            <div>
-                <label>Region:</label>
-                <select id="region">
-                    <option value="">All Regions</option>
-                    <option value="North">North</option>
-                    <option value="North-West">North-West</option>
-                    <option value="North-East">North-East</option>
-                    <option value="East">East</option>
-                    <option value="South">South</option>
-                    <option value="South-West">South-West</option>
-                    <option value="South-East">South-East</option>
-                    <option value="West">West</option>
-                    <option value="Central">Central</option>
-                </select>
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <div>
+                    <label>Region:</label>
+                    <select id="region">
+                        <option value="">All Regions</option>
+                        <option value="North">North</option>
+                        <option value="North-West">North-West</option>
+                        <option value="North-East">North-East</option>
+                        <option value="East">East</option>
+                        <option value="South">South</option>
+                        <option value="South-West">South-West</option>
+                        <option value="South-East">South-East</option>
+                        <option value="West">West</option>
+                        <option value="Central">Central</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Room Type:</label>
+                    <select id="type">
+                        <option value="">All</option>
+                        <option value="Private Room">Private Room</option>
+                        <option value="Shared Room">Shared Room</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Owner's Gender:</label>
+                    <select id="gender">
+                        <option value="">All</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Max Price:</label>
+                    <input type="number" id="price">
+                </div>
             </div>
 
             <div>
-                <label>Room Type:</label>
-                <select id="type">
-                    <option value="">All</option>
-                    <option value="Private Room">Private Room</option>
-                    <option value="Shared Room">Shared Room</option>
-                </select>
+                <label>Amenities:</label>
+                <table>
+                    <tr>
+                        <td><label><input type="checkbox" class="amenity-filter" value="wifi"> Wifi</label></td>
+                        <td><label><input type="checkbox" class="amenity-filter" value="parking"> Parking</label></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" class="amenity-filter" value="ac"> Air Conditioning</label></td>
+                        <td><label><input type="checkbox" class="amenity-filter" value="washing_machine"> Washing Machine</label></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" class="amenity-filter" value="dryer"> Dryer</label></td>
+                        <td><label><input type="checkbox" class="amenity-filter" value="refrigerator"> Refrigerator</label></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" class="amenity-filter" value="microwave"> Microwave</label></td>
+                        <td><label><input type="checkbox" class="amenity-filter" value="fan"> Ceiling Fan</label></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" class="amenity-filter" value="wardrobe"> Wardrobe</label></td>
+                        <td><label><input type="checkbox" class="amenity-filter" value="iron"> Iron</label></td>
+                    </tr>
+                </table>
             </div>
 
-            <div>
-                <label>Owner's Gender:</label>
-                <select id="gender">
-                    <option value="">All</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <button onclick="showListings()">Search</button>
+                <button onclick="resetFilters()">Reset Filters</button>
             </div>
-
-            <div>
-                <label>Max Price:</label>
-                <input type="number" id="price">
-            </div>
-
-            <button onclick="showListings()">Search</button>
-        </div>
-
-        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-            <label>Amenities:</label>
-            <label><input type="checkbox" class="amenity-filter" value="wifi"> Wifi</label>
-            <label><input type="checkbox" class="amenity-filter" value="parking"> Parking</label>
-            <label><input type="checkbox" class="amenity-filter" value="ac"> Air Conditioning</label>
-            <label><input type="checkbox" class="amenity-filter" value="washing_machine"> Washing Machine</label>
-            <label><input type="checkbox" class="amenity-filter" value="dryer"> Dryer</label>
-            <label><input type="checkbox" class="amenity-filter" value="refrigerator"> Refrigerator</label>
-            <label><input type="checkbox" class="amenity-filter" value="microwave"> Microwave</label>
-            <label><input type="checkbox" class="amenity-filter" value="fan"> Ceiling Fan</label>
-            <label><input type="checkbox" class="amenity-filter" value="wardrobe"> Wardrobe</label>
-            <label><input type="checkbox" class="amenity-filter" value="iron"> Iron</label>
-            <button onclick="resetFilters()" style="margin-left:auto;">Reset Filters</button>
-        </div>
         </div>
     </div>
     
@@ -183,10 +198,12 @@
     <script>
         function toggleMoreFilters() {
             let panel = document.getElementById('more-filters');
-            let btn = document.getElementById('toggle-filters-btn');
+            let toggleBtn = document.getElementById('toggle-filters-btn');
+            let searchBtn = document.getElementById('search-btn');
             let isHidden = panel.style.display === 'none';
             panel.style.display = isHidden ? 'flex' : 'none';
-            btn.textContent = isHidden ? 'Less Filters' : 'More Filters';
+            toggleBtn.textContent = isHidden ? 'Less Filters' : 'More Filters';
+            searchBtn.style.display = isHidden ? 'none' : '';
         }
 
         // Filter listings client-side (show/hide)
