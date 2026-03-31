@@ -61,9 +61,13 @@ exports.showEditForm = async (req, res) => {
 
 exports.submitEditProfile = async (req, res) => {
     try {
-        const { fullName, email, gender, phone, bio } = req.body;
 
-        if (!fullName.trim() || !email.trim() || !gender || !phone.trim()) {
+        const fullName = req.body.fullName ? req.body.fullName.trim() : "";
+        const email = req.body.email ? req.body.email.trim() : "";
+        const gender = req.body.gender || "";
+        const bio = req.body.bio || "";
+
+        if (!fullName || !email || !gender) {
             const user = await User.findByUserId(req.session.user.id);
 
             return res.render("editProfile", {

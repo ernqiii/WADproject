@@ -126,7 +126,6 @@
         <% for (let i = 0; i < listings.length; i++) { %>
             <% let listing = listings[i]; %>
             <div class="listing"
-                 data-title="<%= listing.title.toLowerCase() %>"
                  data-region="<%= listing.region.toLowerCase() %>"
                  data-room-type="<%= listing.room_type %>"
                  data-price="<%= listing.price %>"
@@ -209,6 +208,8 @@
     </div>
 
     <script>
+        const originalOrder = Array.from(document.querySelectorAll('.listing'));
+
         function toggleMoreFilters() {
             let panel = document.getElementById('more-filters');
             let toggleBtn = document.getElementById('toggle-filters-btn');
@@ -269,7 +270,14 @@
             document.getElementById('location').value = '';
             document.getElementById('sort-price').value = '';
             document.querySelectorAll('.amenity-filter').forEach(cb => cb.checked = false);
-            showListings();
+
+            const container = document.getElementById('listings');
+            originalOrder.forEach(el => {
+                el.style.display = '';
+                container.appendChild(el);
+            });
+
+            document.getElementById('no-results').style.display = originalOrder.length === 0 ? '' : 'none';
         }
 
         // Like toggle
@@ -310,12 +318,33 @@
                 const commentDiv = document.createElement('div');
                 commentDiv.id = 'comment-' + c._id;
                 commentDiv.style.cssText = 'margin-bottom:8px; padding:5px; border-bottom:1px solid #ccc;';
-                commentDiv.innerHTML =
-                    '<strong>' + (c.user ? c.user.username : 'Unknown') + '</strong>' +
-                    '<span style="font-size:0.8em; color:gray;"> — ' + new Date(c.createdAt).toLocaleString() + '</span>' +
-                    '<p id="comment-text-' + c._id + '">' + c.text + '</p>' +
-                    '<button onclick="editComment(\'' + listingId + '\', \'' + c._id + '\')">Edit</button> ' +
-                    '<button onclick="deleteComment(\'' + listingId + '\', \'' + c._id + '\')">Delete</button>';
+
+                const strong = document.createElement('strong');
+                strong.textContent = c.user ? c.user.username : 'Unknown';
+
+                const timestamp = document.createElement('span');
+                timestamp.style.cssText = 'font-size:0.8em; color:gray;';
+                timestamp.textContent = ' — ' + new Date(c.createdAt).toLocaleString();
+
+                const textP = document.createElement('p');
+                textP.id = 'comment-text-' + c._id;
+                textP.textContent = c.text;
+
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Edit';
+                editBtn.onclick = () => editComment(listingId, c._id);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.onclick = () => deleteComment(listingId, c._id);
+
+                commentDiv.appendChild(strong);
+                commentDiv.appendChild(timestamp);
+                commentDiv.appendChild(textP);
+                commentDiv.appendChild(editBtn);
+                commentDiv.appendChild(document.createTextNode(' '));
+                commentDiv.appendChild(deleteBtn);
+
                 document.getElementById('comments-list-' + listingId).appendChild(commentDiv);
                 document.getElementById('comment-count-' + listingId).textContent = data.commentCount;
             } else {

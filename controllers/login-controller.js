@@ -67,14 +67,27 @@ exports.handleLogout = (req, res) => {
 };
 
 exports.handleSignup = async (req, res) => {
-    const username = req.body.username.trim();
-    const password = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
-    const fullName = req.body.fullName.trim();
-    const email = req.body.email.trim();
-    const gender = req.body.gender;
-    const bio = req.body.bio;
+    const username = req.body.username ? req.body.username.trim() : "";
+    const password = req.body.password || "";
+    const confirmPassword = req.body.confirmPassword || "";
+    const fullName = req.body.fullName ? req.body.fullName.trim() : "";
+    const phone = req.body.phone ? req.body.phone.trim() : "";
+    const email = req.body.email ? req.body.email.trim() : "";
+    const gender = req.body.gender || "";
+    const bio = req.body.bio ? req.body.bio.trim() : "";
     const role = "user";
+
+    let profilePicture = null;
+    let profilePictureType = null;
+
+    // const username = req.body.username.trim();
+    // const password = req.body.password;
+    // const confirmPassword = req.body.confirmPassword;
+    // const fullName = req.body.fullName.trim();
+    // const email = req.body.email.trim();
+    // const gender = req.body.gender;
+    // const bio = req.body.bio;
+    // const role = "user";
 
     // check username length
     if (username.length < 3) {
@@ -160,6 +173,44 @@ exports.handleSignup = async (req, res) => {
         });
     }
 
+    if (req.file) {
+
+if (req.file) {
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+
+    // check file type
+    if (!allowedTypes.includes(req.file.mimetype)) {
+        return res.render("signup-form", {
+            msg: "Only JPG, JPEG, and PNG files are allowed.",
+            username,
+            password: "",
+            fullName,
+            phone,
+            email,
+            gender,
+            bio
+        });
+    }
+
+    // check file size
+    if (req.file.size > 2 * 1024 * 1024) {
+        return res.render("signup-form", {
+            msg: "Image file is too large. Max 2MB is allowed.",
+            username,
+            password: "",
+            fullName,
+            phone,
+            email,
+            gender,
+            bio
+        });
+    }
+
+    profilePicture = req.file.buffer;
+    profilePictureType = req.file.mimetype;
+}
+            }
+
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -170,11 +221,13 @@ exports.handleSignup = async (req, res) => {
             email,
             gender,
             bio: bio ? bio.trim() : "",
-            role
+            role,
+            profilePicture,
+            profilePictureType
         };
-
+        
         await User.addUser(newUser);
-        res.redirect("/login-form");
+        res.redirect("/explore");
     } catch (error) {
         console.error("Signup error:", error);
 
