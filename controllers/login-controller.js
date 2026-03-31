@@ -227,7 +227,7 @@ if (req.file) {
         };
         
         await User.addUser(newUser);
-        res.redirect("/login-form");
+        res.redirect("/explore");
     } catch (error) {
         console.error("Signup error:", error);
 
