@@ -69,6 +69,7 @@ exports.handleLogout = (req, res) => {
 exports.handleSignup = async (req, res) => {
     const username = req.body.username ? req.body.username.trim() : "";
     const password = req.body.password || "";
+    const confirmPassword = req.body.confirmPassword || "";
     const fullName = req.body.fullName ? req.body.fullName.trim() : "";
     const phone = req.body.phone ? req.body.phone.trim() : "";
     const email = req.body.email ? req.body.email.trim() : "";
@@ -78,7 +79,7 @@ exports.handleSignup = async (req, res) => {
 
     let profilePicture = null;
     let profilePictureType = null;
-    
+
     // const username = req.body.username.trim();
     // const password = req.body.password;
     // const confirmPassword = req.body.confirmPassword;
