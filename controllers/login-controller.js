@@ -224,13 +224,14 @@ if (req.file) {
             profilePictureType
         };
         
-        await User.addUser(newUser);
+        const createdUser = await User.addUser(newUser);
 
         req.session.user = {
-            username: newUser.username,
-            fullName: newUser.fullName,
-            role: newUser.role
-        }
+            id: createdUser._id,
+            username: createdUser.username,
+            fullName: createdUser.fullName,
+            role: createdUser.role
+        };
         
         res.redirect("/explore");
     } catch (error) {
