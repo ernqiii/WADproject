@@ -2,88 +2,136 @@
   <head>
     <title>Sign Up</title>
   </head>
-  <body>
-    <h1>Sign Up</h1>
+  <body bgcolor="#f7f4ef">
+    <center>
+      <br>
+      <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+      <br><br>
 
-    <% if (msg) { %>
-      <p style="color: red">Error: <%= msg %></p>
-    <% } %>
+      <table border="0" cellpadding="28" cellspacing="0" bgcolor="#ffffff" width="420">
+        <tr>
+          <td>
+            <center>
+              <font face="Georgia, serif" size="5" color="#3a3a3a"><b>Create an Account</b></font>
+            </center>
 
-    
-    <form action="/signup-form" method="post" enctype="multipart/form-data">
-      <table>
-        <tr>
-          <td>
-            Username:
+            <br>
+
+            <% if (msg) { %>
+              <table border="0" cellpadding="8" bgcolor="#fdecea" width="100%">
+                <tr>
+                  <td>
+                    <font face="Arial, sans-serif" size="2" color="#c0392b">Error: <%= msg %></font>
+                  </td>
+                </tr>
+              </table>
+              <br>
+            <% } %>
+
+            <form action="/signup-form" method="post" enctype="multipart/form-data">
+              <table border="0" cellpadding="6" cellspacing="0" width="100%">
+                <tr>
+                  <td width="140">
+                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Username:</b></font>
+                  </td>
+                  <td>
+                    <input type="text" name="username" value="<%= username ? username : ""%>" required size="28">
+                  </td>
+                </tr>
+                <tr><td colspan="2"><br></td></tr>
+                <tr>
+                  <td>
+                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Password:</b></font>
+                  </td>
+                  <td>
+                    <input type="password" name="password" required size="28">
+                  </td>
+                </tr>
+                <tr><td colspan="2"><br></td></tr>
+                <tr>
+                  <td>
+                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Confirm Password:</b></font>
+                  </td>
+                  <td>
+                    <input type="password" name="confirmPassword" required size="28">
+                  </td>
+                </tr>
+                <tr><td colspan="2"><br></td></tr>
+                <tr>
+                  <td>
+                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Full Name:</b></font>
+                  </td>
+                  <td>
+                    <input type="text" name="fullName" value="<%= fullName ? fullName : ""%>" required size="28">
+                  </td>
+                </tr>
+                <tr><td colspan="2"><br></td></tr>
+                <tr>
+                  <td>
+                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Email:</b></font>
+                  </td>
+                  <td>
+                    <input type="text" name="email" value="<%= email ? email : ""%>" required size="28">
+                  </td>
+                </tr>
+                <tr><td colspan="2"><br></td></tr>
+                <tr>
+                  <td>
+                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Gender:</b></font>
+                  </td>
+                  <td>
+                    <select name="gender">
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr><td colspan="2"><br></td></tr>
+                <tr>
+                  <td valign="top">
+                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Bio:</b></font>
+                  </td>
+                  <td>
+                    <textarea name="bio" rows="4" cols="28" required><%= bio ? bio : "" %></textarea>
+                  </td>
+                </tr>
+                <tr><td colspan="2"><br></td></tr>
+                <tr>
+                  <td>
+                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Profile Picture:</b></font>
+                  </td>
+                  <td>
+                    <input type="file" name="profilePicture" accept="image/*" required>
+                  </td>
+                </tr>
+              </table>
+
+              <br><br>
+
+              <center>
+                <table border="0" cellpadding="10" cellspacing="0" bgcolor="#c0392b" width="180">
+                  <tr>
+                    <td align="center">
+                      <input type="submit" value="Sign Up" style="background:transparent;border:none;color:#ffffff;font-size:14px;cursor:pointer;font-weight:bold;">
+                    </td>
+                  </tr>
+                </table>
+              </center>
+            </form>
+
+            <br>
+            <center>
+              <font face="Arial, sans-serif" size="2" color="#777777">
+                Already have an account? <a href="/login-form"><font color="#c0392b">Login here!</font></a>
+              </font>
+            </center>
           </td>
-          <td>
-            <input type="text" name="username" value="<%= username ? username : ""%>" required>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Password:
-          </td>
-          <td>
-            <input type="password" name="password" required>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Confirm Password:
-          </td>
-          <td>
-            <input type="password" name="confirmPassword" required>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Full Name:
-          </td>
-          <td>
-            <input type="text" name="fullName" value="<%= fullName ? fullName : ""%>" required>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Email:
-          </td>
-          <td>
-            <input type="text" name="email" value="<%= email ? email : ""%>" required>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Gender:
-          </td>
-          <td>
-            <select name="gender">
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Bio:
-          </td>
-          <td>
-            <textarea name="bio" required><%= bio ? bio : "" %></textarea>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Profile Picture:
-          </td>
-            <td>
-              <input type="file" name="profilePicture" accept="image/*" required>
-            </td>
         </tr>
       </table>
 
-      <br>
-      <button type="submit">Sign Up</button>
-    </form>
-    <p>Already have an account? <a href="/login-form">Login here!</a></p>
+      <br><br>
+      <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+      <br><br>
+    </center>
   </body>
 </html>

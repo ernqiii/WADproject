@@ -3,215 +3,187 @@
 <head>
   <title>Edit Listing</title>
 </head>
+<body bgcolor="#f7f4ef">
+<center>
+  <br>
+  <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+  <br>
+  <font face="Arial, sans-serif" size="3">
+    <a href="/listing/<%= data._id %>"><font color="#c0392b">Back to Listing</font></a>
+  </font>
+  <br><br>
 
-<body>
-    <a href="/listing/<%= data._id %>">Back To Listing</a>
-  <% if (error) { %>
-    <p style="color: red"><%= error %></p>
-  <% } %>
+  <table border="0" cellpadding="28" cellspacing="0" bgcolor="#ffffff" width="500">
+    <tr>
+      <td>
+        <font face="Georgia, serif" size="5" color="#3a3a3a"><b>Edit Listing</b></font>
+        <br><br>
 
-  <h1>Edit Listing</h1>
+        <% if (error) { %>
+          <table border="0" cellpadding="8" bgcolor="#fdecea" width="100%">
+            <tr>
+              <td>
+                <font face="Arial, sans-serif" size="2" color="#c0392b"><%= error %></font>
+              </td>
+            </tr>
+          </table>
+          <br>
+        <% } %>
 
-  <form action="/listing/<%= data._id %>/edit" method="POST" enctype="multipart/form-data" style="display:inline;">
+        <form action="/listing/<%= data._id %>/edit" method="POST" enctype="multipart/form-data">
+          <table border="0" cellpadding="6" cellspacing="0" width="100%">
+            <tr>
+              <td width="180"><font face="Arial, sans-serif" size="3" color="#555555"><b>Listing Title</b></font></td>
+              <td>
+                <input type="text" id="title" name="title" placeholder="Title" maxlength="50"
+                  value="<%= data.title || '' %>" required size="28">
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Description</b></font></td>
+              <td>
+                <textarea id="description" name="description" rows="4" cols="28"
+                  placeholder="Room description" maxlength="200" required><%= data.description || '' %></textarea>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Region</b></font></td>
+              <td>
+                <select id="region" name="region" required>
+                  <option value="">Select a region</option>
+                  <option value="North" <%= data.region === 'North' ? 'selected' : '' %>>North</option>
+                  <option value="North-West" <%= data.region === 'North-West' ? 'selected' : '' %>>North-West</option>
+                  <option value="North-East" <%= data.region === 'North-East' ? 'selected' : '' %>>North-East</option>
+                  <option value="East" <%= data.region === 'East' ? 'selected' : '' %>>East</option>
+                  <option value="South" <%= data.region === 'South' ? 'selected' : '' %>>South</option>
+                  <option value="South-West" <%= data.region === 'South-West' ? 'selected' : '' %>>South-West</option>
+                  <option value="South-East" <%= data.region === 'South-East' ? 'selected' : '' %>>South-East</option>
+                  <option value="West" <%= data.region === 'West' ? 'selected' : '' %>>West</option>
+                  <option value="Central" <%= data.region === 'Central' ? 'selected' : '' %>>Central</option>
+                </select>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Location</b></font></td>
+              <td>
+                <input type="text" id="location" name="location" placeholder="Address"
+                  maxlength="100" value="<%= data.location || '' %>" required size="28">
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Price per Month ($)</b></font></td>
+              <td>
+                <input type="number" id="price" name="price" min="0" step="0.01"
+                  required value="<%= data.price || '' %>" size="14">
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Room Type</b></font></td>
+              <td>
+                <select id="room_type" name="room_type" required>
+                  <option value="">Select a room type</option>
+                  <option value="Private Room" <%= data.room_type === 'Private Room' ? 'selected' : '' %>>Private Room</option>
+                  <option value="Shared Room" <%= data.room_type === 'Shared Room' ? 'selected' : '' %>>Shared Room</option>
+                </select>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Roommate Slots</b></font></td>
+              <td>
+                <input type="number" id="roommates" name="roommates" min="1"
+                  required value="<%= data.roommates || '' %>" size="8">
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Preferred Gender</b></font></td>
+              <td>
+                <select id="gender" name="gender" required>
+                  <option value="">Select your gender</option>
+                  <option value="Male" <%= data.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                  <option value="Female" <%= data.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                </select>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Amenities</b></font></td>
+              <td>
+                <table border="0" cellpadding="4">
+                  <tr>
+                    <td><label><input type="checkbox" name="amenities" value="wifi" <%- data.amenities && data.amenities.includes('wifi') ? 'checked' : '' %>> <font face="Arial, sans-serif" size="3">Wifi</font></label></td>
+                    <td><label><input type="checkbox" name="amenities" value="parking" <%- data.amenities && data.amenities.includes('parking') ? 'checked' : '' %>> <font face="Arial, sans-serif" size="3">Parking</font></label></td>
+                  </tr>
+                  <tr>
+                    <td><label><input type="checkbox" name="amenities" value="ac" <%- data.amenities && data.amenities.includes('ac') ? 'checked' : '' %>> <font face="Arial, sans-serif" size="3">Air Conditioning</font></label></td>
+                    <td><label><input type="checkbox" name="amenities" value="washing_machine" <%- data.amenities && data.amenities.includes('washing_machine') ? 'checked' : '' %>> <font face="Arial, sans-serif" size="3">Washing Machine</font></label></td>
+                  </tr>
+                  <tr>
+                    <td><label><input type="checkbox" name="amenities" value="dryer" <%- data.amenities && data.amenities.includes('dryer') ? 'checked' : '' %>> <font face="Arial, sans-serif" size="3">Dryer</font></label></td>
+                    <td><label><input type="checkbox" name="amenities" value="refrigerator" <%- data.amenities && data.amenities.includes('refrigerator') ? 'checked' : '' %>> <font face="Arial, sans-serif" size="3">Refrigerator</font></label></td>
+                  </tr>
+                  <tr>
+                    <td><label><input type="checkbox" name="amenities" value="microwave" <%- data.amenities && data.amenities.includes('microwave') ? 'checked' : '' %>> <font face="Arial, sans-serif" size="3">Microwave</font></label></td>
+                    <td><label><input type="checkbox" name="amenities" value="fan" <%- data.amenities && data.amenities.includes('fan') ? 'checked' : '' %>> <font face="Arial, sans-serif" size="3">Ceiling Fan</font></label></td>
+                  </tr>
+                  <tr>
+                    <td><label><input type="checkbox" name="amenities" value="wardrobe" <%- data.amenities && data.amenities.includes('wardrobe') ? 'checked' : '' %>> <font face="Arial, sans-serif" size="3">Wardrobe</font></label></td>
+                    <td><label><input type="checkbox" name="amenities" value="iron" <%- data.amenities && data.amenities.includes('iron') ? 'checked' : '' %>> <font face="Arial, sans-serif" size="3">Iron</font></label></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Photos</b><br><font size="2" color="#999999">Max 3, 2MB each</font></font></td>
+              <td>
+                <% if (data.photos && data.photos.length > 0) { %>
+                  <font face="Arial, sans-serif" size="2" color="#777777">Current photos:</font><br>
+                  <% data.photos.forEach(function(photo) { %>
+                    <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="120" height="120" alt="listing photo">
+                  <% }) %>
+                  <br><br>
+                <% } %>
+                <input type="file" id="photos" name="photos" multiple accept="image/*">
+              </td>
+            </tr>
+          </table>
 
-    <label for="title">Listing Title</label><br>
-    <input 
-      type="text" 
-      id="title"
-      name="title" 
-      placeholder="Title" 
-      maxlength="50"
-      value="<%= data.title || '' %>" 
-      required
-    >
-    <br><br>
+          <br><br>
+          <center>
+            <table border="0" cellpadding="0" cellspacing="8">
+              <tr>
+                <td>
+                  <table border="0" cellpadding="10" bgcolor="#c0392b">
+                    <tr>
+                      <td align="center">
+                        <input type="submit" value="Update Listing" style="background:transparent;border:none;color:#ffffff;font-size:14px;cursor:pointer;font-weight:bold;">
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </center>
+        </form>
 
-    <label for="description">Description</label><br>
-    <textarea 
-      id="description"
-      name="description" 
-      rows="5" 
-      cols="40" 
-      placeholder="Room description"
-      maxlength="200"
-      required
-    ><%= data.description || '' %></textarea>
-    <br><br>
+        <br>
+        <form action="/listing/<%= data._id %>/delete" method="POST">
+          <input type="submit" value="Delete Listing" onclick="return confirm('Are you sure you want to delete this listing?');">
+        </form>
+      </td>
+    </tr>
+  </table>
 
-    <label for="region">Region</label><br>
-    <select id="region" name="region" required>
-    <option value="">Select a region</option>
-    <option value="North" <%= data.region === 'North' ? 'selected' : '' %>>North</option>
-    <option value="North-West" <%= data.region === 'North-West' ? 'selected' : '' %>>North-West</option>
-    <option value="North-East" <%= data.region === 'North-East' ? 'selected' : '' %>>North-East</option>
-    <option value="East" <%= data.region === 'East' ? 'selected' : '' %>>East</option>
-    <option value="South" <%= data.region === 'South' ? 'selected' : '' %>>South</option>
-    <option value="South-West" <%= data.region === 'South-West' ? 'selected' : '' %>>South-West</option>
-    <option value="South-East" <%= data.region === 'South-East' ? 'selected' : '' %>>South-East</option>
-    <option value="West" <%= data.region === 'West' ? 'selected' : '' %>>West</option>
-    <option value="Central" <%= data.region === 'Central' ? 'selected' : '' %>>Central</option>
-    </select>
-    <br><br>
-
-    <label for="location">Location</label><br>
-    <input 
-      type="text" 
-      id="location"
-      name="location" 
-      placeholder="Address"
-      maxlength="100"
-      value="<%= data.location || '' %>"
-      required
-    >
-    <br><br>
-
-    <label for="price">Price per Month ($)</label><br>
-    <input 
-      type="number" 
-      id="price"
-      name="price" 
-      min="0"
-      step="0.01"
-      required
-      value="<%= data.price || '' %>"
-    >
-    <br><br>
-
-    <label for="room_type">Room Type</label><br>
-    <select id="room_type" name="room_type" required>
-      <option value="">Select a room type</option>
-      <option value="Private Room"  <%= data.room_type === 'Private Room' ? 'selected' : '' %>>Private Room</option>
-      <option value="Shared Room"   <%= data.room_type === 'Shared Room' ? 'selected' : '' %>>Shared Room</option>
-    </select>
-    <br><br>
-
-    <label for="roommates">Roommate Slots Available</label><br>
-    <input 
-      type="number" 
-      id="roommates"
-      name="roommates" 
-      min="1"
-      required
-      value="<%= data.roommates || '' %>"
-    >
-    <br><br>
-
-    <label for="gender">Preferred Gender</label><br>
-    <select id="gender" name="gender" required>
-      <option value="">Select your gender</option>
-      <option value="Male" <%= data.gender === 'Male' ? 'selected' : '' %>>Male</option>
-      <option value="Female" <%= data.gender === 'Female' ? 'selected' : '' %>>Female</option>
-    </select>
-    <br><br>
-
-    <label>Amenities</label><br>
-
-    <table>
-      <tr>
-        <td>
-          <label>
-            <input type="checkbox" name="amenities" value="wifi"
-            <%- data.amenities && data.amenities.includes('wifi') ? 'checked' : '' %>>
-            Wifi
-          </label>
-        </td>
-        <td>
-          <label>
-            <input type="checkbox" name="amenities" value="parking"
-            <%- data.amenities && data.amenities.includes('parking') ? 'checked' : '' %>>
-            Parking
-          </label>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <label>
-            <input type="checkbox" name="amenities" value="ac"
-            <%- data.amenities && data.amenities.includes('ac') ? 'checked' : '' %>>
-            Air Conditioning
-          </label>
-        </td>
-        <td>
-          <label>
-            <input type="checkbox" name="amenities" value="washing_machine"
-            <%- data.amenities && data.amenities.includes('washing_machine') ? 'checked' : '' %>>
-            Washing Machine
-          </label>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <label>
-            <input type="checkbox" name="amenities" value="dryer"
-            <%- data.amenities && data.amenities.includes('dryer') ? 'checked' : '' %>>
-            Dryer
-          </label>
-        </td>
-        <td>
-          <label>
-            <input type="checkbox" name="amenities" value="refrigerator"
-            <%- data.amenities && data.amenities.includes('refrigerator') ? 'checked' : '' %>>
-            Refrigerator
-          </label>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <label>
-            <input type="checkbox" name="amenities" value="microwave"
-            <%- data.amenities && data.amenities.includes('microwave') ? 'checked' : '' %>>
-            Microwave
-          </label>
-        </td>
-        <td>
-          <label>
-            <input type="checkbox" name="amenities" value="fan"
-            <%- data.amenities && data.amenities.includes('fan') ? 'checked' : '' %>>
-            Ceiling Fan
-          </label>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <label>
-            <input type="checkbox" name="amenities" value="wardrobe"
-            <%- data.amenities && data.amenities.includes('wardrobe') ? 'checked' : '' %>>
-            Wardrobe
-          </label>
-        </td>
-        <td>
-          <label>
-            <input type="checkbox" name="amenities" value="iron"
-            <%- data.amenities && data.amenities.includes('iron') ? 'checked' : '' %>>
-            Iron
-          </label>
-        </td>
-      </tr>
-    </table>
-    <br>
-
-    <label for="photos">Upload Photos (Max 3, 2MB each)</label><br>
-    <% if (data.photos && data.photos.length > 0) { %>
-      <p>Current photos:</p>
-      <% data.photos.forEach(function(photo) { %>
-        <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="250" height="250" alt="listing photo">
-      <% }) %>
-    <% } %>
-    <br>
-    <input type="file" id="photos" name="photos" multiple accept="image/*">
-    <br><br>
-
-    <button type="submit">Update Listing</button>
-
-  </form>
-
-  <form action="/listing/<%= data._id %>/delete" method="POST" style="display:inline;">
-  <button type="submit" onclick="return confirm('Are you sure you want to delete this listing?');">Delete</button>
-  </form>
-
+  <br><br>
+  <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+  <br><br>
+</center>
 </body>
 </html>

@@ -2,37 +2,85 @@
   <head>
     <title>Login</title>
   </head>
-  <body>
-    <h1>Login</h1>
+  <body bgcolor="#f7f4ef">
+    <center>
+      <br>
+      <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+      <br><br>
 
-    <% if (msg != "") { %>
-      <p style="color: red">Error: <%= msg %></p>
-    <% } %>
-
-    <form action="/login-form" method="post">
-
-      <table>
+      <table border="0" cellpadding="28" cellspacing="0" bgcolor="#ffffff" width="380">
         <tr>
           <td>
-            Username:
-          </td>
-          <td>
-            <input type="text" name="username" value="<%= username ? username : ""%>" required>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Password:
-          </td>
-          <td>
-            <input type="password" name="password" required>
+            <center>
+              <font face="Georgia, serif" size="5" color="#3a3a3a"><b>Login</b></font>
+            </center>
+
+            <br>
+
+            <% if (msg != "") { %>
+              <table border="0" cellpadding="8" bgcolor="#fdecea" width="100%">
+                <tr>
+                  <td>
+                    <font face="Arial, sans-serif" size="2" color="#c0392b">Error: <%= msg %></font>
+                  </td>
+                </tr>
+              </table>
+              <br>
+            <% } %>
+
+            <form action="/login-form" method="post">
+              <table border="0" cellpadding="6" cellspacing="0" width="100%">
+                <tr>
+                  <td width="120">
+                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Username:</b></font>
+                  </td>
+                  <td>
+                    <input type="text" name="username" value="<%= username ? username : ""%>" required size="28">
+                  </td>
+                </tr>
+                <tr><td colspan="2"><br></td></tr>
+                <tr>
+                  <td>
+                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Password:</b></font>
+                  </td>
+                  <td>
+                    <input type="password" name="password" required size="28">
+                  </td>
+                </tr>
+              </table>
+
+              <br><br>
+
+              <center>
+                <table border="0" cellpadding="10" cellspacing="0" bgcolor="#c0392b" width="180">
+                  <tr>
+                    <td align="center">
+                      <font face="Arial, sans-serif" size="3">
+                        <input type="submit" value="Login" style="background:transparent;border:none;color:#ffffff;font-size:14px;cursor:pointer;font-weight:bold;">
+                      </font>
+                    </td>
+                  </tr>
+                </table>
+              </center>
+            </form>
+
+            <br>
+            <center>
+              <font face="Arial, sans-serif" size="2" color="#777777">
+                Don't have an account? <a href="/signup-form"><font color="#c0392b">Sign up here!</font></a>
+              </font>
+              <br>
+              <font face="Arial, sans-serif" size="2">
+                <a href="/"><font color="#888888">Back to Home</font></a>
+              </font>
+            </center>
           </td>
         </tr>
       </table>
-      <br>
-      <button type="submit">Login</button>
-    </form>
-    <p>Don't have an account? <a href="/signup-form">Sign up here!</a></p>
-    <a href="/">Back to Home</a>
+
+      <br><br>
+      <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+      <br><br>
+    </center>
   </body>
 </html>

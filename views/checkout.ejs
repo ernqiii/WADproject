@@ -3,119 +3,211 @@
 <head>
   <title>Checkout</title>
 </head>
-<body>
+<body bgcolor="#f7f4ef">
+<center>
+  <br>
+  <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+  <br>
+  <font face="Arial, sans-serif" size="3">
+    <a href="/wishlist"><font color="#c0392b">Back to Wishlist</font></a>
+  </font>
+  <br><br>
 
-<h1>Checkout</h1>
-<hr>
-<% if (errors && errors.length > 0) { %>
-  <div style="color:red;">
-    <ul>
-      <% errors.forEach(function(err) { %>
-        <li><%= err %></li>
-      <% }) %>
-    </ul>
-  </div>
-<% } %>
-<h3><%= listing.title %></h3>
+  <font face="Georgia, serif" size="5" color="#3a3a3a"><b>Checkout</b></font>
+  <br><br>
 
-  <% if (listing.photos && listing.photos.length > 0) { %>
-            <% listing.photos.forEach(function(photo) { %>
-                <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="250" height="250" alt="listing photo">
-      <% }); %>
-        
-  <% } else { %>
-    <p>No image available</p>
+  <% if (errors && errors.length > 0) { %>
+    <table border="0" cellpadding="12" bgcolor="#fdecea" width="500">
+      <tr>
+        <td>
+          <ul>
+            <% errors.forEach(function(err) { %>
+              <li><font face="Arial, sans-serif" size="3" color="#c0392b"><%= err %></font></li>
+            <% }) %>
+          </ul>
+        </td>
+      </tr>
+    </table>
+    <br>
   <% } %>
 
-  <p><strong>Region:</strong> <%= listing.region %></p>
-  <p><strong>Location:</strong> <%= listing.location %></p>
-  <p><strong>Price:</strong> $<%= listing.price %>/month</p>
-  <p><strong>Room Type:</strong> <%= listing.room_type %></p>
-  
- 
-  <p><strong>Preferred Gender:</strong> <%= listing.gender %></p> 
-  <p><strong>Roommates:</strong> <%= listing.roommates %></p> 
-  <p><strong>Description:</strong> <%= listing.description %></p>
- 
-  <p>
-    <strong>Amenities:</strong>
-    <% if (listing.amenities && listing.amenities.length > 0) { %>
-      <%= listing.amenities.join(", ") %>
-    <% } else { %>
-      None
-    <% } %>
-  </p>
+  <!-- Listing Summary -->
+  <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="560">
+    <tr>
+      <td>
+        <font face="Georgia, serif" size="4" color="#3a3a3a"><b><%= listing.title %></b></font>
+        <br><br>
 
-  
-</div>
-<hr>
+        <% if (listing.photos && listing.photos.length > 0) { %>
+          <% listing.photos.forEach(function(photo) { %>
+            <img src="data:<%= listing.photos[0].contentType %>;base64,<%= photo.data.toString('base64') %>" width="200" height="200" alt="listing photo">
+          <% }); %>
+          <br><br>
+        <% } else { %>
+          <font face="Arial, sans-serif" size="2" color="#999999">No image available</font>
+          <br><br>
+        <% } %>
 
+        <table border="0" cellpadding="4" cellspacing="0">
+          <tr>
+            <td width="160"><font face="Arial, sans-serif" size="3" color="#555555"><b>Region:</b></font></td>
+            <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.region %></font></td>
+          </tr>
+          <tr>
+            <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Location:</b></font></td>
+            <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.location %></font></td>
+          </tr>
+          <tr>
+            <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Price:</b></font></td>
+            <td><font face="Arial, sans-serif" size="3" color="#3a3a3a">$<%= listing.price %>/month</font></td>
+          </tr>
+          <tr>
+            <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Room Type:</b></font></td>
+            <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.room_type %></font></td>
+          </tr>
+          <tr>
+            <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Preferred Gender:</b></font></td>
+            <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.gender %></font></td>
+          </tr>
+          <tr>
+            <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Roommates:</b></font></td>
+            <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.roommates %></font></td>
+          </tr>
+          <tr>
+            <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Description:</b></font></td>
+            <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.description %></font></td>
+          </tr>
+          <tr>
+            <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Amenities:</b></font></td>
+            <td>
+              <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                <% if (listing.amenities && listing.amenities.length > 0) { %>
+                  <%= listing.amenities.join(", ") %>
+                <% } else { %>
+                  None
+                <% } %>
+              </font>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 
-
-
-<form action="/wishlist/checkout/submit" method="POST">
-  <input type="hidden" name="listingId" value="<%= listing._id %>">
-
-  
-
-
-
-
-<%# But if message was never defined at all, JavaScript errors before it can even evaluate ||. %>
-<br>
-  <strong>Name:</strong>
-  <input type="text" name="name" value="<%= name || '' %>" required> 
-  <br><br>
-  <strong>Gender:</strong>
-  <select name="gender">
-      <option value="">-- Please Select One --</option>
-      <option value="male" <%= gender === "male" ? "selected" : "" %>>Male</option>
-      <option value="female"<%= gender === "female" ? "selected" : "" %>>Female</option>
-  </select><br>
-  
-  
-  <p><u><strong>Please fill in at least one contact method</u></strong></p>
-  
-  <strong>Email:</strong>
-  <input type="email" name="email" value="<%= email || '' %>">
-  <br><br>
-
-  <strong>Phone:</strong>
-  <input type="text" name="phone" value="<%= phone || '' %>"> (via calls, SMS, or WhatsApp)
-  <br><br>
-
-  <strong>Telegram:</strong>
-  <input type="text" name="telegram" value="<%= telegram || '' %>">
-  <br><br>
-
-  Preferred Contact Method<strong>(this contact information has to be provided)</strong>:
   <br>
-  <select name="contact_method">
-    <option value="">--Please Select One--</option>
-    <option value="email" <%= contact_method === "email" ? "selected" : "" %>>Email</option>
-    <option value="phone" <%= contact_method === "phone" ? "selected" : "" %>>Phone</option>
-    <option value="telegram" <%= contact_method === "telegram" ? "selected" : "" %>>Telegram</option>
-    <option value="whatsapp" <%= contact_method === "whatsapp" ? "selected" : "" %>>Whatsapp</option>
-  </select>
-  <br><br>
-  <strong>Message:</strong>
-  <textarea name="message" placeholder="Send a Message" ><%= message || '' %></textarea><%# the data rention not within the text area  part %>
-  <br><br>
-  <p>
-    <small>
-      By submitting this form, you agree that your contact details and message
-      will be stored for the purpose of managing your interest in this listing.
-      Your submission will be shown in your profile, and you may edit or delete it later.
-    </small>
-  </p>
- 
-  <input type="checkbox" name="consent" required>
-    I understand that my submitted contact details and message will be stored for this interest request.
-  <br><br>
 
-  <button type="submit">Submit Request</button>
-</form>
+  <!-- Interest Form -->
+  <table border="0" cellpadding="24" cellspacing="0" bgcolor="#ffffff" width="560">
+    <tr>
+      <td>
+        <font face="Georgia, serif" size="4" color="#3a3a3a"><b>Your Contact Details</b></font>
+        <br><br>
 
+        <form action="/wishlist/checkout/submit" method="POST">
+          <input type="hidden" name="listingId" value="<%= listing._id %>">
 
+          <table border="0" cellpadding="6" cellspacing="0" width="100%">
+            <tr>
+              <td width="180"><font face="Arial, sans-serif" size="3" color="#555555"><b>Name:</b></font></td>
+              <td><input type="text" name="name" value="<%= name || '' %>" required size="28"></td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Gender:</b></font></td>
+              <td>
+                <select name="gender">
+                  <option value="">-- Please Select One --</option>
+                  <option value="male" <%= gender === "male" ? "selected" : "" %>>Male</option>
+                  <option value="female" <%= gender === "female" ? "selected" : "" %>>Female</option>
+                </select>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td colspan="2">
+                <font face="Arial, sans-serif" size="3" color="#555555">
+                  <b><u>Please fill in at least one contact method</u></b>
+                </font>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Email:</b></font></td>
+              <td><input type="email" name="email" value="<%= email || '' %>" size="28"></td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Phone:</b></font></td>
+              <td>
+                <input type="text" name="phone" value="<%= phone || '' %>" size="20">
+                <font face="Arial, sans-serif" size="2" color="#999999">(calls, SMS, WhatsApp)</font>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Telegram:</b></font></td>
+              <td><input type="text" name="telegram" value="<%= telegram || '' %>" size="28"></td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td valign="top">
+                <font face="Arial, sans-serif" size="3" color="#555555"><b>Preferred Contact Method</b><br>
+                <font size="2" color="#999999">(must be provided)</font></font>
+              </td>
+              <td>
+                <select name="contact_method">
+                  <option value="">-- Please Select One --</option>
+                  <option value="email" <%= contact_method === "email" ? "selected" : "" %>>Email</option>
+                  <option value="phone" <%= contact_method === "phone" ? "selected" : "" %>>Phone</option>
+                  <option value="telegram" <%= contact_method === "telegram" ? "selected" : "" %>>Telegram</option>
+                  <option value="whatsapp" <%= contact_method === "whatsapp" ? "selected" : "" %>>WhatsApp</option>
+                </select>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Message:</b></font></td>
+              <td><textarea name="message" rows="4" cols="28" placeholder="Send a Message"><%= message || '' %></textarea></td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td colspan="2">
+                <font face="Arial, sans-serif" size="2" color="#999999">
+                  By submitting this form, you agree that your contact details and message
+                  will be stored for the purpose of managing your interest in this listing.
+                  Your submission will be shown in your profile, and you may edit or delete it later.
+                </font>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td colspan="2">
+                <font face="Arial, sans-serif" size="3" color="#555555">
+                  <input type="checkbox" name="consent" required>
+                  I understand that my submitted contact details and message will be stored for this interest request.
+                </font>
+              </td>
+            </tr>
+          </table>
+
+          <br><br>
+          <center>
+            <table border="0" cellpadding="10" bgcolor="#c0392b" width="180">
+              <tr>
+                <td align="center">
+                  <input type="submit" value="Submit Request" style="background:transparent;border:none;color:#ffffff;font-size:14px;cursor:pointer;font-weight:bold;">
+                </td>
+              </tr>
+            </table>
+          </center>
+        </form>
+      </td>
+    </tr>
+  </table>
+
+  <br><br>
+  <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+  <br><br>
+</center>
 </body>
 </html>

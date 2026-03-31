@@ -1,90 +1,167 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Profile</title>
+  <title>My Interest Forms</title>
 </head>
-<body>
+<body bgcolor="#f7f4ef">
+<center>
+  <br>
+  <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+  <br>
+  <font face="Arial, sans-serif" size="3">
+    <a href="/interest"><font color="#c0392b">Back to Interest Forms</font></a>
+  </font>
+  <br><br>
 
-  <h1>My Interest Forms</h1>
-  <hr>
+  <font face="Georgia, serif" size="5" color="#3a3a3a"><b>My Interest Forms</b></font>
+  <br><br>
 
-  <form action="/interest/submitted" method="GET">
-    <label for="status">Filter by status:</label>
-    <select name="status" id="status">
-      <option value="" <%= selectedStatus === "" ? "selected" : "" %>>All</option>
-      <option value="Active" <%= selectedStatus === "Active" ? "selected" : "" %>>Active</option>
-      <option value="Closed" <%= selectedStatus === "Closed" ? "selected" : "" %>>Closed</option>
-    </select>
-    <button type="submit">Filter</button>
-  </form>
+  <table border="0" cellpadding="12" cellspacing="0" bgcolor="#ffffff" width="660">
+    <tr>
+      <td>
+        <form action="/interest/submitted" method="GET">
+          <font face="Arial, sans-serif" size="3" color="#555555">
+            <label for="status"><b>Filter by status:</b></label>
+            <select name="status" id="status">
+              <option value="" <%= selectedStatus === "" ? "selected" : "" %>>All</option>
+              <option value="Active" <%= selectedStatus === "Active" ? "selected" : "" %>>Active</option>
+              <option value="Closed" <%= selectedStatus === "Closed" ? "selected" : "" %>>Closed</option>
+            </select>
+            &nbsp;
+            <input type="submit" value="Filter">
+          </font>
+        </form>
+      </td>
+    </tr>
+  </table>
 
   <br>
 
   <% if (interestListingArray && interestListingArray.length > 0) { %>
     <% interestListingArray.forEach(function(item) { %>
-      <hr>
 
-      <h3>
-        <%= item.listing ? item.listing.title : "Listing deleted" %>
-        <% if (item.listing && item.landlordUser) { %>
-          —
-          <a href="/profile/<%= item.landlordUser._id %>">
-            <%= item.landlordUser.username %>
-          </a>
-        <% } %>
-      </h3>
+      <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="660">
+        <tr>
+          <td>
+            <font face="Georgia, serif" size="4" color="#3a3a3a">
+              <b><%= item.listing ? item.listing.title : "Listing deleted" %></b>
+              <% if (item.listing && item.landlordUser) { %>
+                &nbsp;&mdash;&nbsp;
+                <a href="/profile/<%= item.landlordUser._id %>">
+                  <font color="#c0392b"><%= item.landlordUser.username %></font>
+                </a>
+              <% } %>
+            </font>
 
-      <% if (item.listing) { %>
-        <p><strong>Location:</strong> <%= item.listing.location %></p>
-        <p><strong>Price:</strong> $<%= item.listing.price %>/month</p>
+            <br><br>
 
-        <% if (item.listing.photos && item.listing.photos.length > 0) { %>
-          <% item.listing.photos.forEach(function(photo) { %>
-            <img
-              src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>"
-              width="250"
-              height="250"
-              alt="listing photo">
-          <% }); %>
-        <% } else { %>
-          <p>No image available</p>
-        <% } %>
-      <% } else { %>
-        <p><em>This listing has been deleted, but your interest form is still saved.</em></p>
-      <% } %>
+            <% if (item.listing) { %>
+              <table border="0" cellpadding="4" cellspacing="0">
+                <tr>
+                  <td width="140"><font face="Arial, sans-serif" size="3" color="#555555"><b>Location:</b></font></td>
+                  <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= item.listing.location %></font></td>
+                </tr>
+                <tr>
+                  <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Price:</b></font></td>
+                  <td><font face="Arial, sans-serif" size="3" color="#3a3a3a">$<%= item.listing.price %>/month</font></td>
+                </tr>
+              </table>
+              <br>
+              <% if (item.listing.photos && item.listing.photos.length > 0) { %>
+                <% item.listing.photos.forEach(function(photo) { %>
+                  <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="180" height="180" alt="listing photo">
+                <% }); %>
+              <% } else { %>
+                <font face="Arial, sans-serif" size="2" color="#999999">No image available</font>
+              <% } %>
+              <br><br>
+            <% } else { %>
+              <font face="Arial, sans-serif" size="2" color="#999999"><em>This listing has been deleted, but your interest form is still saved.</em></font>
+              <br><br>
+            <% } %>
 
-      <p><strong>Name:</strong> <%= item.interest.name %></p>
-      <p><strong>Gender:</strong> <%= item.interest.gender %></p>
-      <p><strong>Email:</strong> <%= item.interest.email || "Not provided" %></p>
-      <p><strong>Phone:</strong> <%= item.interest.phone || "Not provided" %></p>
-      <p><strong>Telegram:</strong> <%= item.interest.telegram || "Not provided" %></p>
-      <p><strong>Preferred Contact Method:</strong> <%= item.interest.preferredContactMethod || "Not selected" %></p>
-      <p><strong>Message:</strong> <%= item.interest.message || "No message" %></p>
-      <p><strong>Status:</strong> <%= item.interest.status %></p>
+            <hr color="#eeeeee" size="1">
 
-      <% if (item.interest.createdAt) { %>
-        <p><strong>Submitted On:</strong> <%= item.interest.createdAt.toDateString() %></p>
-      <% } %>
+            <table border="0" cellpadding="4" cellspacing="0">
+              <tr>
+                <td width="200"><font face="Arial, sans-serif" size="3" color="#555555"><b>Name:</b></font></td>
+                <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= item.interest.name %></font></td>
+              </tr>
+              <tr>
+                <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Gender:</b></font></td>
+                <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= item.interest.gender %></font></td>
+              </tr>
+              <tr>
+                <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Email:</b></font></td>
+                <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= item.interest.email || "Not provided" %></font></td>
+              </tr>
+              <tr>
+                <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Phone:</b></font></td>
+                <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= item.interest.phone || "Not provided" %></font></td>
+              </tr>
+              <tr>
+                <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Telegram:</b></font></td>
+                <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= item.interest.telegram || "Not provided" %></font></td>
+              </tr>
+              <tr>
+                <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Preferred Contact:</b></font></td>
+                <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= item.interest.preferredContactMethod || "Not selected" %></font></td>
+              </tr>
+              <tr>
+                <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Message:</b></font></td>
+                <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= item.interest.message || "No message" %></font></td>
+              </tr>
+              <tr>
+                <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Status:</b></font></td>
+                <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><b><%= item.interest.status %></b></font></td>
+              </tr>
+              <% if (item.interest.createdAt) { %>
+              <tr>
+                <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Submitted On:</b></font></td>
+                <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= item.interest.createdAt.toDateString() %></font></td>
+              </tr>
+              <% } %>
+            </table>
 
-      <% if (item.interest.status === "Active") { %>
-        <form action="/interest/submitted/edit" method="POST">
-          <input type="hidden" name="interestId" value="<%= item.interest._id %>">
-          <button type="submit">Edit</button>
-        </form>
-      <% } %>
+            <br>
 
-      <form action="/interest/submitted/delete" method="POST">
-        <input type="hidden" name="interestId" value="<%= item.interest._id %>">
-        <button type="submit">Delete</button>
-      </form>
+            <table border="0" cellpadding="0" cellspacing="8">
+              <tr>
+                <% if (item.interest.status === "Active") { %>
+                  <td>
+                    <form action="/interest/submitted/edit" method="POST">
+                      <input type="hidden" name="interestId" value="<%= item.interest._id %>">
+                      <input type="submit" value="Edit">
+                    </form>
+                  </td>
+                <% } %>
+                <td>
+                  <form action="/interest/submitted/delete" method="POST">
+                    <input type="hidden" name="interestId" value="<%= item.interest._id %>">
+                    <input type="submit" value="Delete">
+                  </form>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <br>
 
     <% }) %>
   <% } else { %>
-    <p>No interest forms found.</p>
+    <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="440">
+      <tr>
+        <td align="center">
+          <font face="Arial, sans-serif" size="3" color="#777777">No interest forms found.</font>
+        </td>
+      </tr>
+    </table>
   <% } %>
 
-  <hr>
-  <a href="/interest">Go back to view Interests Forms</a>
-
+  <br>
+  <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+  <br><br>
+</center>
 </body>
 </html>
