@@ -56,8 +56,7 @@
         <p><strong>Preferred Gender:</strong> <%= listingItem.gender %></p>
         <p><strong>Roommates:</strong> <%= listingItem.roommates %></p>
         <p><strong>Description:</strong> <%= listingItem.description %></p>
-        <p>
-        <strong>Amenities:</strong>
+        <p><strong>Amenities:</strong>
         <% if (listingItem.amenities && listingItem.amenities.length > 0) { %>
           <%= listingItem.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %>
         <% } else { %>
