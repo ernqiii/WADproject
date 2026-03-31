@@ -52,12 +52,6 @@
                 <textarea id="bio" name="bio" rows="5" cols="40"><%= user.bio %></textarea>
             </div>
 
-            <br>
-
-            <!-- <div>
-                <label for="profilePicture">Upload Profile Picture (Max 2MB):</label><br>
-                <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
-            </div> -->
             <div>
             <% if (user.profilePicture && user.profilePictureType) { %>
                 <p>Current Profile Picture:</p>
