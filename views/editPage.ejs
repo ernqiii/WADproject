@@ -7,10 +7,18 @@
   <h1>Edit Interest Form</h1>
   <hr>
 
-  <h3><%= listing ? listing.title : "Listing deleted" %></h3>
+  <h3>
+    <%= listing ? listing.title : "Listing deleted" %>
+    <% if (listing && landlordUser) { %>
+      —
+      <a href="/profile/<%= landlordUser._id %>">
+        <%= landlordUser.username %>
+      </a>
+    <% } %>
+  </h3>
 
   <% if (errors && errors.length > 0) { %>
-    <div style="color: red;">
+    <div style="color: rgb(255, 0, 0);">
       <p><strong>Please fix the following:</strong></p>
       <ul>
         <% errors.forEach(function(err) { %>
@@ -73,10 +81,7 @@
       </small>
     </p>
 
-    <input
-      type="checkbox"
-      name="consent"
-      value="yes">
+    <input type="checkbox" name="consent" value="yes">
     I understand that my submitted contact details and message will be stored for this interest request.
     <br><br>
 
