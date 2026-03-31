@@ -269,7 +269,8 @@
             document.getElementById('location').value = '';
             document.getElementById('sort-price').value = '';
             document.querySelectorAll('.amenity-filter').forEach(cb => cb.checked = false);
-            showListings();
+            document.querySelectorAll('.listing').forEach(el => el.style.display = '');
+            document.getElementById('no-results').style.display = 'none';
         }
 
         // Like toggle
