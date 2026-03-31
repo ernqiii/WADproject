@@ -21,53 +21,74 @@
 
     <h3>Filters</h3>
 
-    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-        <div>
-            <label>Search location:</label>
-            <input type="text" id="location">
+    <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div>
+                <label>Search location:</label>
+                <input type="text" id="location">
+            </div>
+            <button id="toggle-filters-btn" onclick="toggleMoreFilters()">More Filters</button>
         </div>
 
-        <div>
-            <label>Region:</label>
-            <select id="region">
-                <option value="">All Regions</option>
-                <option value="North">North</option>
-                <option value="North-West">North-West</option>
-                <option value="North-East">North-East</option>
-                <option value="East">East</option>
-                <option value="South">South</option>
-                <option value="South-West">South-West</option>
-                <option value="South-East">South-East</option>
-                <option value="West">West</option>
-                <option value="Central">Central</option>
-            </select>
+        <div id="more-filters" style="display:none; flex-direction:column; gap:10px;">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div>
+                <label>Region:</label>
+                <select id="region">
+                    <option value="">All Regions</option>
+                    <option value="North">North</option>
+                    <option value="North-West">North-West</option>
+                    <option value="North-East">North-East</option>
+                    <option value="East">East</option>
+                    <option value="South">South</option>
+                    <option value="South-West">South-West</option>
+                    <option value="South-East">South-East</option>
+                    <option value="West">West</option>
+                    <option value="Central">Central</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Room Type:</label>
+                <select id="type">
+                    <option value="">All</option>
+                    <option value="Private Room">Private Room</option>
+                    <option value="Shared Room">Shared Room</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Owner's Gender:</label>
+                <select id="gender">
+                    <option value="">All</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Max Price:</label>
+                <input type="number" id="price">
+            </div>
+
+            <button onclick="showListings()">Search</button>
         </div>
 
-        <div>
-            <label>Room Type:</label>
-            <select id="type">
-                <option value="">All</option>
-                <option value="Private Room">Private Room</option>
-                <option value="Shared Room">Shared Room</option>
-            </select>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <label>Amenities:</label>
+            <label><input type="checkbox" class="amenity-filter" value="wifi"> Wifi</label>
+            <label><input type="checkbox" class="amenity-filter" value="parking"> Parking</label>
+            <label><input type="checkbox" class="amenity-filter" value="ac"> Air Conditioning</label>
+            <label><input type="checkbox" class="amenity-filter" value="washing_machine"> Washing Machine</label>
+            <label><input type="checkbox" class="amenity-filter" value="dryer"> Dryer</label>
+            <label><input type="checkbox" class="amenity-filter" value="refrigerator"> Refrigerator</label>
+            <label><input type="checkbox" class="amenity-filter" value="microwave"> Microwave</label>
+            <label><input type="checkbox" class="amenity-filter" value="fan"> Ceiling Fan</label>
+            <label><input type="checkbox" class="amenity-filter" value="wardrobe"> Wardrobe</label>
+            <label><input type="checkbox" class="amenity-filter" value="iron"> Iron</label>
+            <button onclick="resetFilters()" style="margin-left:auto;">Reset Filters</button>
         </div>
-
-        <div>
-            <label>Owner's Gender:</label>
-            <select id="gender">
-                <option value="">All</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
         </div>
-
-        <div>
-            <label>Max Price:</label>
-            <input type="number" id="price">
-        </div>
-
-        <button onclick="showListings()">Search</button>
-        <button onclick="resetFilters()" style="margin-left:auto;">Reset Filters</button>
     </div>
     
     <hr>
@@ -82,7 +103,8 @@
                  data-room-type="<%= listing.room_type %>"
                  data-price="<%= listing.price %>"
                  data-gender="<%= listing.my_gender %>"
-                 data-location="<%= listing.location.toLowerCase() %>">
+                 data-location="<%= listing.location.toLowerCase() %>"
+                 data-amenities="<%= listing.amenities ? listing.amenities.join(',') : '' %>">
                 <h3><%= listing.title %><% if (listing.landlord) { %> — <a href="/profile/<%= listing.landlord._id %>"><%= listing.landlord.username %></a><% } %></h3>
 
                 <% if (listing.photos && listing.photos.length > 0) { %>
@@ -159,6 +181,14 @@
     </div>
 
     <script>
+        function toggleMoreFilters() {
+            let panel = document.getElementById('more-filters');
+            let btn = document.getElementById('toggle-filters-btn');
+            let isHidden = panel.style.display === 'none';
+            panel.style.display = isHidden ? 'flex' : 'none';
+            btn.textContent = isHidden ? 'Less Filters' : 'More Filters';
+        }
+
         // Filter listings client-side (show/hide)
         function showListings() {
             let regionFilter = document.getElementById('region').value;
@@ -166,6 +196,7 @@
             let priceFilter = document.getElementById('price').value;
             let genderFilter = document.getElementById('gender').value;
             let locationFilter = document.getElementById('location').value.toLowerCase();
+            let checkedAmenities = Array.from(document.querySelectorAll('.amenity-filter:checked')).map(cb => cb.value);
 
             let items = document.querySelectorAll('.listing');
 
@@ -178,6 +209,10 @@
                 if (priceFilter && Number(el.dataset.price) > Number(priceFilter)) show = false;
                 if (genderFilter && el.dataset.gender !== genderFilter) show = false;
                 if (locationFilter && !el.dataset.location.includes(locationFilter)) show = false;
+                if (checkedAmenities.length > 0) {
+                    let listingAmenities = el.dataset.amenities.split(',');
+                    if (!checkedAmenities.every(a => listingAmenities.includes(a))) show = false;
+                }
 
                 el.style.display = show ? '' : 'none';
             }
@@ -192,6 +227,7 @@
             document.getElementById('price').value = '';
             document.getElementById('gender').value = '';
             document.getElementById('location').value = '';
+            document.querySelectorAll('.amenity-filter').forEach(cb => cb.checked = false);
             showListings();
         }
 
