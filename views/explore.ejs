@@ -59,7 +59,7 @@
                 </div>
 
                 <div>
-                    <label>Owner's Gender:</label>
+                    <label>Gender:</label>
                     <select id="gender">
                         <option value="">All</option>
                         <option value="Male">Male</option>
@@ -99,8 +99,7 @@
                 </table>
             </div>
 
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <button onclick="showListings()">Search</button>
+            <div>
                 <button onclick="resetFilters()">Reset Filters</button>
             </div>
         </div>
@@ -132,7 +131,7 @@
                 <p><strong>Location:</strong> <%= listing.location %></p>
                 <p><strong>Price:</strong> $<%= listing.price %>/month</p>
                 <p><strong>Room Type:</strong> <%= listing.room_type %></p>
-                <p><strong>Owner's Gender:</strong> <%= listing.my_gender %></p>
+                <p><strong>Preferred Gender:</strong> <%= listing.my_gender %></p>
                 <p><strong>Roommates:</strong> <%= listing.roommates %></p>
                 <p><strong>Description:</strong> <%= listing.description %></p>
 
@@ -199,11 +198,9 @@
         function toggleMoreFilters() {
             let panel = document.getElementById('more-filters');
             let toggleBtn = document.getElementById('toggle-filters-btn');
-            let searchBtn = document.getElementById('search-btn');
             let isHidden = panel.style.display === 'none';
             panel.style.display = isHidden ? 'flex' : 'none';
             toggleBtn.textContent = isHidden ? 'Less Filters' : 'More Filters';
-            searchBtn.style.display = isHidden ? 'none' : '';
         }
 
         // Filter listings client-side (show/hide)
