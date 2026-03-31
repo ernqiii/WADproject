@@ -25,6 +25,10 @@ const reviewSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: null
     }
 });
 
@@ -49,7 +53,7 @@ exports.findReviewByReviewerAndUser = function(reviewerId, reviewedUserId) {
 exports.updateReview = function(reviewId, rating, comment) {
     return Review.updateOne(
         { _id: reviewId },
-        { $set: { rating, comment } }
+        { $set: { rating, comment, updatedAt: new Date() } }
     );
 };
 

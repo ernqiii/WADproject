@@ -144,7 +144,14 @@
                 <strong>Rating:</strong> <%= review.rating %> / 5<br>
 
                 <strong>Comment:</strong>
-                <%= review.comment && review.comment.trim() !== "" ? review.comment : "No comment provided." %>
+                <%= review.comment && review.comment.trim() !== "" ? review.comment : "No comment provided." %><br>
+
+                <small>
+                    Posted: <%= new Date(review.createdAt).toLocaleString() %>
+                    <% if (review.updatedAt) { %>
+                        &nbsp;&bull;&nbsp; Edited: <%= new Date(review.updatedAt).toLocaleString() %>
+                    <% } %>
+                </small>
             </p>
 
             <% if (review.reviewerId && String(review.reviewerId._id) === String(loggedInUserId)) { %>

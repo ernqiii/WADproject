@@ -5,35 +5,22 @@
     <body>
         <header align="center">
             <h1>🏠 Roommie Finder</h1>
+            <img src="/images/home-banner.png" alt="Roommate Finder Banner" width="400" height="280">
+
+        <br><br>
             <p><i>Find your perfect room, share your home.</i></p>
 
             <strong>Navigation</strong> | 
-            <% if (user) { %>
-                <a href="/profile">My Profile</a> | 
-                <a href="/logout">Logout</a>
-            <% } else { %>
                 <a href="/login-form">Login</a>
-            <% } %>
         </header>
 
         <hr>
 
         <main align="center">
             <br>
-            <% if (user) { %>
-                <h3>Welcome back, <%= user.fullName %>!</h3>
-                <p>What would you like to do today?</p>
-                <p><a href="/explore">Find a Room</a> (Search and Send Interest Forms)</p>
-                
-                <p><a href="/listing/new">Post a Room</a> (Create a new Listing)</p>
-
-                <p><a href="/wishlist">View your Wishlist</a> (Check your saved rooms)</p>
-
-            <% } else { %>
-                <p>The simplest way to find a roommate.</p>
-                <p>Ready to join our community?</p>
-                <a href="/signup-form"><strong>Create your account here!</strong></a>
-            <% } %>
+            <p>The simplest way to find a roommate.</p>
+            <p>Ready to join our community?</p>
+            <a href="/signup-form"><strong>Create your account here!</strong></a>
 
             <br><br>
             <hr>
