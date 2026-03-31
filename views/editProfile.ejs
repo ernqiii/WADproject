@@ -1,68 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Profile</title>
-</head>
-<body>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Edit Profile</title>
+    </head>
+    <body>
 
-    <h1>Edit Profile</h1>
+        <h1>Edit Profile</h1>
 
-    <p>
-        <a href="/explore">Back to Explore</a> |
-        <a href="/wishlist">Go to Wishlist</a> |
-        <a href="/listings">Go to Listings</a> |
-        <a href="/profile">Back to Profile</a>
-    </p>
+        <p>
+            <a href="/explore">Back to Explore</a> |
+            <a href="/wishlist">Go to Wishlist</a> |
+            <a href="/listings">Go to Listings</a> |
+            <a href="/profile">Back to Profile</a>
+        </p>
 
-    <hr>
+        <hr>
 
-    <% if (errorMessage) { %>
-        <p><strong><%= errorMessage %></strong></p>
-    <% } %>
+        <% if (errorMessage) { %>
+            <p><strong><%= errorMessage %></strong></p>
+        <% } %>
 
-    <form method="POST" action="/profile/edit" enctype="multipart/form-data">
-        <div>
-            <label for="fullName">Full Name:</label><br>
-            <input type="text" id="fullName" name="fullName" value="<%= user.fullName %>" required>
-        </div>
+        <form method="POST" action="/profile/edit" enctype="multipart/form-data">
+            <div>
+                <label for="fullName">Full Name:</label><br>
+                <input type="text" id="fullName" name="fullName" value="<%= user.fullName %>" required>
+            </div>
 
-        <br>
+            <br>
 
-        <div>
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" value="<%= user.email %>" required>
-        </div>
+            <div>
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" value="<%= user.email %>" required>
+            </div>
 
-        <br>
+            <br>
 
-        <div>
-            <label for="gender">Gender:</label><br>
-            <select id="gender" name="gender" required>
-                <option value="Male" <%= user.gender === "Male" ? "selected" : "" %>>Male</option>
-                <option value="Female" <%= user.gender === "Female" ? "selected" : "" %>>Female</option>
-                <option value="Other" <%= user.gender === "Other" ? "selected" : "" %>>Other</option>
-            </select>
-        </div>
+            <div>
+                <label for="gender">Gender:</label><br>
+                <select id="gender" name="gender" required>
+                    <option value="Male" <%= user.gender === "Male" ? "selected" : "" %>>Male</option>
+                    <option value="Female" <%= user.gender === "Female" ? "selected" : "" %>>Female</option>
+                    <option value="Other" <%= user.gender === "Other" ? "selected" : "" %>>Other</option>
+                </select>
+            </div>
 
-        <br>
+            <br>
 
-        <div>
-            <label for="bio">Bio:</label><br>
-            <textarea id="bio" name="bio" rows="5" cols="40"><%= user.bio %></textarea>
-        </div>
+            <div>
+                <label for="bio">Bio:</label><br>
+                <textarea id="bio" name="bio" rows="5" cols="40"><%= user.bio %></textarea>
+            </div>
 
-        <br>
+            <br>
 
-        <div>
-            <label for="profilePicture">Upload Profile Picture (Max 2MB):</label><br>
-            <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
-        </div>
+            <div>
+                <label for="profilePicture">Upload Profile Picture (Max 2MB):</label><br>
+                <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+            </div>
 
-        <br>
+            <br>
 
-        <button type="submit">Save Changes</button>
-    </form>
+            <button type="submit">Save Changes</button>
+        </form>
 
-</body>
-</html>
+    </body>
+    </html>
