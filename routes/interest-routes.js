@@ -1,22 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const interestController = require("../controllers/interest-controller");
-const userController = require("../controllers/profileController")
-router.get("/interest",interestController.getInterestDashboard);
+const userController = require("../controllers/profileController");
+const auth = require("../middleware/auth");
+
+router.get("/interest", interestController.getInterestDashboard);
 
 
 // show user profile with submitted interest forms
-router.get("/interest/submitted", interestController.getProfile);
+router.get("/interest/submitted", auth.isLoggedIn, interestController.getProfile);
 
 
 // open edit interest form page
-router.post("/interest/submitted/edit", interestController.getEditInterestPage);
+router.post("/interest/submitted/edit", auth.isLoggedIn, interestController.getEditInterestPage);
 
 // submit edited interest form
-router.post("/interest/submitted/update", interestController.updateInterest);
+router.post("/interest/submitted/update", auth.isLoggedIn, interestController.updateInterest);
 
 // delete / withdraw interest form
-router.post("/interest/submitted/delete", interestController.deleteInterest);
+router.post("/interest/submitted/delete", auth.isLoggedIn, interestController.deleteInterest);
 
 
 // =========================
@@ -24,10 +26,10 @@ router.post("/interest/submitted/delete", interestController.deleteInterest);
 // =========================
 
 // show landlord requests page
-router.get("/interest/received", interestController.getLandlordRequestsPage);
+router.get("/interest/received", auth.isLoggedIn, interestController.getLandlordRequestsPage);
 
 // update Active / Closed status
-router.post("/interest/received/update-status", interestController.updateInterestStatus);
+router.post("/interest/received/update-status", auth.isLoggedIn, interestController.updateInterestStatus);
 
 
 module.exports = router;

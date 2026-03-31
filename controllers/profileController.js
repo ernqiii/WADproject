@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const Listing = require("../models/Listing");
+const { Listing, findByLandlord } = require("../models/Listing");
 const Review = require("../models/Review");
 
 exports.showProfile = async (req, res) => {
@@ -11,7 +11,7 @@ exports.showProfile = async (req, res) => {
         const userId = req.params.userId || req.session.user.id;
 
         const user = await User.findByUserId(userId);
-        const listings = await Listing.findByLandlord(userId);
+        const listings = await findByLandlord(userId);
         const reviews = await Review.findReviewsByUserId(userId);
         const ratingSummary = await Review.getAverageRating(userId);
 
@@ -124,7 +124,7 @@ exports.submitEditProfile = async (req, res) => {
 
             // check file size
             if (req.file.size > 2 * 1024 * 1024) {
-                const user = await User.findByUserId(req.session.user.id) 
+                const user = await User.findByUserId(req.session.user.id);
                 return res.render("editProfile", {
                     user, 
                     errorMessage: "Image file is too large. Max 2MB is allowed."
@@ -147,7 +147,7 @@ exports.submitEditProfile = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
     try {
-        await Listing.Listing.deleteMany({ landlord: req.session.user.id });
+        await Listing.deleteMany({ landlord: req.session.user.id });
         await User.deleteUserById(req.session.user.id);
         req.session.destroy(() => {
             res.redirect("/login-form");
