@@ -81,17 +81,6 @@ exports.submitEditProfile = async (req, res) => {
             });
         }
 
-        // check phone format
-        const cleanPhone = phone.split(" ").join("");
-
-        if (cleanPhone.trim().length !== 8|| isNaN(cleanPhone)) {
-            const user = await User.findByUserId(req.session.user.id);
-            return res.render("editProfile", {
-                user,
-                errorMessage: "Please enter a valid phone number."
-            });
-        }
-
         // check name length
         if (fullName.length > 50) {
             const user = await User.findByUserId(req.session.user.id);
@@ -114,7 +103,6 @@ exports.submitEditProfile = async (req, res) => {
             fullName: fullName.trim(),
             email: email.trim(),
             gender: gender.trim(),
-            phone: cleanPhone.trim(),
             bio: bio ? bio.trim() : ""
         };
 

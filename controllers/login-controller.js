@@ -54,7 +54,6 @@ exports.displaySignupForm = (req, res) => {
         username: "",
         password: "",
         fullName: "",
-        phone: "",
         email: "",
         gender: "",
         bio: ""
@@ -72,7 +71,6 @@ exports.handleSignup = async (req, res) => {
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
     const fullName = req.body.fullName.trim();
-    const phone = req.body.phone.trim();
     const email = req.body.email.trim();
     const gender = req.body.gender;
     const bio = req.body.bio;
@@ -86,7 +84,6 @@ exports.handleSignup = async (req, res) => {
             password: "",
             confirmPassword: "",
             fullName,
-            phone,
             email,
             gender,
             bio
@@ -101,7 +98,6 @@ exports.handleSignup = async (req, res) => {
             password: "",
             confirmPassword: "",
             fullName,
-            phone,
             email,
             gender,
             bio
@@ -116,7 +112,6 @@ exports.handleSignup = async (req, res) => {
             password: "",
             confirmPassword: "",
             fullName,
-            phone,
             email,
             gender,
             bio
@@ -131,7 +126,6 @@ exports.handleSignup = async (req, res) => {
             password: "",
             confirmPassword: "",
             fullName,
-            phone,
             email,
             gender,
             bio
@@ -146,24 +140,6 @@ exports.handleSignup = async (req, res) => {
             password: "",
             confirmPassword: "",
             fullName,
-            phone,
-            email,
-            gender,
-            bio
-        });
-    }
-
-    //check phone format
-    const cleanPhone = phone.split(" ").join("");
-
-    if (cleanPhone.trim().length !== 8 || isNaN(cleanPhone)) {
-        return res.render("signup-form", {
-            msg: "Phone number must be exactly 8 digits.",
-            username,
-            password: "",
-            confirmPassword: "",
-            fullName,
-            phone,
             email,
             gender,
             bio
@@ -178,7 +154,6 @@ exports.handleSignup = async (req, res) => {
             password: "",
             confirmPassword: "",
             fullName,
-            phone,
             email,
             gender,
             bio
@@ -192,7 +167,6 @@ exports.handleSignup = async (req, res) => {
             username,
             password: hashedPassword,
             fullName,
-            phone: cleanPhone,
             email,
             gender,
             bio: bio ? bio.trim() : "",
@@ -212,7 +186,6 @@ exports.handleSignup = async (req, res) => {
                 username,
                 password: "",
                 fullName,
-                phone,
                 email,
                 gender,
                 bio
