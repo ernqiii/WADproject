@@ -80,15 +80,6 @@ exports.handleSignup = async (req, res) => {
     let profilePicture = null;
     let profilePictureType = null;
 
-    // const username = req.body.username.trim();
-    // const password = req.body.password;
-    // const confirmPassword = req.body.confirmPassword;
-    // const fullName = req.body.fullName.trim();
-    // const email = req.body.email.trim();
-    // const gender = req.body.gender;
-    // const bio = req.body.bio;
-    // const role = "user";
-
     // check username length
     if (username.length < 3) {
         return res.render("signup-form", {
@@ -232,7 +223,7 @@ if (req.file) {
             fullName: createdUser.fullName,
             role: createdUser.role
         };
-        
+
         res.redirect("/explore");
     } catch (error) {
         console.error("Signup error:", error);
