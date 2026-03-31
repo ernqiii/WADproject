@@ -173,7 +173,6 @@ exports.handleSignup = async (req, res) => {
         });
     }
 
-    if (req.file) {
 
 if (req.file) {
     const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
@@ -208,8 +207,7 @@ if (req.file) {
 
     profilePicture = req.file.buffer;
     profilePictureType = req.file.mimetype;
-}
-            }
+    }
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -227,6 +225,13 @@ if (req.file) {
         };
         
         await User.addUser(newUser);
+
+        req.session.user = {
+            username: newUser.username,
+            fullName: newUser.fullName,
+            role: newUser.role
+        }
+        
         res.redirect("/explore");
     } catch (error) {
         console.error("Signup error:", error);
