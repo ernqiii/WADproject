@@ -10,8 +10,8 @@ exports.getInterestDashboard = (req,res)=>{
 }
 exports.getProfile = async (req, res) => {
   try {
-    const userId = req.session.user._id || req.session?.user?.id;
-    const statusFilter = req.query.status;//at first when page first loads -> undefined 
+    const userId = req.session?.user?.id;
+    const statusFilter = req.query.status;//at first when page first loads -> undefined
 
     const searchCriteria = { user: userId };
 
@@ -51,10 +51,10 @@ exports.getProfile = async (req, res) => {
 };
 exports.getEditInterestPage = async (req, res) => {
   const interestId = req.body.interestId;
-  const userId = req.session.user._id||req.session?.user?.id;
-  
+  const userId = req.session?.user?.id;
+
   try {
-    
+
 
     const interest = await interestFormModel.findByInterest_and_User(interestId,userId)
        //the logged in user is the only one who is able to access the interest form * clarify !
@@ -203,7 +203,7 @@ exports.updateInterest = async (req, res) => {
 };
 exports.deleteInterest = async (req, res) => {
   const interestId = req.body.interestId;
-  const userId = req.session.user._id ||req.session?.user?.id;
+  const userId = req.session?.user?.id;
   try {
     const interest = await interestFormModel.findByInterest_and_User(interestId, userId);
 
@@ -229,7 +229,7 @@ exports.deleteInterest = async (req, res) => {
 //Landlord's side 
 exports.getLandlordRequestsPage = async (req, res) => {
   try {
-    const landlordId = req.session.user._id ||req.session?.user?.id;
+    const landlordId = req.session?.user?.id;
     const statusFilter = req.query.status;
 
     const searchCriteria = { landlord: landlordId };
@@ -272,7 +272,7 @@ exports.getLandlordRequestsPage = async (req, res) => {
 };
 exports.updateInterestStatus = async (req, res) => { //to update status for landlords
   try {
-    const landlordId = req.session.user._id||req.session?.user?.id;
+    const landlordId = req.session?.user?.id;
     const interestId = req.body.interestId;
     const status = req.body.status;
     console.log(landlordId)

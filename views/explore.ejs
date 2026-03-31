@@ -129,7 +129,7 @@
                  data-region="<%= listing.region.toLowerCase() %>"
                  data-room-type="<%= listing.room_type %>"
                  data-price="<%= listing.price %>"
-                 data-gender="<%= listing.my_gender %>"
+                 data-gender="<%= listing.gender %>"
                  data-location="<%= listing.location.toLowerCase() %>"
                  data-amenities="<%= listing.amenities ? listing.amenities.join(',') : '' %>">
                 <h3><%= listing.title %><% if (listing.landlord) { %> — <a href="/profile/<%= listing.landlord._id %>"><%= listing.landlord.username %></a><% } %></h3>
@@ -144,7 +144,7 @@
                 <p><strong>Location:</strong> <%= listing.location %></p>
                 <p><strong>Price:</strong> $<%= listing.price %>/month</p>
                 <p><strong>Room Type:</strong> <%= listing.room_type %></p>
-                <p><strong>Preferred Gender:</strong> <%= listing.my_gender %></p>
+                <p><strong>Preferred Gender:</strong> <%= listing.gender %></p>
                 <p><strong>Roommates:</strong> <%= listing.roommates %></p>
                 <p><strong>Description:</strong> <%= listing.description %></p>
 

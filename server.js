@@ -7,7 +7,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const dotenv = require("dotenv");
-const path = require("path");
 
 dotenv.config({ path: "./config.env" });
 const path = require("path");
@@ -17,7 +16,6 @@ server.set("view engine", "ejs");
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
 server.use("/",express.static(path.join(__dirname,"/public")));
-
 
 
 const secret = process.env.SECRET;
