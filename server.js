@@ -46,12 +46,12 @@ server.use("/admin-profile", adminRoutes);
 
 
 // change homepage behavior
-server.get("/", (req, res, next) => {
-    if (req.session.user) {
-        return res.redirect("/explore"); 
-    }
-    next();
-});
+//server.get("/", (req, res, next) => {
+    //if (req.session.user) {
+        //return res.redirect("/explore"); 
+    //}
+    //next();
+//});
 
 async function connectDB() {
     try {
