@@ -17,8 +17,6 @@ server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
 server.use("/",express.static(path.join(__dirname,"/public")));
 
-server.use(express.static(path.join(__dirname, "public")));
-
 const secret = process.env.SECRET;
 server.use(session({
     secret: secret, // sign the session ID cookie. should be a long, random, and secure string, preferably stored in an environment variable
