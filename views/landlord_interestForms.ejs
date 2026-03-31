@@ -24,8 +24,15 @@
     <% interestListingArray.forEach(function(item) { %>
       <hr>
 
-      <h3><%= item.listing ? item.listing.title : "Listing deleted" %></h3>
-
+      <h3>
+        <%= item.listing ? item.listing.title : "Listing deleted" %>
+        <% if (item.senderUser) { %>
+          — Request from
+          <a href="/profile/<%= item.senderUser._id %>">
+            <%= item.senderUser.username %>
+          </a>
+        <% } %>
+      </h3>
       <% if (item.listing) { %>
         <p><strong>Location:</strong> <%= item.listing.location %></p>
         <p><strong>Price:</strong> $<%= item.listing.price %>/month</p>

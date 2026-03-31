@@ -8,7 +8,7 @@
   <h1>My Interest Forms</h1>
   <hr>
 
-  <form action="/profile" method="GET">
+  <form action="/interest/submitted" method="GET">
     <label for="status">Filter by status:</label>
     <select name="status" id="status">
       <option value="" <%= selectedStatus === "" ? "selected" : "" %>>All</option>
@@ -24,28 +24,41 @@
     <% interestListingArray.forEach(function(item) { %>
       <hr>
 
-      <h3><%= item.listing ? item.listing.title : "Listing deleted" %></h3>
+      <h3>
+        <%= item.listing ? item.listing.title : "Listing deleted" %>
+        <% if (item.listing && item.landlordUser) { %>
+          —
+          <a href="/profile/<%= item.landlordUser._id %>">
+            <%= item.landlordUser.username %>
+          </a>
+        <% } %>
+      </h3>
 
       <% if (item.listing) { %>
-        <p><strong>Location:</strong> <%= item.listing.location %></p> <%# listing is gone-> interest form could still be present %>
+        <p><strong>Location:</strong> <%= item.listing.location %></p>
         <p><strong>Price:</strong> $<%= item.listing.price %>/month</p>
+
         <% if (item.listing.photos && item.listing.photos.length > 0) { %>
-            <% item.listing.photos.forEach(function(photo) { %>
-                <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="250" height="250" alt="listing photo">
-            <% }); %>
-   
-             
+          <% item.listing.photos.forEach(function(photo) { %>
+            <img
+              src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>"
+              width="250"
+              height="250"
+              alt="listing photo">
+          <% }); %>
         <% } else { %>
           <p>No image available</p>
         <% } %>
-    <% } %>
+      <% } else { %>
+        <p><em>This listing has been deleted, but your interest form is still saved.</em></p>
+      <% } %>
 
       <p><strong>Name:</strong> <%= item.interest.name %></p>
       <p><strong>Gender:</strong> <%= item.interest.gender %></p>
       <p><strong>Email:</strong> <%= item.interest.email || "Not provided" %></p>
       <p><strong>Phone:</strong> <%= item.interest.phone || "Not provided" %></p>
       <p><strong>Telegram:</strong> <%= item.interest.telegram || "Not provided" %></p>
-      <p><strong>Preferred Contact Method:</strong> <%= item.interest.preferredContactMethod %></p>
+      <p><strong>Preferred Contact Method:</strong> <%= item.interest.preferredContactMethod || "Not selected" %></p>
       <p><strong>Message:</strong> <%= item.interest.message || "No message" %></p>
       <p><strong>Status:</strong> <%= item.interest.status %></p>
 
@@ -54,7 +67,7 @@
       <% } %>
 
       <% if (item.interest.status === "Active") { %>
-        <form action="/interest/submitted/edit" method="POST" >
+        <form action="/interest/submitted/edit" method="POST">
           <input type="hidden" name="interestId" value="<%= item.interest._id %>">
           <button type="submit">Edit</button>
         </form>
@@ -69,6 +82,7 @@
   <% } else { %>
     <p>No interest forms found.</p>
   <% } %>
+
   <hr>
   <a href="/interest">Go back to view Interests Forms</a>
 

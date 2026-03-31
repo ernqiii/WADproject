@@ -1,5 +1,6 @@
 const interestFormModel = require("../models/interestFormModel");
 const listingModel = require("../models/Listing");
+const userModel = require("../models/User");
 
 
 
@@ -9,33 +10,36 @@ exports.getInterestDashboard = (req,res)=>{
 }
 exports.getProfile = async (req, res) => {
   try {
-    const userId = req.session.user._id||req.session?.user?.id; 
-    const statusFilter = req.query.status; //at first when page first loads -> undefined 
+    const userId = req.session.user._id || req.session?.user?.id;
+    const statusFilter = req.query.status;//at first when page first loads -> undefined 
 
     const searchCriteria = { user: userId };
 
-    // only apply filter if status is Active or Closed
     if (statusFilter === "Active" || statusFilter === "Closed") { // when page first loads -> no actove/closed -> show any
       searchCriteria.status = statusFilter; //like { landlord: landlordId, status: statusFilter }
     }
 
     const interests = await interestFormModel
       .findByUser(searchCriteria)
-      .sort({ createdAt: -1 }); // -1 = sort newest to oldest, 1 = sort oldest to newest
-      
-    
+      .sort({ createdAt: -1 });  // -1 = sort newest to oldest, 1 = sort oldest to newest
+
     const interestListingArray = [];
 
     for (const interest of interests) {
       const listing = await listingModel.findByListing(interest.listing);
 
+      let landlordUser = null;
+      if (interest.landlord) {
+        landlordUser = await userModel.findByUserId(interest.landlord);
+      }
+
       interestListingArray.push({
-        interest: interest, // one interest form
-        listing: listing // one model listing
+        interest, // one interest form
+        listing, // one model listing
+        landlordUser
       });
     }
-    console.log("hi")
-    console.log(interests)
+
     res.render("users_interestForms", {
       interestListingArray,
       selectedStatus: statusFilter || "" // need "" -> page first loads -> its undefined -> ensure that theres a value to it 
@@ -58,14 +62,20 @@ exports.getEditInterestPage = async (req, res) => {
     if (!interest) {
       return res.status(404).send("Interest form not found");
     }
-
+    
     const listing = await listingModel.findByListing(interest.listing);
+    let landlordUser = null;
+    if (interest.landlord) {
+      landlordUser = await userModel.findByUserId(interest.landlord);
+    }
 
-    res.render("editPage", {
+    return res.render("editPage", {
       interest,
       listing,
+      landlordUser,
       errors: []
     });
+    
   } catch (error) {
     console.log(error);
     res.status(500).send("Failed to load edit page");
@@ -74,7 +84,7 @@ exports.getEditInterestPage = async (req, res) => {
 
 exports.updateInterest = async (req, res) => {
   const interestId = req.body.interestId;
-  const userId = req.session?.user?._id ||req.session?.user?.id
+  const userId = req.session?.user?._id || req.session?.user?.id;
 
   const {
     name,
@@ -84,14 +94,14 @@ exports.updateInterest = async (req, res) => {
     telegram,
     contact_method,
     message,
-    consent} = req.body;
+    consent
+  } = req.body;
 
   const cleanName = name ? name.trim() : "";
   const cleanEmail = email ? email.trim() : "";
   const cleanPhone = phone ? phone.trim() : "";
   const cleanTelegram = telegram ? telegram.trim() : "";
   const cleanMessage = message ? message.trim() : "";
-  
 
   try {
     const interest = await interestFormModel.findByInterest_and_User(interestId, userId);
@@ -108,6 +118,11 @@ exports.updateInterest = async (req, res) => {
 
     if (!listing) {
       return res.status(404).send("Listing not found");
+    }
+
+    let landlordUser = null;
+    if (interest.landlord) {
+      landlordUser = await userModel.findByUserId(interest.landlord);
     }
 
     const errors = [];
@@ -161,6 +176,7 @@ exports.updateInterest = async (req, res) => {
 
       return res.render("editPage", {
         listing,
+        landlordUser,
         errors,
         interest: updatedInterest
       });
@@ -210,8 +226,7 @@ exports.deleteInterest = async (req, res) => {
   }
 };
 
-
-
+//Landlord's side 
 exports.getLandlordRequestsPage = async (req, res) => {
   try {
     const landlordId = req.session.user._id ||req.session?.user?.id;
@@ -232,11 +247,19 @@ exports.getLandlordRequestsPage = async (req, res) => {
     for (const interest of interests) {
       const listing = await listingModel.findByListing(interest.listing);
 
+      let senderUser = null;
+      if (interest.user) {
+        senderUser = await userModel.findByUserId(interest.user);
+      }
+
       interestListingArray.push({
-        interest: interest,
-        listing: listing
+        interest,
+        listing,
+        senderUser
       });
     }
+    
+    
 
     res.render("landlord_interestForms", {
       interestListingArray,
