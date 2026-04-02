@@ -3,89 +3,159 @@
   <head>
     <title>Wishlist</title>
   </head>
-  <body>
-    <h1>Your wishlist of rooms</h1>
-    <hr>
+  <body bgcolor="#f7f4ef">
+  <center>
+    <br>
+    <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+    <br>
+    <font face="Arial, sans-serif" size="3">
+      <a href="/explore"><font color="#c0392b">Continue Searching!</font></a>
+    </font>
+    <br><br>
+
+    <font face="Georgia, serif" size="5" color="#3a3a3a"><b>Your Wishlist</b></font>
+    <br><br>
 
     <% if (wishlist && listingArray && listingArray.length > 0) { %>
-      <p>Found <%= listingArray.length %> wishlist item(s)</p>
-      <hr>
+      <font face="Arial, sans-serif" size="3" color="#777777">
+        Found <b><%= listingArray.length %></b> wishlist item(s)
+      </font>
+      <br><br>
 
       <% listingArray.forEach(function(item) { %>
         <% const listingItem = item.listing; %>
 
-        <h3><%= listingItem.title %> — <% if (item.landlordUser) { %>
-          <a href="/profile/<%= item.landlordUser._id %>">
-            <%= item.landlordUser.username %>
-          </a>
-        <% } %></h3>
+        <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="660">
+          <tr>
+            <td>
+              <font face="Georgia, serif" size="4" color="#3a3a3a">
+                <b><%= listingItem.title %></b>
+                <% if (item.landlordUser) { %>
+                  &nbsp;&mdash;&nbsp;
+                  <a href="/profile/<%= item.landlordUser._id %>">
+                    <font color="#c0392b"><%= item.landlordUser.username %></font>
+                  </a>
+                <% } %>
+              </font>
+              <br><br>
 
-     
-        <% if (listingItem.photos && listingItem.photos.length > 0) { %>
-            <% listingItem.photos.forEach(function(photo) { %>
-                <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="250" height="250" alt="listing photo">
-            <% }); %>
-   
-             
-        <% } else { %>
-          <p>No image available</p>
-        <% } %>
+              <% if (listingItem.photos && listingItem.photos.length > 0) { %>
+                <% listingItem.photos.forEach(function(photo) { %>
+                  <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="200" height="200" alt="listing photo">
+                <% }); %>
+              <% } else { %>
+                <font face="Arial, sans-serif" size="2" color="#999999">No image available</font>
+              <% } %>
 
+              <br><br>
 
-        <form action="/wishlist/update" method="POST">
-          <input type="hidden" name="listingId" value="<%= listingItem._id %>">
+              <table border="0" cellpadding="4" cellspacing="0">
+                <tr>
+                  <td width="160"><font face="Arial, sans-serif" size="3" color="#555555"><b>Region:</b></font></td>
+                  <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listingItem.region %></font></td>
+                </tr>
+                <tr>
+                  <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Location:</b></font></td>
+                  <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listingItem.location %></font></td>
+                </tr>
+                <tr>
+                  <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Price:</b></font></td>
+                  <td><font face="Arial, sans-serif" size="3" color="#3a3a3a">$<%= listingItem.price %>/month</font></td>
+                </tr>
+                <tr>
+                  <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Room Type:</b></font></td>
+                  <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listingItem.room_type %></font></td>
+                </tr>
+                <tr>
+                  <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Preferred Gender:</b></font></td>
+                  <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listingItem.gender %></font></td>
+                </tr>
+                <tr>
+                  <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Roommates:</b></font></td>
+                  <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listingItem.roommates %></font></td>
+                </tr>
+                <tr>
+                  <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Description:</b></font></td>
+                  <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listingItem.description %></font></td>
+                </tr>
+                <tr>
+                  <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Amenities:</b></font></td>
+                  <td>
+                    <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                      <% if (listingItem.amenities && listingItem.amenities.length > 0) { %>
+                        <%= listingItem.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %>
+                      <% } else { %>
+                        None
+                      <% } %>
+                    </font>
+                  </td>
+                </tr>
+              </table>
 
-          <label for="ranking_<%= listingItem._id %>"><strong>Ranking:</strong></label>
-          <select name="ranking" id="ranking_<%= listingItem._id %>">
-            <option value="">-- Select Ranking --</option>
-            <% for (let i = 1; i <= listingArray.length; i++) { %>
-              <option value="<%= i %>" <%= item.ranking == i ? "selected" : "" %>>
-                <%= i %>
-              </option>
-            <% } %>
-          </select>
+              <br>
 
-          <button type="submit">Save Ranking</button>
-        </form>
+              <form action="/wishlist/update" method="POST">
+                <input type="hidden" name="listingId" value="<%= listingItem._id %>">
+                <font face="Arial, sans-serif" size="3" color="#555555">
+                  <label for="ranking_<%= listingItem._id %>"><b>Ranking:</b></label>
+                  <select name="ranking" id="ranking_<%= listingItem._id %>">
+                    <option value="">-- Select Ranking --</option>
+                    <% for (let i = 1; i <= listingArray.length; i++) { %>
+                      <option value="<%= i %>" <%= item.ranking == i ? "selected" : "" %>><%= i %></option>
+                    <% } %>
+                  </select>
+                  &nbsp;
+                  <input type="submit" value="Save Ranking">
+                </font>
+              </form>
 
-        <p><strong>Region:</strong> <%= listingItem.region %></p>
-        <p><strong>Location:</strong> <%= listingItem.location %></p>
-        <p><strong>Price:</strong> $<%= listingItem.price %>/month</p>
-        
-        <p><strong>Room Type:</strong> <%= listingItem.room_type %></p>
-        <p><strong>Preferred Gender:</strong> <%= listingItem.gender %></p>
-        <p><strong>Roommates:</strong> <%= listingItem.roommates %></p>
-        <p><strong>Description:</strong> <%= listingItem.description %></p>
-        <p><strong>Amenities:</strong>
-        <% if (listingItem.amenities && listingItem.amenities.length > 0) { %>
-          <%= listingItem.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %>
-        <% } else { %>
-          None
-        <% } %>
-      </p>
+              <br>
 
-        
-
-        <form action="/wishlist/delete" method="POST" style="display:inline;">
-          <input type="hidden" name="listingId" value="<%= listingItem._id %>">
-          <button type="submit">Remove from Wishlist</button>
-        </form>
-
-    
-        <p><form action="/wishlist/checkout" method="POST">
-            <input type="hidden" name="listingId" value="<%= listingItem._id %>">
-            <button type="submit">Proceed to Checkout</button>
-      </form></p>
-      <hr>
+              <table border="0" cellpadding="0" cellspacing="8">
+                <tr>
+                  <td>
+                    <form action="/wishlist/delete" method="POST">
+                      <input type="hidden" name="listingId" value="<%= listingItem._id %>">
+                      <input type="submit" value="Remove from Wishlist">
+                    </form>
+                  </td>
+                  <td>
+                    <form action="/wishlist/checkout" method="POST">
+                      <input type="hidden" name="listingId" value="<%= listingItem._id %>">
+                      <table border="0" cellpadding="8" bgcolor="#c0392b">
+                        <tr>
+                          <td align="center">
+                            <input type="submit" value="Proceed to Checkout" style="background:transparent;border:none;color:#ffffff;font-size:13px;cursor:pointer;font-weight:bold;">
+                          </td>
+                        </tr>
+                      </table>
+                    </form>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <br>
       <% }) %>
 
-      
-
     <% } else { %>
-      <h3>Nothing in your wishlist yet</h3>
+      <table border="0" cellpadding="28" cellspacing="0" bgcolor="#ffffff" width="440">
+        <tr>
+          <td align="center">
+            <font face="Arial, sans-serif" size="4">💔</font>
+            <br>
+            <font face="Georgia, serif" size="4" color="#3a3a3a"><b>Nothing in your wishlist yet</b></font>
+            <br><br>
+            <a href="/explore"><font face="Arial, sans-serif" size="3" color="#c0392b">Start exploring listings!</font></a>
+          </td>
+        </tr>
+      </table>
     <% } %>
 
-    <br>
-    <a href="/explore">Continue Searching!</a>
+    <br><br>
+    <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+    <br><br>
+  </center>
   </body>
 </html>

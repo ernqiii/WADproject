@@ -20,7 +20,7 @@ exports.createReview = async (req, res) => {
         );
 
         if (existingReview) {
-            return res.send("You have already reviewed this user.");
+            return res.redirect(`/profile/${reviewedUserId}?error=already_reviewed`);
         }
 
         await Review.addReview({

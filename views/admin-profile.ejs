@@ -4,153 +4,227 @@
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
 </head>
-<body>
+<body bgcolor="#f7f4ef">
+<center>
+    <br>
+    <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+    <br>
+    <font face="Arial, sans-serif" size="2" color="#c0392b"><b>Admin Dashboard</b></font>
+    <br><br>
+</center>
 
-    <table width="100%">
-        <tr>
-            <td><h1>Welcome, admin: <%= user.username %>!</h1></td>
-            <td align="right"><a href="/logout">Logout</a></td>
-        </tr>
-    </table>
+<table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="800" align="center">
+    <tr>
+        <td>
+            <table border="0" cellpadding="0" width="100%">
+                <tr>
+                    <td>
+                        <font face="Georgia, serif" size="4" color="#3a3a3a"><b>Welcome, <%= user.username %>!</b></font>
+                    </td>
+                    <td align="right">
+                        <font face="Arial, sans-serif" size="3">
+                            <a href="/logout"><font color="#c0392b">Logout</font></a>
+                        </font>
+                    </td>
+                </tr>
+            </table>
 
-    <hr>
+            <hr color="#eeeeee" size="1">
+            <br>
 
-    <h2>Search Users</h2>
-    <form action="/admin-profile/search" method="POST">
-        <input type="text" name="username" placeholder="Search by username" value="<%= searchTerm %>">
-        <button type="submit">Search</button>
-    </form>
+            <!-- Search Users -->
+            <font face="Georgia, serif" size="4" color="#3a3a3a"><b>Search Users</b></font>
+            <br><br>
+            <form action="/admin-profile/search" method="POST">
+                <input type="text" name="username" placeholder="Search by username" value="<%= searchTerm %>" size="28">
+                &nbsp;
+                <input type="submit" value="Search">
+            </form>
 
-    <% if (results !== null) { %>
-        <% if (results.length === 0) { %>
-            <p>No users found for "<%= searchTerm %>".</p>
-        <% } else { %>
-            <h3>Search Results for "<%= searchTerm %>"</h3>
-            <% results.forEach(function(result) { %>
-                <% const u = result.u; %>
-                <h4>
-                    User: <a href="/profile/<%= u._id %>"><%= u.username %></a>
-                    <form action="/admin-profile/delete-user/<%= u._id %>" method="POST" style="display:inline;">
-                        <button type="submit" onclick="return confirm('Delete user <%= u.username %> and all their data?');">Delete User</button>
-                    </form>
-                </h4>
-                <p><strong>Email:</strong> <%= u.email %> | <strong>Full Name:</strong> <%= u.fullName %> | <strong>Gender:</strong> <%= u.gender %> | <strong>Phone:</strong> <%= u.phone %></p>
-                <p><strong>Bio:</strong> <%= u.bio || "—" %></p>
-
-                <strong>Listings (<%= result.listings.length %>):</strong>
-                <% if (result.listings.length === 0) { %>
-                    <p>No listings.</p>
+            <% if (results !== null) { %>
+                <br>
+                <% if (results.length === 0) { %>
+                    <font face="Arial, sans-serif" size="3" color="#777777">No users found for "<%= searchTerm %>".</font>
                 <% } else { %>
-                    <% result.listings.forEach(function(listing) { %>
-                        <p>
-                            &nbsp;&nbsp;<a href="/listing/<%= listing._id %>"><%= listing.title %></a>
-                            — $<%= listing.price %>/month — <%= listing.region %>
-                            <form action="/admin-profile/delete-listing/<%= listing._id %>" method="POST" style="display:inline;">
-                                <button type="submit" onclick="return confirm('Delete this listing?');">Delete Listing</button>
+                    <font face="Georgia, serif" size="3" color="#3a3a3a"><b>Results for "<%= searchTerm %>"</b></font>
+                    <br><br>
+                    <% results.forEach(function(result) { %>
+                        <% const u = result.u; %>
+                        <table border="0" cellpadding="12" cellspacing="0" bgcolor="#f7f4ef" width="100%">
+                            <tr>
+                                <td>
+                                    <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                                        <b><a href="/profile/<%= u._id %>"><font color="#c0392b"><%= u.username %></font></a></b>
+                                        &nbsp;&nbsp;
+                                        <form action="/admin-profile/delete-user/<%= u._id %>" method="POST" style="display:inline;">
+                                            <input type="submit" value="Delete User" onclick="return confirm('Delete user <%= u.username %> and all their data?');">
+                                        </form>
+                                    </font>
+                                    <br>
+                                    <font face="Arial, sans-serif" size="2" color="#555555">
+                                        <b>Email:</b> <%= u.email %> &nbsp;|&nbsp;
+                                        <b>Full Name:</b> <%= u.fullName %> &nbsp;|&nbsp;
+                                        <b>Gender:</b> <%= u.gender %>
+                                    </font>
+                                    <br>
+                                    <font face="Arial, sans-serif" size="2" color="#777777">
+                                        <b>Bio:</b> <%= u.bio || "—" %>
+                                    </font>
+                                    <br><br>
+
+                                    <font face="Arial, sans-serif" size="2" color="#3a3a3a">
+                                        <b>Listings (<%= result.listings.length %>):</b>
+                                    </font>
+                                    <% if (result.listings.length === 0) { %>
+                                        <font face="Arial, sans-serif" size="2" color="#999999"> None</font>
+                                    <% } else { %>
+                                        <% result.listings.forEach(function(listing) { %>
+                                            <br>
+                                            <font face="Arial, sans-serif" size="2" color="#555555">
+                                                &nbsp;&nbsp;<a href="/listing/<%= listing._id %>"><font color="#c0392b"><%= listing.title %></font></a>
+                                                &mdash; $<%= listing.price %>/month &mdash; <%= listing.region %>
+                                                &nbsp;
+                                                <form action="/admin-profile/delete-listing/<%= listing._id %>" method="POST" style="display:inline;">
+                                                    <input type="submit" value="Delete" onclick="return confirm('Delete this listing?');">
+                                                </form>
+                                            </font>
+                                            <% if (listing.comments && listing.comments.length > 0) { %>
+                                                <ul>
+                                                    <% listing.comments.forEach(function(comment) { %>
+                                                        <li>
+                                                            <font face="Arial, sans-serif" size="2" color="#555555">
+                                                                "<%= comment.text %>"
+                                                                <form action="/admin-profile/delete-comment/<%= listing._id %>/<%= comment._id %>" method="POST" style="display:inline;">
+                                                                    <input type="submit" value="Delete Comment" onclick="return confirm('Delete this comment?');">
+                                                                </form>
+                                                            </font>
+                                                        </li>
+                                                    <% }) %>
+                                                </ul>
+                                            <% } %>
+                                        <% }) %>
+                                    <% } %>
+                                    <br>
+                                    <font face="Arial, sans-serif" size="2" color="#3a3a3a">
+                                        <b>Reviews Received (<%= result.reviews.length %>):</b>
+                                    </font>
+                                    <% if (result.reviews.length === 0) { %>
+                                        <font face="Arial, sans-serif" size="2" color="#999999"> None</font>
+                                    <% } else { %>
+                                        <% result.reviews.forEach(function(review) { %>
+                                            <br>
+                                            <font face="Arial, sans-serif" size="2" color="#555555">
+                                                &nbsp;&nbsp;From: <%= review.reviewerId ? review.reviewerId.username : 'Deleted User' %>
+                                                &mdash; Rating: <%= review.rating %>/5
+                                                &mdash; "<%= review.comment || 'No comment' %>"
+                                                &nbsp;
+                                                <form action="/admin-profile/delete-review/<%= review._id %>" method="POST" style="display:inline;">
+                                                    <input type="submit" value="Delete Review" onclick="return confirm('Delete this review?');">
+                                                </form>
+                                            </font>
+                                        <% }) %>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        </table>
+                        <br>
+                    <% }) %>
+                <% } %>
+            <% } %>
+
+            <hr color="#eeeeee" size="1">
+            <br>
+
+            <!-- Manage Users -->
+            <font face="Georgia, serif" size="4" color="#3a3a3a"><b>Manage Users</b></font>
+            <br><br>
+            <% if (allUsers.length === 0) { %>
+                <font face="Arial, sans-serif" size="3" color="#777777">No users found.</font>
+            <% } else { %>
+                <% allUsers.forEach(function(u) { %>
+                    <% if (u.role !== 'admin') { %>
+                        <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                            <b><a href="/profile/<%= u._id %>"><font color="#c0392b"><%= u.username %></font></a></b>
+                            (<%= u.email %>)
+                            &nbsp;
+                            <form action="/admin-profile/delete-user/<%= u._id %>" method="POST" style="display:inline;">
+                                <input type="submit" value="Delete User" onclick="return confirm('Delete user <%= u.username %> and all their data?');">
                             </form>
-                        </p>
-                        <% if (listing.comments && listing.comments.length > 0) { %>
-                            <ul>
-                                <% listing.comments.forEach(function(comment) { %>
-                                    <li>
+                        </font>
+                        <br>
+                    <% } %>
+                <% }) %>
+            <% } %>
+
+            <br>
+            <hr color="#eeeeee" size="1">
+            <br>
+
+            <!-- Manage Listings -->
+            <font face="Georgia, serif" size="4" color="#3a3a3a"><b>Manage Listings</b></font>
+            <br><br>
+            <% if (allListings.length === 0) { %>
+                <font face="Arial, sans-serif" size="3" color="#777777">No listings found.</font>
+            <% } else { %>
+                <% allListings.forEach(function(listing) { %>
+                    <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                        <b><a href="/listing/<%= listing._id %>"><font color="#c0392b"><%= listing.title %></font></a></b>
+                        &mdash; by <%= listing.landlord ? listing.landlord.username : 'Deleted User' %>
+                        &mdash; $<%= listing.price %>/month
+                        &nbsp;
+                        <form action="/admin-profile/delete-listing/<%= listing._id %>" method="POST" style="display:inline;">
+                            <input type="submit" value="Delete Listing" onclick="return confirm('Delete this listing?');">
+                        </form>
+                    </font>
+                    <% if (listing.comments && listing.comments.length > 0) { %>
+                        <ul>
+                            <% listing.comments.forEach(function(comment) { %>
+                                <li>
+                                    <font face="Arial, sans-serif" size="2" color="#555555">
                                         "<%= comment.text %>"
                                         <form action="/admin-profile/delete-comment/<%= listing._id %>/<%= comment._id %>" method="POST" style="display:inline;">
-                                            <button type="submit" onclick="return confirm('Delete this comment?');">Delete Comment</button>
+                                            <input type="submit" value="Delete Comment" onclick="return confirm('Delete this comment?');">
                                         </form>
-                                    </li>
-                                <% }) %>
-                            </ul>
-                        <% } %>
-                    <% }) %>
-                <% } %>
-
-                <strong>Reviews Received (<%= result.reviews.length %>):</strong>
-                <% if (result.reviews.length === 0) { %>
-                    <p>No reviews.</p>
-                <% } else { %>
-                    <% result.reviews.forEach(function(review) { %>
-                        <p>
-                            &nbsp;&nbsp;From: <%= review.reviewerId ? review.reviewerId.username : 'Deleted User' %>
-                            — Rating: <%= review.rating %>/5
-                            — "<%= review.comment || 'No comment' %>"
-                            <form action="/admin-profile/delete-review/<%= review._id %>" method="POST" style="display:inline;">
-                                <button type="submit" onclick="return confirm('Delete this review?');">Delete Review</button>
-                            </form>
-                        </p>
-                    <% }) %>
-                <% } %>
-                <hr>
-            <% }) %>
-        <% } %>
-    <% } %>
-
-    <hr>
-
-    <h2>Manage Users</h2>
-    <% if (allUsers.length === 0) { %>
-        <p>No users found.</p>
-    <% } else { %>
-        <% allUsers.forEach(function(u) { %>
-            <% if (u.role !== 'admin') { %>
-                <p>
-                    <strong><a href="/profile/<%= u._id %>"><%= u.username %></a></strong>
-                    (<%= u.email %>)
-                    <form action="/admin-profile/delete-user/<%= u._id %>" method="POST" style="display:inline;">
-                        <button type="submit" onclick="return confirm('Delete user <%= u.username %> and all their data?');">Delete User</button>
-                    </form>
-                </p>
+                                    </font>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } %>
+                    <br>
+                <% }) %>
             <% } %>
-        <% }) %>
-    <% } %>
 
-    <hr>
+            <hr color="#eeeeee" size="1">
+            <br>
 
-    <h2>Manage Listings</h2>
-    <% if (allListings.length === 0) { %>
-        <p>No listings found.</p>
-    <% } else { %>
-        <% allListings.forEach(function(listing) { %>
-            <p>
-                <strong><a href="/listing/<%= listing._id %>"><%= listing.title %></a></strong>
-                — by <%= listing.landlord ? listing.landlord.username : 'Deleted User' %>
-                — $<%= listing.price %>/month
-                <form action="/admin-profile/delete-listing/<%= listing._id %>" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Delete this listing?');">Delete Listing</button>
-                </form>
-            </p>
-            <% if (listing.comments && listing.comments.length > 0) { %>
-                <ul>
-                    <% listing.comments.forEach(function(comment) { %>
-                        <li>
-                            "<%= comment.text %>"
-                            <form action="/admin-profile/delete-comment/<%= listing._id %>/<%= comment._id %>" method="POST" style="display:inline;">
-                                <button type="submit" onclick="return confirm('Delete this comment?');">Delete Comment</button>
-                            </form>
-                        </li>
-                    <% }) %>
-                </ul>
+            <!-- Manage Reviews -->
+            <font face="Georgia, serif" size="4" color="#3a3a3a"><b>Manage Reviews</b></font>
+            <br><br>
+            <% if (allReviews.length === 0) { %>
+                <font face="Arial, sans-serif" size="3" color="#777777">No reviews found.</font>
+            <% } else { %>
+                <% allReviews.forEach(function(review) { %>
+                    <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                        <b>By:</b> <%= review.reviewerId ? review.reviewerId.username : 'Deleted User' %>
+                        &rarr; <b>On:</b> <%= review.reviewedUserId ? review.reviewedUserId.username : 'Deleted User' %>
+                        &mdash; Rating: <%= review.rating %>/5
+                        &mdash; "<%= review.comment || 'No comment' %>"
+                        &nbsp;
+                        <form action="/admin-profile/delete-review/<%= review._id %>" method="POST" style="display:inline;">
+                            <input type="submit" value="Delete Review" onclick="return confirm('Delete this review?');">
+                        </form>
+                    </font>
+                    <br>
+                <% }) %>
             <% } %>
-        <% }) %>
-    <% } %>
+        </td>
+    </tr>
+</table>
 
-    <hr>
-
-    <h2>Manage Reviews</h2>
-    <% if (allReviews.length === 0) { %>
-        <p>No reviews found.</p>
-    <% } else { %>
-        <% allReviews.forEach(function(review) { %>
-            <p>
-                <strong>By:</strong> <%= review.reviewerId ? review.reviewerId.username : 'Deleted User' %>
-                → <strong>On:</strong> <%= review.reviewedUserId ? review.reviewedUserId.username : 'Deleted User' %>
-                — Rating: <%= review.rating %>/5
-                — "<%= review.comment || 'No comment' %>"
-                <form action="/admin-profile/delete-review/<%= review._id %>" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Delete this review?');">Delete Review</button>
-                </form>
-            </p>
-        <% }) %>
-    <% } %>
-
+<center>
+    <br><br>
+    <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+    <br><br>
+</center>
 </body>
 </html>

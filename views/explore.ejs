@@ -3,125 +3,150 @@
 <head>
     <title>Explore Rooms</title>
 </head>
-<body>
-
-    <h1>Student Housing</h1>
+<body bgcolor="#f7f4ef">
+<center>
+    <br>
+    <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+    <br>
 
     <% if (user) { %>
-        <p>
-            Hello, <strong><%= user.username %></strong> |
-            <a href="/profile">Go to Profile</a> |
-            <a href="/wishlist">Go to Wishlist</a> |
-            <a href="/logout">Logout</a>
-
-        </p>
+        <font face="Arial, sans-serif" size="3" color="#555555">
+            Hello, <b><%= user.username %></b> &nbsp;|&nbsp;
+            <a href="/profile"><font color="#c0392b">Profile</font></a> &nbsp;|&nbsp;
+            <a href="/wishlist"><font color="#c0392b">Wishlist</font></a> &nbsp;|&nbsp;
+            <a href="/logout"><font color="#c0392b">Logout</font></a>
+        </font>
     <% } %>
 
-    <hr>
+    <br><br>
 
-    <h3>Filters</h3>
+    <font face="Georgia, serif" size="5" color="#3a3a3a"><b>Student Housing</b></font>
+    <br><br>
 
-    <div style="display:flex; flex-direction:column; gap:10px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-            <div>
-                <label>Search location:</label>
-                <input type="text" id="location">
-            </div>
-            <button id="search-btn" onclick="showListings()">Search</button>
-            <button id="toggle-filters-btn" onclick="toggleMoreFilters()">More Filters</button>
-        </div>
+    <!-- Filters -->
+    <table border="0" cellpadding="12" cellspacing="0" bgcolor="#ffffff" width="720">
+        <tr>
+            <td>
+                <font face="Georgia, serif" size="3" color="#3a3a3a"><b>Filters</b></font>
+                <br><br>
 
-        <div id="more-filters" style="display:none; flex-direction:column; gap:10px;">
-            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-                <div>
-                    <label>Region:</label>
-                    <select id="region">
-                        <option value="">All Regions</option>
-                        <option value="North">North</option>
-                        <option value="North-West">North-West</option>
-                        <option value="North-East">North-East</option>
-                        <option value="East">East</option>
-                        <option value="South">South</option>
-                        <option value="South-West">South-West</option>
-                        <option value="South-East">South-East</option>
-                        <option value="West">West</option>
-                        <option value="Central">Central</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label>Room Type:</label>
-                    <select id="type">
-                        <option value="">All</option>
-                        <option value="Private Room">Private Room</option>
-                        <option value="Shared Room">Shared Room</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label>Gender:</label>
-                    <select id="gender">
-                        <option value="">All</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label>Min Price:</label>
-                    <input type="number" id="min-price">
-                </div>
-
-                <div>
-                    <label>Max Price:</label>
-                    <input type="number" id="price">
-                </div>
-
-                <div>
-                    <label>Sort by Price:</label>
-                    <select id="sort-price">
-                        <option value="">Default</option>
-                        <option value="asc">Lowest to Highest</option>
-                        <option value="desc">Highest to Lowest</option>
-                    </select>
-                </div>
-            </div>
-
-            <div>
-                <label>Amenities:</label>
-                <table>
+                <table border="0" cellpadding="4" cellspacing="0">
                     <tr>
-                        <td><label><input type="checkbox" class="amenity-filter" value="wifi"> Wifi</label></td>
-                        <td><label><input type="checkbox" class="amenity-filter" value="parking"> Parking</label></td>
-                    </tr>
-                    <tr>
-                        <td><label><input type="checkbox" class="amenity-filter" value="ac"> Air Conditioning</label></td>
-                        <td><label><input type="checkbox" class="amenity-filter" value="washing_machine"> Washing Machine</label></td>
-                    </tr>
-                    <tr>
-                        <td><label><input type="checkbox" class="amenity-filter" value="dryer"> Dryer</label></td>
-                        <td><label><input type="checkbox" class="amenity-filter" value="refrigerator"> Refrigerator</label></td>
-                    </tr>
-                    <tr>
-                        <td><label><input type="checkbox" class="amenity-filter" value="microwave"> Microwave</label></td>
-                        <td><label><input type="checkbox" class="amenity-filter" value="fan"> Ceiling Fan</label></td>
-                    </tr>
-                    <tr>
-                        <td><label><input type="checkbox" class="amenity-filter" value="wardrobe"> Wardrobe</label></td>
-                        <td><label><input type="checkbox" class="amenity-filter" value="iron"> Iron</label></td>
+                        <td>
+                            <font face="Arial, sans-serif" size="3" color="#555555"><label>Search location:</label></font><br>
+                            <input type="text" id="location" size="22">
+                        </td>
+                        <td width="12"></td>
+                        <td valign="bottom">
+                            <input type="button" id="search-btn" value="Search" onclick="showListings()">
+                        </td>
+                        <td width="8"></td>
+                        <td valign="bottom">
+                            <input type="button" id="toggle-filters-btn" value="More Filters" onclick="toggleMoreFilters()">
+                        </td>
                     </tr>
                 </table>
-            </div>
 
-            <div>
-                <button onclick="resetFilters()">Reset Filters</button>
-            </div>
-        </div>
-    </div>
-    
-    <hr>
+                <div id="more-filters" style="display:none;">
+                    <br>
+                    <table border="0" cellpadding="6" cellspacing="0">
+                        <tr>
+                            <td>
+                                <font face="Arial, sans-serif" size="3" color="#555555"><label>Region:</label></font><br>
+                                <select id="region">
+                                    <option value="">All Regions</option>
+                                    <option value="North">North</option>
+                                    <option value="North-West">North-West</option>
+                                    <option value="North-East">North-East</option>
+                                    <option value="East">East</option>
+                                    <option value="South">South</option>
+                                    <option value="South-West">South-West</option>
+                                    <option value="South-East">South-East</option>
+                                    <option value="West">West</option>
+                                    <option value="Central">Central</option>
+                                </select>
+                            </td>
+                            <td width="12"></td>
+                            <td>
+                                <font face="Arial, sans-serif" size="3" color="#555555"><label>Room Type:</label></font><br>
+                                <select id="type">
+                                    <option value="">All</option>
+                                    <option value="Private Room">Private Room</option>
+                                    <option value="Shared Room">Shared Room</option>
+                                </select>
+                            </td>
+                            <td width="12"></td>
+                            <td>
+                                <font face="Arial, sans-serif" size="3" color="#555555"><label>Gender:</label></font><br>
+                                <select id="gender">
+                                    <option value="">All</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><td colspan="5"><br></td></tr>
+                        <tr>
+                            <td>
+                                <font face="Arial, sans-serif" size="3" color="#555555"><label>Min Price:</label></font><br>
+                                <input type="number" id="min-price" size="8">
+                            </td>
+                            <td width="12"></td>
+                            <td>
+                                <font face="Arial, sans-serif" size="3" color="#555555"><label>Max Price:</label></font><br>
+                                <input type="number" id="price" size="8">
+                            </td>
+                            <td width="12"></td>
+                            <td>
+                                <font face="Arial, sans-serif" size="3" color="#555555"><label>Sort by Price:</label></font><br>
+                                <select id="sort-price">
+                                    <option value="">Default</option>
+                                    <option value="asc">Lowest to Highest</option>
+                                    <option value="desc">Highest to Lowest</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><td colspan="5"><br></td></tr>
+                        <tr>
+                            <td colspan="5">
+                                <font face="Arial, sans-serif" size="3" color="#555555"><b>Amenities:</b></font><br>
+                                <table border="0" cellpadding="4">
+                                    <tr>
+                                        <td><label><input type="checkbox" class="amenity-filter" value="wifi"> <font face="Arial, sans-serif" size="3">Wifi</font></label></td>
+                                        <td><label><input type="checkbox" class="amenity-filter" value="parking"> <font face="Arial, sans-serif" size="3">Parking</font></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label><input type="checkbox" class="amenity-filter" value="ac"> <font face="Arial, sans-serif" size="3">Air Conditioning</font></label></td>
+                                        <td><label><input type="checkbox" class="amenity-filter" value="washing_machine"> <font face="Arial, sans-serif" size="3">Washing Machine</font></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label><input type="checkbox" class="amenity-filter" value="dryer"> <font face="Arial, sans-serif" size="3">Dryer</font></label></td>
+                                        <td><label><input type="checkbox" class="amenity-filter" value="refrigerator"> <font face="Arial, sans-serif" size="3">Refrigerator</font></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label><input type="checkbox" class="amenity-filter" value="microwave"> <font face="Arial, sans-serif" size="3">Microwave</font></label></td>
+                                        <td><label><input type="checkbox" class="amenity-filter" value="fan"> <font face="Arial, sans-serif" size="3">Ceiling Fan</font></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label><input type="checkbox" class="amenity-filter" value="wardrobe"> <font face="Arial, sans-serif" size="3">Wardrobe</font></label></td>
+                                        <td><label><input type="checkbox" class="amenity-filter" value="iron"> <font face="Arial, sans-serif" size="3">Iron</font></label></td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <input type="button" value="Reset Filters" onclick="resetFilters()">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <br>
+
+    <!-- Listings -->
     <div id="listings">
-        <p id="no-results" style="display:<%= listings.length === 0 ? '' : 'none' %>;">No listings found.</p>
+        <font face="Arial, sans-serif" size="3" color="#777777" id="no-results" style="display:<%= listings.length === 0 ? '' : 'none' %>;">No listings found.</font>
 
         <% for (let i = 0; i < listings.length; i++) { %>
             <% let listing = listings[i]; %>
@@ -132,282 +157,349 @@
                  data-gender="<%= listing.gender %>"
                  data-location="<%= listing.location.toLowerCase() %>"
                  data-amenities="<%= listing.amenities ? listing.amenities.join(',') : '' %>">
-                <h3><%= listing.title %><% if (listing.landlord) { %> — <a href="/profile/<%= listing.landlord._id %>"><%= listing.landlord.username %></a><% } %></h3>
 
-                <% if (listing.photos && listing.photos.length > 0) { %>
-                    <% listing.photos.forEach(function(photo) { %>
-                        <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="250" height="250" alt="listing photo">
-                    <% }); %>
-                <% } %>
+                <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="720">
+                    <tr>
+                        <td>
+                            <font face="Georgia, serif" size="4" color="#3a3a3a">
+                                <b><%= listing.title %></b>
+                                <% if (listing.landlord) { %>
+                                    &nbsp;&mdash;&nbsp;
+                                    <a href="/profile/<%= listing.landlord._id %>">
+                                        <font face="Arial, sans-serif" size="3" color="#c0392b"><%= listing.landlord.username %></font>
+                                    </a>
+                                <% } %>
+                            </font>
+                            <br><br>
 
-                <p><strong>Region:</strong> <%= listing.region %></p>
-                <p><strong>Location:</strong> <%= listing.location %></p>
-                <p><strong>Price:</strong> $<%= listing.price %>/month</p>
-                <p><strong>Room Type:</strong> <%= listing.room_type %></p>
-                <p><strong>Preferred Gender:</strong> <%= listing.gender %></p>
-                <p><strong>Roommates:</strong> <%= listing.roommates %></p>
-                <p><strong>Description:</strong> <%= listing.description %></p>
+                            <% if (listing.photos && listing.photos.length > 0) { %>
+                                <% listing.photos.forEach(function(photo) { %>
+                                    <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" width="200" height="200" alt="listing photo">
+                                <% }); %>
+                                <br><br>
+                            <% } %>
 
-                <% if (listing.amenities && listing.amenities.length > 0) { %>
-                    <p><strong>Amenities:</strong> <%= listing.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %></p>
-                <% } %>
+                            <table border="0" cellpadding="4" cellspacing="0">
+                                <tr>
+                                    <td width="160"><font face="Arial, sans-serif" size="3" color="#555555"><b>Region:</b></font></td>
+                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.region %></font></td>
+                                </tr>
+                                <tr>
+                                    <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Location:</b></font></td>
+                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.location %></font></td>
+                                </tr>
+                                <tr>
+                                    <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Price:</b></font></td>
+                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a">$<%= listing.price %>/month</font></td>
+                                </tr>
+                                <tr>
+                                    <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Room Type:</b></font></td>
+                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.room_type %></font></td>
+                                </tr>
+                                <tr>
+                                    <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Preferred Gender:</b></font></td>
+                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.gender %></font></td>
+                                </tr>
+                                <tr>
+                                    <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Roommates:</b></font></td>
+                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.roommates %></font></td>
+                                </tr>
+                                <tr>
+                                    <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Description:</b></font></td>
+                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.description %></font></td>
+                                </tr>
+                                <% if (listing.amenities && listing.amenities.length > 0) { %>
+                                <tr>
+                                    <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Amenities:</b></font></td>
+                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %></font></td>
+                                </tr>
+                                <% } %>
+                            </table>
 
-                <!-- Like Button -->
-                <button id="like-btn-<%= listing._id %>" onclick="toggleLike('<%= listing._id %>')">
-                    <% if (user && listing.likes.some(id => id.toString() === user.id.toString())) { %>
-                        Unlike (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
-                    <% } else { %>
-                        Like (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
-                    <% } %>
-                </button>
+                            <br>
 
-                <!-- Comment Button -->
-                <button onclick="toggleComments('<%= listing._id %>')">
-                    Comments (<span id="comment-count-<%= listing._id %>"><%= listing.comments.length %></span>)
-                </button>
+                            <!-- Action Buttons -->
+                            <table border="0" cellpadding="0" cellspacing="6">
+                                <tr>
+                                    <td>
+                                        <button id="like-btn-<%= listing._id %>" onclick="toggleLike('<%= listing._id %>')">
+                                            <% if (user && listing.likes.some(id => id.toString() === user.id.toString())) { %>
+                                                Unlike (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
+                                            <% } else { %>
+                                                Like (<span id="like-count-<%= listing._id %>"><%= listing.likes.length %></span>)
+                                            <% } %>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button onclick="toggleComments('<%= listing._id %>')">
+                                            Comments (<span id="comment-count-<%= listing._id %>"><%= listing.comments.length %></span>)
+                                        </button>
+                                    </td>
+                                    <% if (!user || listing.landlord._id.toString() !== user.id.toString()) { %>
+                                        <% const wishlisted = wishlistedIds.includes(listing._id.toString()); %>
+                                        <td>
+                                            <button id="wishlist-btn-<%= listing._id %>"
+                                                <% if (wishlisted) { %>disabled<% } %>
+                                                onclick="toggleWishlist('<%= listing._id %>')">
+                                                <%= wishlisted ? 'Wishlisted' : 'Wishlist' %>
+                                            </button>
+                                        </td>
+                                    <% } %>
+                                </tr>
+                            </table>
 
-                <!-- Wishlist Button -->
-                <% if (!user || listing.landlord._id.toString() !== user.id.toString()) { %>
-                    <% const wishlisted = wishlistedIds.includes(listing._id.toString()); %>
-                    <button id="wishlist-btn-<%= listing._id %>"
-                        <% if (wishlisted) { %>disabled<% } %>
-                        onclick="toggleWishlist('<%= listing._id %>')">
-                        <%= wishlisted ? 'Wishlisted' : 'Wishlist' %>
-                    </button>
-                <% } %>
+                            <!-- Comments Section (hidden by default) -->
+                            <div id="comments-<%= listing._id %>" style="display:none;">
+                                <br>
+                                <font face="Georgia, serif" size="3" color="#3a3a3a"><b>Comments</b></font>
+                                <br><br>
+                                <div id="comments-list-<%= listing._id %>">
+                                    <% for (let j = 0; j < listing.comments.length; j++) { %>
+                                        <% let comment = listing.comments[j]; %>
+                                        <div id="comment-<%= comment._id %>">
+                                            <table border="0" cellpadding="8" cellspacing="0" bgcolor="#f7f4ef" width="100%">
+                                                <tr>
+                                                    <td>
+                                                        <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                                                            <b><%= comment.user ? comment.user.username : 'Unknown' %></b>
+                                                        </font>
+                                                        <font face="Arial, sans-serif" size="2" color="#999999">
+                                                            &mdash; <%= new Date(comment.createdAt).toLocaleString() %>
+                                                        </font>
+                                                        <br>
+                                                        <font face="Arial, sans-serif" size="3" color="#555555" id="comment-text-<%= comment._id %>"><%= comment.text %></font>
 
-                <!-- Comments Section (hidden by default) -->
-                <div id="comments-<%= listing._id %>" style="display:none; margin-top:10px;">
-                    <h4>Comments</h4>
-                    <div id="comments-list-<%= listing._id %>">
-                        <% for (let j = 0; j < listing.comments.length; j++) { %>
-                            <% let comment = listing.comments[j]; %>
-                            <div id="comment-<%= comment._id %>" style="margin-bottom:8px; padding:5px; border-bottom:1px solid #ccc;">
-                                <strong><%= comment.user ? comment.user.username : 'Unknown' %></strong>
-                                <span style="font-size:0.8em; color:gray;">
-                                    — <%= new Date(comment.createdAt).toLocaleString() %>
-                                </span>
-                                <p id="comment-text-<%= comment._id %>"><%= comment.text %></p>
+                                                        <% if (user && comment.user && comment.user._id.toString() === user.id.toString()) { %>
+                                                            <br>
+                                                            <button onclick="editComment('<%= listing._id %>', '<%= comment._id %>')">Edit</button>
+                                                            <button onclick="deleteComment('<%= listing._id %>', '<%= comment._id %>')">Delete</button>
+                                                        <% } %>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <br>
+                                        </div>
+                                    <% } %>
+                                </div>
 
-                                <% if (user && comment.user && comment.user._id.toString() === user.id.toString()) { %>
-                                    <button onclick="editComment('<%= listing._id %>', '<%= comment._id %>')">Edit</button>
-                                    <button onclick="deleteComment('<%= listing._id %>', '<%= comment._id %>')">Delete</button>
+                                <% if (user) { %>
+                                    <textarea id="comment-input-<%= listing._id %>" placeholder="Write a comment..." rows="2" cols="60"></textarea>
+                                    <br>
+                                    <button onclick="addComment('<%= listing._id %>')">Submit Comment</button>
                                 <% } %>
                             </div>
-                        <% } %>
-                    </div>
-
-                    <% if (user) { %>
-                        <textarea id="comment-input-<%= listing._id %>" placeholder="Write a comment..." rows="2" style="width:100%;"></textarea>
-                        <button onclick="addComment('<%= listing._id %>')">Submit Comment</button>
-                    <% } %>
-                </div>
-                <hr>
+                        </td>
+                    </tr>
+                </table>
+                <br>
             </div>
         <% } %>
     </div>
 
-    <script>
-        const originalOrder = Array.from(document.querySelectorAll('.listing'));
+    <br>
+    <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+    <br><br>
+</center>
 
-        function toggleMoreFilters() {
-            let panel = document.getElementById('more-filters');
-            let toggleBtn = document.getElementById('toggle-filters-btn');
-            let isHidden = panel.style.display === 'none';
-            panel.style.display = isHidden ? 'flex' : 'none';
-            toggleBtn.textContent = isHidden ? 'Less Filters' : 'More Filters';
-        }
+<script>
+    const originalOrder = Array.from(document.querySelectorAll('.listing'));
 
-        // Filter listings client-side (show/hide)
-        function showListings() {
-            let regionFilter = document.getElementById('region').value;
-            let typeFilter = document.getElementById('type').value;
-            let minPriceFilter = document.getElementById('min-price').value;
-            let maxPriceFilter = document.getElementById('price').value;
-            let genderFilter = document.getElementById('gender').value;
-            let locationFilter = document.getElementById('location').value.toLowerCase();
-            let checkedAmenities = Array.from(document.querySelectorAll('.amenity-filter:checked')).map(cb => cb.value);
-            let sortPrice = document.getElementById('sort-price').value;
+    function toggleMoreFilters() {
+        let panel = document.getElementById('more-filters');
+        let toggleBtn = document.getElementById('toggle-filters-btn');
+        let isHidden = panel.style.display === 'none';
+        panel.style.display = isHidden ? '' : 'none';
+        toggleBtn.value = isHidden ? 'Less Filters' : 'More Filters';
+    }
 
-            let items = Array.from(document.querySelectorAll('.listing'));
+    // Filter listings client-side (show/hide)
+    function showListings() {
+        let regionFilter = document.getElementById('region').value;
+        let typeFilter = document.getElementById('type').value;
+        let minPriceFilter = document.getElementById('min-price').value;
+        let maxPriceFilter = document.getElementById('price').value;
+        let genderFilter = document.getElementById('gender').value;
+        let locationFilter = document.getElementById('location').value.toLowerCase();
+        let checkedAmenities = Array.from(document.querySelectorAll('.amenity-filter:checked')).map(cb => cb.value);
+        let sortPrice = document.getElementById('sort-price').value;
 
-            items.forEach(el => {
-                let show = true;
+        let items = Array.from(document.querySelectorAll('.listing'));
 
-                if (regionFilter && el.dataset.region !== regionFilter.toLowerCase()) show = false;
-                if (typeFilter && el.dataset.roomType !== typeFilter) show = false;
-                if (minPriceFilter && Number(el.dataset.price) < Number(minPriceFilter)) show = false;
-                if (maxPriceFilter && Number(el.dataset.price) > Number(maxPriceFilter)) show = false;
-                if (genderFilter && el.dataset.gender !== genderFilter) show = false;
-                if (locationFilter && !el.dataset.location.includes(locationFilter)) show = false;
-                if (checkedAmenities.length > 0) {
-                    let listingAmenities = el.dataset.amenities.split(',');
-                    if (!checkedAmenities.every(a => listingAmenities.includes(a))) show = false;
-                }
+        items.forEach(el => {
+            let show = true;
 
-                el.style.display = show ? '' : 'none';
-            });
-
-            if (sortPrice) {
-                let container = document.getElementById('listings');
-                let visible = items.filter(el => el.style.display !== 'none');
-                visible.sort((a, b) => sortPrice === 'asc'
-                    ? Number(a.dataset.price) - Number(b.dataset.price)
-                    : Number(b.dataset.price) - Number(a.dataset.price));
-                visible.forEach(el => container.appendChild(el));
+            if (regionFilter && el.dataset.region !== regionFilter.toLowerCase()) show = false;
+            if (typeFilter && el.dataset.roomType !== typeFilter) show = false;
+            if (minPriceFilter && Number(el.dataset.price) < Number(minPriceFilter)) show = false;
+            if (maxPriceFilter && Number(el.dataset.price) > Number(maxPriceFilter)) show = false;
+            if (genderFilter && el.dataset.gender !== genderFilter) show = false;
+            if (locationFilter && !el.dataset.location.includes(locationFilter)) show = false;
+            if (checkedAmenities.length > 0) {
+                let listingAmenities = el.dataset.amenities.split(',');
+                if (!checkedAmenities.every(a => listingAmenities.includes(a))) show = false;
             }
 
-            let anyVisible = items.some(el => el.style.display !== 'none');
-            document.getElementById('no-results').style.display = anyVisible ? 'none' : '';
+            el.style.display = show ? '' : 'none';
+        });
+
+        if (sortPrice) {
+            let container = document.getElementById('listings');
+            let visible = items.filter(el => el.style.display !== 'none');
+            visible.sort((a, b) => sortPrice === 'asc'
+                ? Number(a.dataset.price) - Number(b.dataset.price)
+                : Number(b.dataset.price) - Number(a.dataset.price));
+            visible.forEach(el => container.appendChild(el));
         }
 
-        function resetFilters() {
-            document.getElementById('region').value = '';
-            document.getElementById('type').value = '';
-            document.getElementById('min-price').value = '';
-            document.getElementById('price').value = '';
-            document.getElementById('gender').value = '';
-            document.getElementById('location').value = '';
-            document.getElementById('sort-price').value = '';
-            document.querySelectorAll('.amenity-filter').forEach(cb => cb.checked = false);
+        let anyVisible = items.some(el => el.style.display !== 'none');
+        document.getElementById('no-results').style.display = anyVisible ? 'none' : '';
+    }
 
-            const container = document.getElementById('listings');
-            originalOrder.forEach(el => {
-                el.style.display = '';
-                container.appendChild(el);
-            });
+    function resetFilters() {
+        document.getElementById('region').value = '';
+        document.getElementById('type').value = '';
+        document.getElementById('min-price').value = '';
+        document.getElementById('price').value = '';
+        document.getElementById('gender').value = '';
+        document.getElementById('location').value = '';
+        document.getElementById('sort-price').value = '';
+        document.querySelectorAll('.amenity-filter').forEach(cb => cb.checked = false);
 
-            document.getElementById('no-results').style.display = originalOrder.length === 0 ? '' : 'none';
+        const container = document.getElementById('listings');
+        originalOrder.forEach(el => {
+            el.style.display = '';
+            container.appendChild(el);
+        });
+
+        document.getElementById('no-results').style.display = originalOrder.length === 0 ? '' : 'none';
+    }
+
+    // Like toggle
+    async function toggleLike(listingId) {
+        const res = await fetch('/explore/listings/' + listingId + '/like', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+            document.getElementById('like-count-' + listingId).textContent = data.likeCount;
+            let btn = document.getElementById('like-btn-' + listingId);
+            let countSpan = document.getElementById('like-count-' + listingId).outerHTML;
+            btn.innerHTML = data.liked ? 'Unlike (' + countSpan + ')' : 'Like (' + countSpan + ')';
+        } else {
+            alert(data.message);
         }
+    }
 
-        // Like toggle
-        async function toggleLike(listingId) {
-            const res = await fetch('/explore/listings/' + listingId + '/like', { method: 'POST' });
-            const data = await res.json();
+    // Toggle comments section
+    function toggleComments(listingId) {
+        let section = document.getElementById('comments-' + listingId);
+        section.style.display = section.style.display === 'none' ? '' : 'none';
+    }
+
+    // Add a new comment
+    async function addComment(listingId) {
+        let input = document.getElementById('comment-input-' + listingId);
+        let text = input.value.trim();
+        if (!text) return;
+
+        const res = await fetch('/explore/listings/' + listingId + '/comment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+        });
+        const data = await res.json();
+        if (data.success) {
+            input.value = '';
+            const c = data.comment;
+            const commentDiv = document.createElement('div');
+            commentDiv.id = 'comment-' + c._id;
+
+            const strong = document.createElement('strong');
+            strong.textContent = c.user ? c.user.username : 'Unknown';
+
+            const timestamp = document.createElement('span');
+            timestamp.textContent = ' — ' + new Date(c.createdAt).toLocaleString();
+
+            const textP = document.createElement('p');
+            textP.id = 'comment-text-' + c._id;
+            textP.textContent = c.text;
+
+            const editBtn = document.createElement('button');
+            editBtn.textContent = 'Edit';
+            editBtn.onclick = () => editComment(listingId, c._id);
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.onclick = () => deleteComment(listingId, c._id);
+
+            commentDiv.appendChild(strong);
+            commentDiv.appendChild(timestamp);
+            commentDiv.appendChild(textP);
+            commentDiv.appendChild(editBtn);
+            commentDiv.appendChild(document.createTextNode(' '));
+            commentDiv.appendChild(deleteBtn);
+
+            document.getElementById('comments-list-' + listingId).appendChild(commentDiv);
+            document.getElementById('comment-count-' + listingId).textContent = data.commentCount;
+        } else {
+            alert(data.message);
+        }
+    }
+
+    // Edit a comment
+    function editComment(listingId, commentId) {
+        let textEl = document.getElementById('comment-text-' + commentId);
+        let currentText = textEl.textContent;
+
+        let newText = prompt('Edit your comment:', currentText);
+        if (newText === null || newText.trim() === '') return;
+
+        fetch('/explore/listings/' + listingId + '/comments/' + commentId, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: newText.trim() })
+        })
+        .then(res => res.json())
+        .then(data => {
             if (data.success) {
-                document.getElementById('like-count-' + listingId).textContent = data.likeCount;
-                let btn = document.getElementById('like-btn-' + listingId);
-                let countSpan = document.getElementById('like-count-' + listingId).outerHTML;
-                btn.innerHTML = data.liked ? 'Unlike (' + countSpan + ')' : 'Like (' + countSpan + ')';
+                textEl.textContent = newText.trim();
             } else {
                 alert(data.message);
             }
+        });
+    }
+
+    // Delete a comment
+    async function deleteComment(listingId, commentId) {
+        if (!confirm('Are you sure you want to delete this comment?')) return;
+
+        const res = await fetch('/explore/listings/' + listingId + '/comments/' + commentId, {
+            method: 'DELETE'
+        });
+        const data = await res.json();
+        if (data.success) {
+            document.getElementById('comment-' + commentId).remove();
+            let countEl = document.getElementById('comment-count-' + listingId);
+            countEl.textContent = Number(countEl.textContent) - 1;
+        } else {
+            alert(data.message);
         }
+    }
 
-        // Toggle comments section
-        function toggleComments(listingId) {
-            let section = document.getElementById('comments-' + listingId);
-            section.style.display = section.style.display === 'none' ? '' : 'none';
+    // Add to wishlist
+    async function toggleWishlist(listingId) {
+        const res = await fetch('/wishlist/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ listingId })
+        });
+        if (res.ok) {
+            let btn = document.getElementById('wishlist-btn-' + listingId);
+            btn.textContent = 'Wishlisted';
+            btn.disabled = true;
+        } else {
+            alert('Please login to add to wishlist');
         }
-
-        // Add a new comment
-        async function addComment(listingId) {
-            let input = document.getElementById('comment-input-' + listingId);
-            let text = input.value.trim();
-            if (!text) return;
-
-            const res = await fetch('/explore/listings/' + listingId + '/comment', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text })
-            });
-            const data = await res.json();
-            if (data.success) {
-                input.value = '';
-                const c = data.comment;
-                const commentDiv = document.createElement('div');
-                commentDiv.id = 'comment-' + c._id;
-                commentDiv.style.cssText = 'margin-bottom:8px; padding:5px; border-bottom:1px solid #ccc;';
-
-                const strong = document.createElement('strong');
-                strong.textContent = c.user ? c.user.username : 'Unknown';
-
-                const timestamp = document.createElement('span');
-                timestamp.style.cssText = 'font-size:0.8em; color:gray;';
-                timestamp.textContent = ' — ' + new Date(c.createdAt).toLocaleString();
-
-                const textP = document.createElement('p');
-                textP.id = 'comment-text-' + c._id;
-                textP.textContent = c.text;
-
-                const editBtn = document.createElement('button');
-                editBtn.textContent = 'Edit';
-                editBtn.onclick = () => editComment(listingId, c._id);
-
-                const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = 'Delete';
-                deleteBtn.onclick = () => deleteComment(listingId, c._id);
-
-                commentDiv.appendChild(strong);
-                commentDiv.appendChild(timestamp);
-                commentDiv.appendChild(textP);
-                commentDiv.appendChild(editBtn);
-                commentDiv.appendChild(document.createTextNode(' '));
-                commentDiv.appendChild(deleteBtn);
-
-                document.getElementById('comments-list-' + listingId).appendChild(commentDiv);
-                document.getElementById('comment-count-' + listingId).textContent = data.commentCount;
-            } else {
-                alert(data.message);
-            }
-        }
-
-        // Edit a comment
-        function editComment(listingId, commentId) {
-            let textEl = document.getElementById('comment-text-' + commentId);
-            let currentText = textEl.textContent;
-
-            let newText = prompt('Edit your comment:', currentText);
-            if (newText === null || newText.trim() === '') return;
-
-            fetch('/explore/listings/' + listingId + '/comments/' + commentId, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: newText.trim() })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    textEl.textContent = newText.trim();
-                } else {
-                    alert(data.message);
-                }
-            });
-        }
-
-        // Delete a comment
-        async function deleteComment(listingId, commentId) {
-            if (!confirm('Are you sure you want to delete this comment?')) return;
-
-            const res = await fetch('/explore/listings/' + listingId + '/comments/' + commentId, {
-                method: 'DELETE'
-            });
-            const data = await res.json();
-            if (data.success) {
-                document.getElementById('comment-' + commentId).remove();
-                let countEl = document.getElementById('comment-count-' + listingId);
-                countEl.textContent = Number(countEl.textContent) - 1;
-            } else {
-                alert(data.message);
-            }
-        }
-
-        // Add to wishlist
-        async function toggleWishlist(listingId) {
-            const res = await fetch('/wishlist/add', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ listingId })
-            });
-            if (res.ok) {
-                let btn = document.getElementById('wishlist-btn-' + listingId);
-                btn.textContent = 'Wishlisted';
-                btn.disabled = true;
-            } else {
-                alert('Please login to add to wishlist');
-            }
-        }
-    </script>
+    }
+</script>
 
 </body>
 </html>

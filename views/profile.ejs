@@ -4,172 +4,274 @@
     <meta charset="UTF-8">
     <title><%= user.username %>'s Profile</title>
 </head>
-<body>
+<body bgcolor="#f7f4ef">
+<center>
+    <br>
+    <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+    <br><br>
 
-    <table width="100%">
+    <table border="0" cellpadding="0" cellspacing="0" width="700">
         <tr>
             <td>
-                <h1><%= user.username %>'s Profile</h1>
+                <font face="Georgia, serif" size="5" color="#3a3a3a"><b><%= user.username %>'s Profile</b></font>
             </td>
-
             <td align="right">
                 <form method="POST" action="/profile/search">
-                    <label>Search by username:</label>
-                    <input type="text" name="username" placeholder="Enter username" required>
-                    <button type="submit">Search</button>
+                    <font face="Arial, sans-serif" size="2" color="#555555">Search by username:</font>
+                    <input type="text" name="username" placeholder="Enter username" required size="18">
+                    <input type="submit" value="Search">
                 </form>
             </td>
         </tr>
     </table>
 
-    <% if (loggedInUserRole === 'admin' && String(user._id) !== String(loggedInUserId)) { %>
-        <p><a href="/admin-profile">Back to Admin</a></p>
-    <% } else if (String(user._id) === String(loggedInUserId)) { %>
-        <p>
-            <a href="/explore">Back to Explore</a> |
-            <a href="/wishlist">Wishlist</a> |
-            <a href="/listing/new">New Listing</a> |
-            <a href="/interest">Interest Forms</a> |
-            <a href="/logout">Logout</a>
-        </p>
-    <% } else { %>
-        <p>
-            <a href="/explore">Back to Explore</a> |
-            <a href="/profile">My Profile</a>
-        </p>
-    <% } %>
+    <br>
 
-    <hr>
-
-    <h2>Profile Information</h2>
-
-    <% if (profileImage) { %>
-        <p>
-            <img src="<%= profileImage %>" alt="Profile Picture" width="150" height="150">
-        </p>
-    <% } else { %>
-        <p>No profile picture uploaded.</p>
-    <% } %>
-
-    <p><strong>Username:</strong> <%= user.username %></p>
-    <p><strong>Full Name:</strong> <%= user.fullName %></p>
-    <p><strong>Email:</strong> <%= user.email %></p>
-    <p><strong>Gender:</strong> <%= user.gender %></p>
-    <p><strong>Bio:</strong> <%= user.bio %></p>
-
-    <% if (loggedInUserRole === 'admin' && String(user._id) !== String(loggedInUserId)) { %>
-        <p>
-            <form action="/admin-profile/delete-user/<%= user._id %>" method="POST" style="display:inline;">
-                <button type="submit" onclick="return confirm('Delete this user and all their data?');">Delete User</button>
-            </form>
-        </p>
-    <% } else if (String(user._id) === String(loggedInUserId)) { %>
-        <p>
-            <a href="/profile/edit">Edit Profile</a>
-            <form action="/profile/delete" method="POST" style="display:inline;">
-                <button type="submit" onclick="return confirm('Are you sure you want to delete your account? This cannot be undone.');">Delete Account</button>
-            </form>
-        </p>
-    <% } %>
-
-    <hr>
-
-    <h2>Listings</h2>
-
-    <% if (listings.length === 0) { %>
-        <p>No listings posted yet.</p>
-    <% } else { %>
-        <% listings.forEach(function(listing) { %>
-      <p><strong><%= listing.title %></strong></p>
-
-        <% if (listing.photos.length > 0) { %>
-        <% listing.photos.forEach(function(photo) { %>
-        <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" alt="listing photo" width="250" height="250">
-        <% }) %>
-        <% } %>
-
-      <p><strong>Region:</strong> <%= listing.region %></p>
-      <p><strong>Price:</strong> $<%= listing.price %> / month</p>
-        <a href="/listing/<%= listing._id %>">View Details</a>
-        <hr>
-     <% }) %>
-    <% } %>
-
-    <u><h2>Reviews</h2></u>
-
-    <p><strong>Average Rating:</strong> <%= avgRating ? (avgRating || 0).toFixed(1) : "0.0" %> / 5</p>
-    <p><strong>Total Reviews:</strong> <%= totalReviews || 0 %></p>
-    <hr>
-
-    <% if (String(user._id) !== String(loggedInUserId)) { %>
-        <h3>Leave a Review</h3>
-
-        <form method="POST" action="/reviews/add">
-            <input type="hidden" name="reviewedUserId" value="<%= user._id %>">
-
-            <p>
-                Rating:
-                <select name="rating" required>
-                    <option value="">Select</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </p>
-
-            <p>
-                Comment:<br>
-                <textarea name="comment" rows="4" cols="40"></textarea>
-            </p>
-
-            <button type="submit">Submit Review</button>
-        </form>
-
-        <hr>
-    <% } %>
-
-    <% if (reviews.length === 0) { %>
-        <p>No reviews yet.</p>
-    <% } else { %>
-        <% reviews.forEach(function(review) { %>
-            <p>
-                <strong>Reviewer:</strong>
-                <% if (review.reviewerId) { %>
-                    <a href="/profile/<%= review.reviewerId._id %>"><%= review.reviewerId.username %></a>
-                <% } else { %>
-                    Unknown User
-                <% } %><br>
-
-                <strong>Rating:</strong> <%= review.rating %> / 5<br>
-
-                <strong>Comment:</strong>
-                <%= review.comment && review.comment.trim() !== "" ? review.comment : "No comment provided." %><br>
-
-                <small>
-                    Posted: <%= new Date(review.createdAt).toLocaleString() %>
-                    <% if (review.updatedAt) { %>
-                        &nbsp;&bull;&nbsp; Edited: <%= new Date(review.updatedAt).toLocaleString() %>
+    <table border="0" cellpadding="8" cellspacing="0" bgcolor="#ffffff" width="700">
+        <tr>
+            <td>
+                <font face="Arial, sans-serif" size="3" color="#555555">
+                    <% if (loggedInUserRole === 'admin' && String(user._id) !== String(loggedInUserId)) { %>
+                        <a href="/admin-profile"><font color="#c0392b">Back to Admin</font></a>
+                    <% } else if (String(user._id) === String(loggedInUserId)) { %>
+                        <a href="/explore"><font color="#c0392b">Explore</font></a> &nbsp;|&nbsp;
+                        <a href="/wishlist"><font color="#c0392b">Wishlist</font></a> &nbsp;|&nbsp;
+                        <a href="/listing/new"><font color="#c0392b">New Listing</font></a> &nbsp;|&nbsp;
+                        <a href="/interest"><font color="#c0392b">Interest Forms</font></a> &nbsp;|&nbsp;
+                        <a href="/logout"><font color="#c0392b">Logout</font></a>
+                    <% } else { %>
+                        <a href="/explore"><font color="#c0392b">Explore</font></a> &nbsp;|&nbsp;
+                        <a href="/profile"><font color="#c0392b">My Profile</font></a>
                     <% } %>
-                </small>
-            </p>
+                </font>
+            </td>
+        </tr>
+    </table>
 
-            <% if (review.reviewerId && String(review.reviewerId._id) === String(loggedInUserId)) { %>
-                <p>
-                    <a href="/reviews/edit?reviewId=<%= review._id %>">Edit Review</a>
-                </p>
+    <br>
 
-                <form method="POST" action="/reviews/delete">
-                    <input type="hidden" name="reviewId" value="<%= review._id %>">
-                    <input type="hidden" name="reviewedUserId" value="<%= user._id %>">
-                    <button type="submit">Delete Review</button>
-                </form>
-            <% } %>
+    <!-- Profile Information -->
+    <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="700">
+        <tr>
+            <td>
+                <font face="Georgia, serif" size="4" color="#3a3a3a"><b>Profile Information</b></font>
+                <hr color="#eeeeee" size="1">
 
-            <hr>
-        <% }) %>
-    <% } %>
+                <table border="0" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td>
+                            <% if (profileImage) { %>
+                                <img src="<%= profileImage %>" alt="Profile Picture" width="120" height="120">
+                            <% } else { %>
+                                <font face="Arial, sans-serif" size="2" color="#999999">No profile picture.</font>
+                            <% } %>
+                        </td>
+                        <td width="20"></td>
+                        <td valign="top">
+                            <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                                <b>Username:</b> <%= user.username %><br><br>
+                                <b>Full Name:</b> <%= user.fullName %><br><br>
+                                <b>Email:</b> <%= user.email %><br><br>
+                                <b>Gender:</b> <%= user.gender %><br><br>
+                                <b>Bio:</b> <%= user.bio %>
+                            </font>
+                        </td>
+                    </tr>
+                </table>
 
+                <br>
+
+                <% if (loggedInUserRole === 'admin' && String(user._id) !== String(loggedInUserId)) { %>
+                    <form action="/admin-profile/delete-user/<%= user._id %>" method="POST">
+                        <input type="submit" value="Delete User" onclick="return confirm('Delete this user and all their data?');">
+                    </form>
+                <% } else if (String(user._id) === String(loggedInUserId)) { %>
+                    <font face="Arial, sans-serif" size="3">
+                        <a href="/profile/edit"><font color="#c0392b">Edit Profile</font></a>
+                        &nbsp;&nbsp;
+                        <form action="/profile/delete" method="POST" style="display:inline;">
+                            <input type="submit" value="Delete Account" onclick="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
+                        </form>
+                    </font>
+                <% } %>
+            </td>
+        </tr>
+    </table>
+
+    <br>
+
+    <!-- Listings -->
+    <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="700">
+        <tr>
+            <td>
+                <font face="Georgia, serif" size="4" color="#3a3a3a"><b>Listings</b></font>
+                <hr color="#eeeeee" size="1">
+
+                <% if (listings.length === 0) { %>
+                    <font face="Arial, sans-serif" size="3" color="#777777">No listings posted yet.</font>
+                <% } else { %>
+                    <% listings.forEach(function(listing) { %>
+                        <table border="0" cellpadding="12" cellspacing="0" bgcolor="#f7f4ef" width="100%">
+                            <tr>
+                                <td>
+                                    <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                                        <b><%= listing.title %></b>
+                                    </font>
+                                    <br>
+                                    <% if (listing.photos.length > 0) { %>
+                                        <% listing.photos.forEach(function(photo) { %>
+                                            <img src="data:<%= photo.contentType %>;base64,<%= photo.data.toString('base64') %>" alt="listing photo" width="180" height="180">
+                                        <% }) %>
+                                        <br>
+                                    <% } %>
+                                    <font face="Arial, sans-serif" size="3" color="#555555">
+                                        <b>Region:</b> <%= listing.region %><br>
+                                        <b>Price:</b> $<%= listing.price %> / month
+                                    </font>
+                                    <br>
+                                    <a href="/listing/<%= listing._id %>"><font face="Arial, sans-serif" size="3" color="#c0392b">View Details</font></a>
+                                </td>
+                            </tr>
+                        </table>
+                        <br>
+                    <% }) %>
+                <% } %>
+            </td>
+        </tr>
+    </table>
+
+    <br>
+
+    <!-- Reviews -->
+    <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="700">
+        <tr>
+            <td>
+                <font face="Georgia, serif" size="4" color="#3a3a3a"><b>Reviews</b></font>
+                <hr color="#eeeeee" size="1">
+
+                <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                    <b>Average Rating:</b> <%= avgRating ? (avgRating || 0).toFixed(1) : "0.0" %> / 5
+                    &nbsp;&nbsp;
+                    <b>Total Reviews:</b> <%= totalReviews || 0 %>
+                </font>
+
+                <br><br>
+
+                <% if (String(user._id) !== String(loggedInUserId)) { %>
+                    <font face="Georgia, serif" size="3" color="#3a3a3a"><b>Leave a Review</b></font>
+                    <br><br>
+
+                    <% if (errorMessage) { %>
+                        <font face="Arial, sans-serif" size="3" color="#c0392b"><b><%= errorMessage %></b></font>
+                        <br><br>
+                    <% } %>
+
+                    <% if (!hasReviewed) { %>
+                    <form method="POST" action="/reviews/add">
+                        <input type="hidden" name="reviewedUserId" value="<%= user._id %>">
+
+                        <table border="0" cellpadding="4" cellspacing="0">
+                            <tr>
+                                <td width="80">
+                                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Rating:</b></font>
+                                </td>
+                                <td>
+                                    <select name="rating" required>
+                                        <option value="">Select</option>
+                                        <option value="1">1 ⭐</option>
+                                        <option value="2">2 ⭐⭐</option>
+                                        <option value="3">3 ⭐⭐⭐</option>
+                                        <option value="4">4 ⭐⭐⭐⭐</option>
+                                        <option value="5">5 ⭐⭐⭐⭐⭐</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr><td colspan="2"><br></td></tr>
+                            <tr>
+                                <td valign="top">
+                                    <font face="Arial, sans-serif" size="3" color="#555555"><b>Comment:</b></font>
+                                </td>
+                                <td>
+                                    <textarea name="comment" rows="4" cols="36"></textarea>
+                                </td>
+                            </tr>
+                            <tr><td colspan="2"><br></td></tr>
+                            <tr>
+                                <td colspan="2">
+                                    <table border="0" cellpadding="8" cellspacing="0" bgcolor="#c0392b" width="160">
+                                        <tr>
+                                            <td align="center">
+                                                <input type="submit" value="Submit Review" style="background:transparent;border:none;color:#ffffff;font-size:13px;cursor:pointer;font-weight:bold;">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <% } else { %>
+                        <font face="Arial, sans-serif" size="3" color="#777777"><i>You have already reviewed this user.</i></font>
+                    <% } %>
+
+                    <br>
+                    <hr color="#eeeeee" size="1">
+                    <br>
+                <% } %>
+
+                <% if (reviews.length === 0) { %>
+                    <font face="Arial, sans-serif" size="3" color="#777777">No reviews yet.</font>
+                <% } else { %>
+                    <% reviews.forEach(function(review) { %>
+                        <table border="0" cellpadding="12" cellspacing="0" bgcolor="#f7f4ef" width="100%">
+                            <tr>
+                                <td>
+                                    <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                                        <b>Reviewer:</b>
+                                        <% if (review.reviewerId) { %>
+                                            <a href="/profile/<%= review.reviewerId._id %>"><font color="#c0392b"><%= review.reviewerId.username %></font></a>
+                                        <% } else { %>
+                                            Deleted User
+                                        <% } %>
+                                        &nbsp;&nbsp;
+                                        <b>Rating:</b> <%= review.rating %> / 5
+                                    </font>
+                                    <br>
+                                    <font face="Arial, sans-serif" size="3" color="#555555">
+                                        <%= review.comment && review.comment.trim() !== "" ? review.comment : "No comment provided." %>
+                                    </font>
+                                    <br>
+                                    <font face="Arial, sans-serif" size="2" color="#999999">
+                                        Posted: <%= new Date(review.createdAt).toLocaleString() %>
+                                        <% if (review.updatedAt) { %>
+                                            &nbsp;&bull;&nbsp; Edited: <%= new Date(review.updatedAt).toLocaleString() %>
+                                        <% } %>
+                                    </font>
+
+                                    <% if (review.reviewerId && String(review.reviewerId._id) === String(loggedInUserId)) { %>
+                                        <br>
+                                        <font face="Arial, sans-serif" size="2">
+                                            <a href="/reviews/edit?reviewId=<%= review._id %>"><font color="#c0392b">Edit Review</font></a>
+                                            &nbsp;
+                                            <form method="POST" action="/reviews/delete" style="display:inline;">
+                                                <input type="hidden" name="reviewId" value="<%= review._id %>">
+                                                <input type="hidden" name="reviewedUserId" value="<%= user._id %>">
+                                                <input type="submit" value="Delete Review">
+                                            </form>
+                                        </font>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        </table>
+                        <br>
+                    <% }) %>
+                <% } %>
+            </td>
+        </tr>
+    </table>
+
+    <br><br>
+    <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+    <br><br>
+</center>
 </body>
 </html>

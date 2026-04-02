@@ -3,35 +3,82 @@
 <head>
   <title>Interest Submitted</title>
 </head>
-<body>
+<body bgcolor="#f7f4ef">
+<center>
+  <br>
+  <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+  <br><br>
 
-<h1>Interest Submitted Successfully</h1>
-<hr>
-
-<p>Your interest for "<%= listing.title %>" has been submitted.</p>
-<p>The landlord will be able to view your request in the system.</p>
-<hr>
-<br>
-<h2 align="center">Navigation</h2>
-
-  <table align="center" cellpadding="10">
+  <table border="0" cellpadding="28" cellspacing="0" bgcolor="#ffffff" width="480">
     <tr>
-      <td>
-        <form action="/explore" method="GET">
-          <button type="submit">Go to Explore Page</button>
-        </form>
-      </td>
+      <td align="center">
+        <font face="Arial, sans-serif" size="6" color="#27ae60">✓</font>
+        <br>
+        <font face="Georgia, serif" size="5" color="#3a3a3a"><b>Interest Submitted Successfully</b></font>
+        <br><br>
 
-      <td>
-        <form action="/wishlist" method="GET">
-          <button type="submit">Back to Wishlist</button>
-        </form>
-      </td>
+        <hr color="#eeeeee" size="1" width="80%">
+        <br>
 
-      <td>
-        <form action="/interest/submitted" method="GET">
-          <button type="submit">View your previously submitted interest forms</button>
-        </form>
+        <font face="Arial, sans-serif" size="3" color="#555555">
+          Your interest for <b>"<%= listing.title %>"</b> has been submitted.
+        </font>
+        <br>
+        <font face="Arial, sans-serif" size="3" color="#777777">
+          The landlord will be able to view your request in the system.
+        </font>
+        <br><br>
+
+        <hr color="#eeeeee" size="1" width="80%">
+        <br>
+
+        <font face="Georgia, serif" size="4" color="#3a3a3a"><b>What would you like to do next?</b></font>
+        <br><br>
+
+        <table border="0" cellpadding="0" cellspacing="8">
+          <tr>
+            <td>
+              <form action="/explore" method="GET">
+                <table border="0" cellpadding="10" bgcolor="#c0392b">
+                  <tr>
+                    <td align="center">
+                      <input type="submit" value="Explore Listings" style="background:transparent;border:none;color:#ffffff;font-size:13px;cursor:pointer;font-weight:bold;">
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            </td>
+            <td>
+              <form action="/wishlist" method="GET">
+                <table border="0" cellpadding="10" bgcolor="#888888">
+                  <tr>
+                    <td align="center">
+                      <input type="submit" value="Back to Wishlist" style="background:transparent;border:none;color:#ffffff;font-size:13px;cursor:pointer;font-weight:bold;">
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            </td>
+            <td>
+              <form action="/interest/submitted" method="GET">
+                <table border="0" cellpadding="10" bgcolor="#555555">
+                  <tr>
+                    <td align="center">
+                      <input type="submit" value="My Interest Forms" style="background:transparent;border:none;color:#ffffff;font-size:13px;cursor:pointer;font-weight:bold;">
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>
   </table>
+
+  <br><br>
+  <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+  <br><br>
+</center>
+</body>
+</html>

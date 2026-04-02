@@ -4,34 +4,70 @@
     <meta charset="UTF-8">
     <title>Edit Review</title>
 </head>
-<body>
+<body bgcolor="#f7f4ef">
+<center>
+    <br>
+    <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+    <br>
+    <font face="Arial, sans-serif" size="3">
+        <a href="/profile/<%= review.reviewedUserId %>"><font color="#c0392b">Back to Profile</font></a>
+    </font>
+    <br><br>
 
-    <h1>Edit Review</h1>
+    <table border="0" cellpadding="28" cellspacing="0" bgcolor="#ffffff" width="420">
+        <tr>
+            <td>
+                <font face="Georgia, serif" size="5" color="#3a3a3a"><b>Edit Review</b></font>
+                <br><br>
 
-    <p><a href="/profile/<%= review.reviewedUserId %>">Back to Profile</a></p>
+                <form method="POST" action="/reviews/update">
+                    <input type="hidden" name="reviewId" value="<%= review._id %>">
+                    <input type="hidden" name="reviewedUserId" value="<%= review.reviewedUserId %>">
 
-    <form method="POST" action="/reviews/update">
-        <input type="hidden" name="reviewId" value="<%= review._id %>">
-        <input type="hidden" name="reviewedUserId" value="<%= review.reviewedUserId %>">
+                    <table border="0" cellpadding="6" cellspacing="0" width="100%">
+                        <tr>
+                            <td width="80">
+                                <font face="Arial, sans-serif" size="3" color="#555555"><b>Rating:</b></font>
+                            </td>
+                            <td>
+                                <select name="rating" required>
+                                    <option value="1" <%= review.rating == 1 ? "selected" : "" %>>1 ⭐</option>
+                                    <option value="2" <%= review.rating == 2 ? "selected" : "" %>>2 ⭐⭐</option>
+                                    <option value="3" <%= review.rating == 3 ? "selected" : "" %>>3 ⭐⭐⭐</option>
+                                    <option value="4" <%= review.rating == 4 ? "selected" : "" %>>4 ⭐⭐⭐⭐</option>
+                                    <option value="5" <%= review.rating == 5 ? "selected" : "" %>>5 ⭐⭐⭐⭐⭐</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"><br></td></tr>
+                        <tr>
+                            <td valign="top">
+                                <font face="Arial, sans-serif" size="3" color="#555555"><b>Comment:</b></font>
+                            </td>
+                            <td>
+                                <textarea name="comment" rows="5" cols="30"><%= review.comment %></textarea>
+                            </td>
+                        </tr>
+                    </table>
 
-        <p>
-            Rating:
-            <select name="rating" required>
-                <option value="1" <%= review.rating == 1 ? "selected" : "" %>>1</option>
-                <option value="2" <%= review.rating == 2 ? "selected" : "" %>>2</option>
-                <option value="3" <%= review.rating == 3 ? "selected" : "" %>>3</option>
-                <option value="4" <%= review.rating == 4 ? "selected" : "" %>>4</option>
-                <option value="5" <%= review.rating == 5 ? "selected" : "" %>>5</option>
-            </select>
-        </p>
+                    <br><br>
+                    <center>
+                        <table border="0" cellpadding="10" cellspacing="0" bgcolor="#c0392b" width="180">
+                            <tr>
+                                <td align="center">
+                                    <input type="submit" value="Update Review" style="background:transparent;border:none;color:#ffffff;font-size:14px;cursor:pointer;font-weight:bold;">
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                </form>
+            </td>
+        </tr>
+    </table>
 
-        <p>
-            Comment:<br>
-            <textarea name="comment" rows="4" cols="40"><%= review.comment %></textarea>
-        </p>
-
-        <button type="submit">Update Review</button>
-    </form>
-
+    <br><br>
+    <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+    <br><br>
+</center>
 </body>
 </html>

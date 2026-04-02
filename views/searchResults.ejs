@@ -4,41 +4,68 @@
     <meta charset="UTF-8">
     <title>User Search Results</title>
 </head>
-<body>
+<body bgcolor="#f7f4ef">
+<center>
+    <br>
+    <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+    <br>
+    <font face="Arial, sans-serif" size="3" color="#777777">
+        <a href="/profile"><font color="#c0392b">Back to My Profile</font></a>
+    </font>
+    <br><br>
 
-    <h1>User Search Results</h1>
+    <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="500">
+        <tr>
+            <td>
+                <font face="Georgia, serif" size="5" color="#3a3a3a"><b>Search Users</b></font>
+                <br><br>
 
-    <p>
-        <a href="/profile">Back to My Profile</a>
-    </p>
+                <form method="POST" action="/profile/search">
+                    <font face="Arial, sans-serif" size="3" color="#555555">
+                        <label>Search by username:</label>
+                    </font>
+                    <br>
+                    <input type="text" name="username" value="<%= searchTerm %>" placeholder="Enter username" required size="30">
+                    &nbsp;
+                    <input type="submit" value="Search">
+                </form>
 
-    <hr>
+                <br>
+                <hr color="#eeeeee" size="1">
+                <br>
 
-    <form method="POST" action="/profile/search">
-        <label>Search by username:</label>
-        <input type="text" name="username" value="<%= searchTerm %>" placeholder="Enter username" required>
-        <button type="submit">Search</button>
-    </form>
+                <font face="Georgia, serif" size="4" color="#3a3a3a"><b>Results for "<%= searchTerm %>"</b></font>
+                <br><br>
 
-    <hr>
+                <% if (searchTerm === "") { %>
+                    <font face="Arial, sans-serif" size="3" color="#777777">Please enter a username.</font>
+                <% } else if (results.length === 0) { %>
+                    <font face="Arial, sans-serif" size="3" color="#777777">No users found.</font>
+                <% } else { %>
+                    <% results.forEach(function(foundUser) { %>
+                        <table border="0" cellpadding="12" cellspacing="0" bgcolor="#f7f4ef" width="100%">
+                            <tr>
+                                <td>
+                                    <font face="Arial, sans-serif" size="3" color="#3a3a3a">
+                                        <b><%= foundUser.username %></b><br>
+                                        <font color="#777777">Full Name: <%= foundUser.fullName %></font><br>
+                                        <font color="#777777">Email: <%= foundUser.email %></font><br>
+                                        <br>
+                                        <a href="/profile/<%= foundUser._id %>"><font color="#c0392b">View Profile</font></a>
+                                    </font>
+                                </td>
+                            </tr>
+                        </table>
+                        <br>
+                    <% }) %>
+                <% } %>
+            </td>
+        </tr>
+    </table>
 
-    <h2>Results for "<%= searchTerm %>"</h2>
-
-    <% if (searchTerm === "") { %>
-        <p>Please enter a username.</p>
-    <% } else if (results.length === 0) { %>
-        <p>No users found.</p>
-    <% } else { %>
-        <% results.forEach(function(foundUser) { %>
-            <p>
-                <strong><%= foundUser.username %></strong><br>
-                Full Name: <%= foundUser.fullName %><br>
-                Email: <%= foundUser.email %><br>
-                <a href="/profile/<%= foundUser._id %>">View Profile</a>
-            </p>
-            <hr>
-        <% }) %>
-    <% } %>
-
+    <br><br>
+    <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+    <br><br>
+</center>
 </body>
 </html>

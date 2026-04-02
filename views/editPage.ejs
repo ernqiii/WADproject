@@ -3,89 +3,156 @@
 <head>
   <title>Edit Interest Form</title>
 </head>
-<body>
-  <h1>Edit Interest Form</h1>
-  <hr>
+<body bgcolor="#f7f4ef">
+<center>
+  <br>
+  <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
+  <br>
+  <font face="Arial, sans-serif" size="3">
+    <a href="/interest/submitted"><font color="#c0392b">Back to My Interest Forms</font></a>
+  </font>
+  <br><br>
 
-  <h3>
-    <%= listing ? listing.title : "Listing deleted" %>
-    <% if (listing && landlordUser) { %>
-      —
-      <a href="/profile/<%= landlordUser._id %>">
-        <%= landlordUser.username %>
-      </a>
-    <% } %>
-  </h3>
+  <table border="0" cellpadding="24" cellspacing="0" bgcolor="#ffffff" width="540">
+    <tr>
+      <td>
+        <font face="Georgia, serif" size="5" color="#3a3a3a"><b>Edit Interest Form</b></font>
+        <br><br>
 
-  <% if (errors && errors.length > 0) { %>
-    <div style="color: rgb(255, 0, 0);">
-      <p><strong>Please fix the following:</strong></p>
-      <ul>
-        <% errors.forEach(function(err) { %>
-          <li><%= err %></li>
-        <% }) %>
-      </ul>
-    </div>
-    <hr>
-  <% } %>
+        <font face="Georgia, serif" size="4" color="#3a3a3a">
+          <%= listing ? listing.title : "Listing deleted" %>
+          <% if (listing && landlordUser) { %>
+            &nbsp;&mdash;&nbsp;
+            <a href="/profile/<%= landlordUser._id %>">
+              <font color="#c0392b"><%= landlordUser.username %></font>
+            </a>
+          <% } %>
+        </font>
+        <br><br>
 
-  <form action="/interest/submitted/update" method="POST">
-    <input type="hidden" name="interestId" value="<%= interest._id %>">
+        <% if (errors && errors.length > 0) { %>
+          <table border="0" cellpadding="10" bgcolor="#fdecea" width="100%">
+            <tr>
+              <td>
+                <font face="Arial, sans-serif" size="3" color="#c0392b"><b>Please fix the following:</b></font>
+                <ul>
+                  <% errors.forEach(function(err) { %>
+                    <li><font face="Arial, sans-serif" size="3" color="#c0392b"><%= err %></font></li>
+                  <% }) %>
+                </ul>
+              </td>
+            </tr>
+          </table>
+          <br>
+        <% } %>
 
-    <strong>Name:</strong>
-    <input type="text" name="name" value="<%= interest.name || '' %>">
-    <br><br>
+        <form action="/interest/submitted/update" method="POST">
+          <input type="hidden" name="interestId" value="<%= interest._id %>">
 
-    <strong>Gender:</strong>
-    <select name="gender">
-      <option value="">-- Please Select One --</option>
-      <option value="male" <%= interest.gender === "male" ? "selected" : "" %>>Male</option>
-      <option value="female" <%= interest.gender === "female" ? "selected" : "" %>>Female</option>
-    </select>
-    <br><br>
+          <table border="0" cellpadding="6" cellspacing="0" width="100%">
+            <tr>
+              <td width="180"><font face="Arial, sans-serif" size="3" color="#555555"><b>Name:</b></font></td>
+              <td><input type="text" name="name" value="<%= interest.name || '' %>" size="26"></td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Gender:</b></font></td>
+              <td>
+                <select name="gender">
+                  <option value="">-- Please Select One --</option>
+                  <option value="male" <%= interest.gender === "male" ? "selected" : "" %>>Male</option>
+                  <option value="female" <%= interest.gender === "female" ? "selected" : "" %>>Female</option>
+                </select>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td colspan="2">
+                <font face="Arial, sans-serif" size="3" color="#555555">
+                  <b>Please fill in at least one contact method.</b>
+                </font>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Email:</b></font></td>
+              <td><input type="email" name="email" value="<%= interest.email || '' %>" size="26"></td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Phone:</b></font></td>
+              <td>
+                <input type="text" name="phone" value="<%= interest.phone || '' %>" size="20">
+                <font face="Arial, sans-serif" size="2" color="#999999">(calls, SMS, WhatsApp)</font>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td><font face="Arial, sans-serif" size="3" color="#555555"><b>Telegram:</b></font></td>
+              <td><input type="text" name="telegram" value="<%= interest.telegram || '' %>" size="26"></td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td valign="top">
+                <font face="Arial, sans-serif" size="3" color="#555555">
+                  <b>Preferred Contact Method</b><br>
+                  <font size="2" color="#999999">(must be provided)</font>
+                </font>
+              </td>
+              <td>
+                <select name="contact_method">
+                  <option value="">-- Please Select One --</option>
+                  <option value="email" <%= interest.preferredContactMethod === "email" ? "selected" : "" %>>Email</option>
+                  <option value="phone" <%= interest.preferredContactMethod === "phone" ? "selected" : "" %>>Phone</option>
+                  <option value="telegram" <%= interest.preferredContactMethod === "telegram" ? "selected" : "" %>>Telegram</option>
+                  <option value="whatsapp" <%= interest.preferredContactMethod === "whatsapp" ? "selected" : "" %>>WhatsApp</option>
+                </select>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Message:</b></font></td>
+              <td><textarea name="message" rows="5" cols="28"><%= interest.message || '' %></textarea></td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td colspan="2">
+                <font face="Arial, sans-serif" size="2" color="#999999">
+                  By submitting this form, you agree that your contact details and message
+                  will be stored for the purpose of managing your interest in this listing.
+                  Your submission will be shown in your profile, and you may edit or delete it later.
+                </font>
+              </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+              <td colspan="2">
+                <font face="Arial, sans-serif" size="3" color="#555555">
+                  <input type="checkbox" name="consent" value="yes">
+                  I understand that my submitted contact details and message will be stored for this interest request.
+                </font>
+              </td>
+            </tr>
+          </table>
 
-    <p><strong>Please fill in at least one contact method.</strong></p>
+          <br><br>
+          <center>
+            <table border="0" cellpadding="10" bgcolor="#c0392b" width="180">
+              <tr>
+                <td align="center">
+                  <input type="submit" value="Save Changes" style="background:transparent;border:none;color:#ffffff;font-size:14px;cursor:pointer;font-weight:bold;">
+                </td>
+              </tr>
+            </table>
+          </center>
+        </form>
+      </td>
+    </tr>
+  </table>
 
-    <strong>Email:</strong>
-    <input type="email" name="email" value="<%= interest.email || '' %>">
-    <br><br>
-
-    <strong>Phone:</strong>
-    <input type="text" name="phone" value="<%= interest.phone || '' %>"> (via calls, SMS, or WhatsApp)
-    <br><br>
-
-    <strong>Telegram:</strong>
-    <input type="text" name="telegram" value="<%= interest.telegram || '' %>">
-    <br><br>
-
-    <strong>Preferred Contact Method</strong> (this contact information has to be provided)
-    <select name="contact_method">
-      <option value="">-- Please Select One --</option>
-      <option value="email" <%= interest.preferredContactMethod === "email" ? "selected" : "" %>>Email</option>
-      <option value="phone" <%= interest.preferredContactMethod === "phone" ? "selected" : "" %>>Phone</option>
-      <option value="telegram" <%= interest.preferredContactMethod === "telegram" ? "selected" : "" %>>Telegram</option>
-      <option value="whatsapp" <%= interest.preferredContactMethod === "whatsapp" ? "selected" : "" %>>WhatsApp</option>
-    </select>
-    <br><br>
-
-    <strong>Message:</strong>
-    <br>
-    <textarea name="message" rows="5" cols="40"><%= interest.message || '' %></textarea>
-    <br><br>
-
-    <p>
-      <small>
-        By submitting this form, you agree that your contact details and message
-        will be stored for the purpose of managing your interest in this listing.
-        Your submission will be shown in your profile, and you may edit or delete it later.
-      </small>
-    </p>
-
-    <input type="checkbox" name="consent" value="yes">
-    I understand that my submitted contact details and message will be stored for this interest request.
-    <br><br>
-
-    <button type="submit">Save Changes</button>
-  </form>
+  <br><br>
+  <font face="Arial, sans-serif" size="2" color="#aaaaaa">&copy; 2026 Roommie Finder</font>
+  <br><br>
+</center>
 </body>
 </html>
