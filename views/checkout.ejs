@@ -31,6 +31,7 @@
     <br>
   <% } %>
 
+  
   <!-- Listing Summary -->
   <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="560">
     <tr>
@@ -82,7 +83,7 @@
             <td>
               <font face="Arial, sans-serif" size="3" color="#3a3a3a">
                 <% if (listing.amenities && listing.amenities.length > 0) { %>
-                  <%= listing.amenities.join(", ") %>
+                  <%= listing.amenities.map(a => a === 'ac' ? 'Air Condition' : a).join(", ") %>
                 <% } else { %>
                   None
                 <% } %>
