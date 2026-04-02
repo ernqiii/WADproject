@@ -82,12 +82,17 @@
             <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Amenities:</b></font></td>
             <td>
               <font face="Arial, sans-serif" size="3" color="#3a3a3a">
-                <% if (listing.amenities && listing.amenities.length > 0) { %>
-                  <%= listing.amenities.map(a => a === 'ac' ? 'Air Condition' : a).join(", ") %>
-                <% } else { %>
-                  None
-                <% } %>
-              </font>
+              <% if (listing.amenities && listing.amenities.length > 0) { %>
+                <%= listing.amenities
+                  .map(a => {
+                    let label = a === 'ac' ? 'Air Condition' : a;
+                    return label.charAt(0).toUpperCase() + label.slice(1);
+                  })
+                  .join(", ") %>
+              <% } else { %>
+                None
+              <% } %>
+            </font>
             </td>
           </tr>
         </table>
