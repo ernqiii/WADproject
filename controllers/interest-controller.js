@@ -162,6 +162,12 @@ exports.updateInterest = async (req, res) => {
     if (contact_method === "telegram" && !cleanTelegram) {
       errors.push("You selected Telegram as the preferred contact method, so Telegram is required.");
     }
+    if (contact_method === "telegram") {
+      if (!cleanTelegram || cleanTelegram.toLowerCase() === "na" || cleanTelegram.toLowerCase() === "@na") {
+        errors.push("Please provide a valid Telegram username.");
+      }
+    }
+
 
     if (errors.length > 0) {
       const updatedInterest = interest.toObject();

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Create a new ‘book' schema
+// Create a new ‘wishlist' schema
 const wishlistSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,

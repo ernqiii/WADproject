@@ -9,7 +9,7 @@ const addToWishlist = async (req, res) => {
   const listingId = req.body.listingId;
 
   try {
-    let wishlist = await wishlistModel.findByUser(userId);
+    let wishlist = await wishlistModel.findByUser(userId); //each wishlist has a unqiue user -> find the user -> find their associated wishlist 
 
     if (!wishlist) {
       await wishlistModel.createWishlist(userId, [{ listing: listingId }]);
@@ -225,6 +225,11 @@ const postCheckoutPage = async (req, res) => {
     if (contact_method === "telegram" && !cleanTelegram) {
       errors.push("You selected Telegram as the preferred contact method, so Telegram is required.");
     }
+    if (contact_method === "telegram") {
+      if (!cleanTelegram || cleanTelegram.toLowerCase() === "na" || cleanTelegram.toLowerCase() === "@na") {
+        errors.push("Please provide a valid Telegram username.");
+      }
+    }
 
     if (errors.length > 0) {
       return res.render("checkout", {
@@ -257,7 +262,7 @@ const postCheckoutPage = async (req, res) => {
     console.log("Created form:", createdForm);
     const wishlist = await wishlistModel.findByUser(userId);
 
-
+    
     const updatedItems = wishlist.items.filter(item => {
       return item.listing.toString() !== listingId;
     });
