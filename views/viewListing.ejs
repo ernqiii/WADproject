@@ -61,7 +61,7 @@
             <td>
               <ul>
                 <% listing.amenities.forEach(function(a) { %>
-                  <li><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= a.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %></font></li>
+                  <li><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= a.toLowerCase() === 'ac' ? 'Air Condition' : a.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %></font></li>
                 <% }) %>
               </ul>
             </td>

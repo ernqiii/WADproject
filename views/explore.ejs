@@ -116,7 +116,7 @@
                                         <td><label><input type="checkbox" class="amenity-filter" value="parking"> <font face="Arial, sans-serif" size="3">Parking</font></label></td>
                                     </tr>
                                     <tr>
-                                        <td><label><input type="checkbox" class="amenity-filter" value="ac"> <font face="Arial, sans-serif" size="3">Air Conditioning</font></label></td>
+                                        <td><label><input type="checkbox" class="amenity-filter" value="ac"> <font face="Arial, sans-serif" size="3">Air Condition</font></label></td>
                                         <td><label><input type="checkbox" class="amenity-filter" value="washing_machine"> <font face="Arial, sans-serif" size="3">Washing Machine</font></label></td>
                                     </tr>
                                     <tr>
@@ -211,7 +211,7 @@
                                 <% if (listing.amenities && listing.amenities.length > 0) { %>
                                 <tr>
                                     <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Amenities:</b></font></td>
-                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %></font></td>
+                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.amenities.map(a => a.toLowerCase() === 'ac' ? 'Air Condition' : a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %></font></td>
                                 </tr>
                                 <% } %>
                             </table>

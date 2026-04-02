@@ -83,7 +83,7 @@
                   <td>
                     <font face="Arial, sans-serif" size="3" color="#3a3a3a">
                       <% if (listingItem.amenities && listingItem.amenities.length > 0) { %>
-                        <%= listingItem.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %>
+                        <%= listingItem.amenities.map(a => a.toLowerCase() === 'ac' ? 'Air Condition' : a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %>
                       <% } else { %>
                         None
                       <% } %>

@@ -31,6 +31,25 @@
     <br>
   <% } %>
 
+  <p><strong>Region:</strong> <%= listing.region %></p>
+  <p><strong>Location:</strong> <%= listing.location %></p>
+  <p><strong>Price:</strong> $<%= listing.price %>/month</p>
+  <p><strong>Room Type:</strong> <%= listing.room_type %></p>
+  
+ 
+  <p><strong>Preferred Gender:</strong> <%= listing.gender %></p> 
+  <p><strong>Roommates:</strong> <%= listing.roommates %></p> 
+  <p><strong>Description:</strong> <%= listing.description %></p>
+ 
+  <p>
+    <strong>Amenities:</strong>
+    <% if (listing.amenities && listing.amenities.length > 0) { %>
+          <%= listing.amenities.map(a => a.toLowerCase() === 'ac' ? 'Air Condition' : a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %>
+        <% } else { %>
+          None
+        <% } %>
+  </p>
+
   <!-- Listing Summary -->
   <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="560">
     <tr>
@@ -82,7 +101,7 @@
             <td>
               <font face="Arial, sans-serif" size="3" color="#3a3a3a">
                 <% if (listing.amenities && listing.amenities.length > 0) { %>
-                  <%= listing.amenities.join(", ") %>
+                  <%= listing.amenities.map(a => a === 'ac' ? 'Air Condition' : a).join(", ") %>
                 <% } else { %>
                   None
                 <% } %>
