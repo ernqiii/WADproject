@@ -40,10 +40,10 @@
   <p>
     <strong>Amenities:</strong>
     <% if (listing.amenities && listing.amenities.length > 0) { %>
-      <%= listing.amenities.join(", ") %>
-    <% } else { %>
-      None
-    <% } %>
+          <%= listing.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %>
+        <% } else { %>
+          None
+        <% } %>
   </p>
 
   
