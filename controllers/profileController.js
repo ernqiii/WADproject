@@ -25,15 +25,21 @@ exports.showProfile = async (req, res) => {
             profileImage = `data:${user.profilePictureType};base64,${user.profilePicture.toString("base64")}`;
         }
 
+        const loggedInUserId = req.session.user.id;
+        const hasReviewed = (reviews || []).some(r => r.reviewerId && String(r.reviewerId._id) === String(loggedInUserId));
+        const errorMessage = req.query.error === "already_reviewed" ? "You have already reviewed this user." : null;
+
         res.render("profile", {
             user,
             listings: listings || [],
             profileImage,
-            loggedInUserId: req.session.user.id,
+            loggedInUserId,
             loggedInUserRole: req.session.user.role || "user",
             reviews: reviews || [],
             avgRating: ratingSummary ? ratingSummary.avgRating : 0,
-            totalReviews: ratingSummary ? ratingSummary.totalReviews : 0
+            totalReviews: ratingSummary ? ratingSummary.totalReviews : 0,
+            hasReviewed,
+            errorMessage
         });
     } catch (error) {
         console.log(error);

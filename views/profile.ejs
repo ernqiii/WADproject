@@ -161,6 +161,12 @@
                     <font face="Georgia, serif" size="3" color="#3a3a3a"><b>Leave a Review</b></font>
                     <br><br>
 
+                    <% if (errorMessage) { %>
+                        <font face="Arial, sans-serif" size="3" color="#c0392b"><b><%= errorMessage %></b></font>
+                        <br><br>
+                    <% } %>
+
+                    <% if (!hasReviewed) { %>
                     <form method="POST" action="/reviews/add">
                         <input type="hidden" name="reviewedUserId" value="<%= user._id %>">
 
@@ -203,6 +209,9 @@
                             </tr>
                         </table>
                     </form>
+                    <% } else { %>
+                        <font face="Arial, sans-serif" size="3" color="#777777"><i>You have already reviewed this user.</i></font>
+                    <% } %>
 
                     <br>
                     <hr color="#eeeeee" size="1">
@@ -221,7 +230,7 @@
                                         <% if (review.reviewerId) { %>
                                             <a href="/profile/<%= review.reviewerId._id %>"><font color="#c0392b"><%= review.reviewerId.username %></font></a>
                                         <% } else { %>
-                                            Unknown User
+                                            Deleted User
                                         <% } %>
                                         &nbsp;&nbsp;
                                         <b>Rating:</b> <%= review.rating %> / 5
