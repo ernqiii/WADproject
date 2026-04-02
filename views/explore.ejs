@@ -211,7 +211,7 @@
                                 <% if (listing.amenities && listing.amenities.length > 0) { %>
                                 <tr>
                                     <td valign="top"><font face="Arial, sans-serif" size="3" color="#555555"><b>Amenities:</b></font></td>
-                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %></font></td>
+                                    <td><font face="Arial, sans-serif" size="3" color="#3a3a3a"><%= listing.amenities.map(a => a.toLowerCase() === 'ac' ? 'Air Condition' : a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %></font></td>
                                 </tr>
                                 <% } %>
                             </table>

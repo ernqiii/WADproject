@@ -44,7 +44,7 @@
   <p>
     <strong>Amenities:</strong>
     <% if (listing.amenities && listing.amenities.length > 0) { %>
-          <%= listing.amenities.map(a => a === 'ac' ? 'Air Condition' : a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %>
+          <%= listing.amenities.map(a => a.toLowerCase() === 'ac' ? 'Air Condition' : a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %>
         <% } else { %>
           None
         <% } %>
