@@ -47,10 +47,6 @@ const listingSchema = new mongoose.Schema({
     text: { type: String, required: true },
     createdAt: { type: Date, default: Date.now }
   }],
-  wishlistedBy: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }]
 });
 
 //const Listing = mongoose.model('Listing', listingSchema);
