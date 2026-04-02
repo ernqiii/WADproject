@@ -44,7 +44,7 @@
   <p>
     <strong>Amenities:</strong>
     <% if (listing.amenities && listing.amenities.length > 0) { %>
-          <%= listing.amenities.map(a => a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %>
+          <%= listing.amenities.map(a => a === 'ac' ? 'Air Condition' : a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())).join(', ') %>
         <% } else { %>
           None
         <% } %>
@@ -101,7 +101,7 @@
             <td>
               <font face="Arial, sans-serif" size="3" color="#3a3a3a">
                 <% if (listing.amenities && listing.amenities.length > 0) { %>
-                  <%= listing.amenities.join(", ") %>
+                  <%= listing.amenities.map(a => a === 'ac' ? 'Air Condition' : a).join(", ") %>
                 <% } else { %>
                   None
                 <% } %>
