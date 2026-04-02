@@ -15,12 +15,16 @@ Open a terminal in the extracted folder and run:
 npm install
 ```
 
-### 3. Running the Application
+## Run application
+
+### 1. Running the Application
 ```bash
 nodemon server.js
 ```
 
-### 4. Sample username and password
+## Sample username and password
+
+### 1. Sample username and password
 (in the application)
 Username: jason
 Password: jason123
