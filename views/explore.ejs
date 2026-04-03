@@ -105,6 +105,15 @@
                                     <option value="desc">Highest to Lowest</option>
                                 </select>
                             </td>
+                            <td width="12"></td>
+                            <td>
+                                <font face="Arial, sans-serif" size="3" color="#555555"><label>Sort by Date:</label></font><br>
+                                <select id="sort-date">
+                                    <option value="">Default</option>
+                                    <option value="newest">Newest First</option>
+                                    <option value="oldest">Oldest First</option>
+                                </select>
+                            </td>
                         </tr>
                         <tr><td colspan="5"><br></td></tr>
                         <tr>
@@ -156,21 +165,34 @@
                  data-price="<%= listing.price %>"
                  data-gender="<%= listing.gender %>"
                  data-location="<%= listing.location.toLowerCase() %>"
-                 data-amenities="<%= listing.amenities ? listing.amenities.join(',') : '' %>">
+                 data-amenities="<%= listing.amenities ? listing.amenities.join(',') : '' %>"
+                 data-createdat="<%= listing._id.getTimestamp().getTime() %>">
 
                 <table border="0" cellpadding="20" cellspacing="0" bgcolor="#ffffff" width="720">
                     <tr>
                         <td>
-                            <font face="Georgia, serif" size="4" color="#3a3a3a">
-                                <b><%= listing.title %></b>
-                                <% if (listing.landlord) { %>
-                                    &nbsp;&mdash;&nbsp;
-                                    <a href="/profile/<%= listing.landlord._id %>">
-                                        <font face="Arial, sans-serif" size="3" color="#c0392b"><%= listing.landlord.username %></font>
-                                    </a>
-                                <% } %>
-                            </font>
-                            <br><br>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td>
+                                        <font face="Georgia, serif" size="4" color="#3a3a3a">
+                                            <b><%= listing.title %></b>
+                                            <% if (listing.landlord) { %>
+                                                &nbsp;&mdash;&nbsp;
+                                                <a href="/profile/<%= listing.landlord._id %>">
+                                                    <font face="Arial, sans-serif" size="3" color="#c0392b"><%= listing.landlord.username %></font>
+                                                </a>
+                                            <% } %>
+                                        </font>
+                                    </td>
+                                    <td align="right" valign="top">
+                                        <font face="Arial, sans-serif" size="2" color="#555555">
+                                            Posted: <%= new Date(listing._id.getTimestamp()).toLocaleString() %>
+                                            <% if (listing.updatedAt) { %><br>Edited: <%= new Date(listing.updatedAt).toLocaleString() %><% } %>
+                                        </font>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
 
                             <% if (listing.photos && listing.photos.length > 0) { %>
                                 <% listing.photos.forEach(function(photo) { %>
@@ -322,6 +344,7 @@
         let locationFilter = document.getElementById('location').value.toLowerCase();
         let checkedAmenities = Array.from(document.querySelectorAll('.amenity-filter:checked')).map(cb => cb.value);
         let sortPrice = document.getElementById('sort-price').value;
+        let sortDate = document.getElementById('sort-date').value;
 
         let items = Array.from(document.querySelectorAll('.listing'));
 
@@ -342,12 +365,18 @@
             el.style.display = show ? '' : 'none';
         });
 
-        if (sortPrice) {
+        if (sortPrice || sortDate) {
             let container = document.getElementById('listings');
             let visible = items.filter(el => el.style.display !== 'none');
-            visible.sort((a, b) => sortPrice === 'asc'
-                ? Number(a.dataset.price) - Number(b.dataset.price)
-                : Number(b.dataset.price) - Number(a.dataset.price));
+            if (sortPrice) {
+                visible.sort((a, b) => sortPrice === 'asc'
+                    ? Number(a.dataset.price) - Number(b.dataset.price)
+                    : Number(b.dataset.price) - Number(a.dataset.price));
+            } else if (sortDate) {
+                visible.sort((a, b) => sortDate === 'newest'
+                    ? Number(b.dataset.createdat) - Number(a.dataset.createdat)
+                    : Number(a.dataset.createdat) - Number(b.dataset.createdat));
+            }
             visible.forEach(el => container.appendChild(el));
         }
 
@@ -363,6 +392,7 @@
         document.getElementById('gender').value = '';
         document.getElementById('location').value = '';
         document.getElementById('sort-price').value = '';
+        document.getElementById('sort-date').value = '';
         document.querySelectorAll('.amenity-filter').forEach(cb => cb.checked = false);
 
         const container = document.getElementById('listings');

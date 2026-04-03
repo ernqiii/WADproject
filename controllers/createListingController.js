@@ -142,6 +142,7 @@ exports.updateListing = async (req, res) => {
       }));
     }
  
+    updateData.updatedAt = new Date();
     const listing = await Listing.findByIdAndUpdate(
       req.params.id,
       updateData,

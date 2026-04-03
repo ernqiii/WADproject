@@ -114,9 +114,19 @@
                         <table border="0" cellpadding="12" cellspacing="0" bgcolor="#f7f4ef" width="100%">
                             <tr>
                                 <td>
-                                    <font face="Arial, sans-serif" size="3" color="#3a3a3a">
-                                        <b><%= listing.title %></b>
-                                    </font>
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                        <tr>
+                                            <td>
+                                                <font face="Arial, sans-serif" size="3" color="#3a3a3a"><b><%= listing.title %></b></font>
+                                            </td>
+                                            <td align="right" valign="top">
+                                                <font face="Arial, sans-serif" size="2" color="#555555">
+                                                    Posted: <%= new Date(listing._id.getTimestamp()).toLocaleString() %>
+                                                    <% if (listing.updatedAt) { %><br>Edited: <%= new Date(listing.updatedAt).toLocaleString() %><% } %>
+                                                </font>
+                                            </td>
+                                        </tr>
+                                    </table>
                                     <br>
                                     <% if (listing.photos.length > 0) { %>
                                         <% listing.photos.forEach(function(photo) { %>
