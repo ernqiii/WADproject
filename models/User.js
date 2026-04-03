@@ -69,7 +69,7 @@ exports.editProfile = function(userId, updateData) {
 
 exports.searchByUsername = function(username) {
     return User.find({
-        username: { $regex: username, $options: "i" }
+        username: { $regex: `^${username}`, $options: "i" }
     });
 };
 
