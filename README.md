@@ -34,3 +34,6 @@ Username: Admin
 Password: admin123
 
 The app will be available at [http://localhost:8000](http://localhost:8000).
+
+### 2. AI usage Declaration 
+The beautifying of the website in the views file was done using Claude and ChatGPT
