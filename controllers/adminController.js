@@ -104,3 +104,27 @@ exports.deleteComment = async (req, res) => {
         res.status(500).send("Error deleting comment.");
     }
 };
+
+exports.promoteToAdmin = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+
+        await Listing.deleteMany({ landlord: userId });
+        await Review.Review.deleteMany({
+            $or: [
+                { reviewerId: userId },
+                { reviewedUserId: userId }
+            ]
+        });
+        await Listing.updateMany(
+            {},
+            { $pull: { comments: { user: userId } } }
+        );
+        await User.User.findByIdAndUpdate(userId, { role: "admin" });
+
+        res.redirect("/admin-profile");
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error promoting user to admin.");
+    }
+};

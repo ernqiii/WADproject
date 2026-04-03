@@ -140,6 +140,12 @@
                                     </font>
                                     <br>
                                     <a href="/listing/<%= listing._id %>"><font face="Arial, sans-serif" size="3" color="#c0392b">View Details</font></a>
+                                    <% if (loggedInUserRole === 'admin') { %>
+                                        &nbsp;
+                                        <form action="/admin-profile/delete-listing/<%= listing._id %>" method="POST" style="display:inline;">
+                                            <input type="submit" value="Delete Listing" onclick="return confirm('Delete this listing?');">
+                                        </form>
+                                    <% } %>
                                 </td>
                             </tr>
                         </table>
@@ -167,7 +173,7 @@
 
                 <br><br>
 
-                <% if (String(user._id) !== String(loggedInUserId)) { %>
+                <% if (String(user._id) !== String(loggedInUserId) && loggedInUserRole !== 'admin') { %>
                     <font face="Georgia, serif" size="3" color="#3a3a3a"><b>Leave a Review</b></font>
                     <br><br>
 
@@ -268,6 +274,11 @@
                                                 <input type="submit" value="Delete Review">
                                             </form>
                                         </font>
+                                    <% } else if (loggedInUserRole === 'admin') { %>
+                                        <br>
+                                        <form method="POST" action="/admin-profile/delete-review/<%= review._id %>" style="display:inline;">
+                                            <input type="submit" value="Delete Review" onclick="return confirm('Delete this review?');">
+                                        </form>
                                     <% } %>
                                 </td>
                             </tr>

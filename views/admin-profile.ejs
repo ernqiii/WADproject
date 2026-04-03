@@ -56,6 +56,10 @@
                                     <font face="Arial, sans-serif" size="3" color="#3a3a3a">
                                         <b><a href="/profile/<%= u._id %>"><font color="#c0392b"><%= u.username %></font></a></b>
                                         &nbsp;&nbsp;
+                                        <form action="/admin-profile/promote-to-admin/<%= u._id %>" method="POST" style="display:inline;">
+                                            <input type="submit" value="Promote to Admin" onclick="return confirm('Promote <%= u.username %> to admin? This will delete all their listings, reviews, and comments.');">
+                                        </form>
+                                        &nbsp;
                                         <form action="/admin-profile/delete-user/<%= u._id %>" method="POST" style="display:inline;">
                                             <input type="submit" value="Delete User" onclick="return confirm('Delete user <%= u.username %> and all their data?');">
                                         </form>
@@ -146,6 +150,10 @@
                         <font face="Arial, sans-serif" size="3" color="#3a3a3a">
                             <b><a href="/profile/<%= u._id %>"><font color="#c0392b"><%= u.username %></font></a></b>
                             (<%= u.email %>)
+                            &nbsp;
+                            <form action="/admin-profile/promote-to-admin/<%= u._id %>" method="POST" style="display:inline;">
+                                <input type="submit" value="Promote to Admin" onclick="return confirm('Promote <%= u.username %> to admin? This will delete all their listings, reviews, and comments.');">
+                            </form>
                             &nbsp;
                             <form action="/admin-profile/delete-user/<%= u._id %>" method="POST" style="display:inline;">
                                 <input type="submit" value="Delete User" onclick="return confirm('Delete user <%= u.username %> and all their data?');">

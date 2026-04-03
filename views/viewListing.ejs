@@ -9,7 +9,11 @@
   <font face="Georgia, serif" size="6" color="#3a3a3a"><b>🏠 Roommie Finder</b></font>
   <br>
   <font face="Arial, sans-serif" size="3">
-    <a href="/profile/<%= listing.landlord %>"><font color="#c0392b">Back to Profile</font></a>
+    <% if (user && user.role === 'admin') { %>
+      <a href="/admin-profile"><font color="#c0392b">Back to Admin Dashboard</font></a>
+    <% } else { %>
+      <a href="/profile/<%= listing.landlord %>"><font color="#c0392b">Back to Profile</font></a>
+    <% } %>
   </font>
   <br><br>
 
