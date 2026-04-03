@@ -29,4 +29,8 @@ nodemon server.js
 Username: jason
 Password: jason123
 
+Admin profile:
+Username: Admin
+Password: admin123
+
 The app will be available at [http://localhost:8000](http://localhost:8000).
